@@ -1,0 +1,54 @@
+{
+  "name": "Neo GST Assistant",
+  "short_name": "Neo GST",
+  "author": "Gaddam Chiranjeevi",
+  "developer": {
+    "name": "Gaddam Chiranjeevi",
+    "url": "Gaddam Chiranjeevi"
+  },
+  "version": "1.3",
+  "description": "Extension to quickly download GST returns from GST Portal",
+  "manifest_version": 2,
+  "permissions": [
+    "activeTab",
+    "downloads",
+    "tabs",
+    "cookies",
+    "https://*.gst.gov.in/*"
+  ],
+  "content_security_policy": "script-src 'self'; object-src 'self'",
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://services.gst.gov.in/services/login*"],
+      "js": ["login-autofill.js"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://services.gst.gov.in/*",
+        "https://return.gst.gov.in/*"
+      ],
+      "js": ["contentscript.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "browser_action": {
+    "browser_style": false,
+    "default_title": "Neo GST Assistant",
+    "default_icon": {
+      "16": "images/octagst-logo-16.png",
+      "32": "images/octagst-logo-32.png",
+      "48": "images/octagst-logo-48.png",
+      "128": "images/octagst-logo-128.png"
+    }
+  },
+  "icons": {
+    "16": "images/octagst-logo-16.png",
+    "32": "images/octagst-logo-32.png",
+    "48": "images/octagst-logo-48.png",
+    "128": "images/octagst-logo-128.png"
+  }
+}

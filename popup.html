@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <style type="text/css">
+      :root {
+        --bg: #f3f6ff;
+        --bg-accent: #fef6e6;
+        --primary: #1456ff;
+        --success: #167b5b;
+        --warning: #f0b429;
+        --danger: #c62828;
+        --card: #ffffff;
+        --text: #1c2436;
+        --muted: #6f7b8e;
+        --radius: 12px;
+        --shadow: 0 16px 40px rgba(20, 34, 74, 0.08);
+      }
+      html, body {
+        font-family: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
+        font-size: 14px;
+        background: var(--bg);
+        color: var(--text);
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        background: radial-gradient(circle at top left, #eef2ff, transparent 55%),
+          radial-gradient(circle at top right, var(--bg-accent), transparent 50%),
+          var(--bg);
+      }
+      .shell {
+        min-height: 100vh;
+        padding: 28px 18px 48px;
+      }
+      .page {
+        max-width: 1120px;
+        margin: 0 auto;
+        display: grid;
+        gap: 18px;
+      }
+      .card-soft {
+        background: var(--card);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        border: 1px solid #e6ebf5;
+      }
+      .header-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 18px;
+        border-radius: var(--radius);
+        background: linear-gradient(120deg, #e6edff, #ffffff);
+        border: 1px solid #dfe7ff;
+      }
+      .header-title {
+        font-weight: 700;
+        margin: 0;
+        font-size: 16px;
+      }
+      .header-sub {
+        color: var(--muted);
+        font-size: 12px;
+        margin: 2px 0 0;
+      }
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .hero {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 14px;
+        padding: 16px 18px;
+      }
+      .hero-card {
+        border-radius: var(--radius);
+        padding: 14px;
+        background: #f7f9ff;
+        border: 1px solid #e1e8ff;
+      }
+      .hero-title {
+        font-weight: 700;
+        margin-bottom: 6px;
+        font-size: 14px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+      .pill.success { background: #e7f4ed; color: var(--success); }
+      .pill.warning { background: #fff6d6; color: #946200; }
+      .pill.danger { background: #ffe3e3; color: var(--danger); }
+      .pill.muted { background: #eef2f7; color: var(--muted); }
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 10px 16px;
+        padding: 16px 18px 8px;
+      }
+      .info-grid select {
+        width: 100%;
+      }
+      .info-label {
+        color: var(--muted);
+        font-size: 11px;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+      }
+      .info-value {
+        font-weight: 600;
+        color: var(--text);
+        font-size: 13px;
+      }
+      .select-row {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 0 18px 14px;
+        flex-wrap: wrap;
+      }
+      .select-row button {
+        height: 36px;
+        font-size: 13px;
+        padding: 6px 12px;
+        white-space: nowrap;
+      }
+      .multi-select {
+        width: 100%;
+        min-height: 110px;
+        font-size: 12px;
+      }
+      .period-range .form-control {
+        height: 32px;
+        font-size: 12px;
+      }
+      .returns-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 12px;
+        padding: 16px 18px;
+      }
+      .return-card {
+        border: 1px solid #e6ebf5;
+        border-radius: var(--radius);
+        padding: 10px;
+        background: var(--card);
+        box-shadow: 0 8px 20px rgba(15, 20, 35, 0.05);
+        transition: transform 0.08s ease, box-shadow 0.12s ease;
+      }
+      .return-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 26px rgba(15, 20, 35, 0.1);
+      }
+      .return-title {
+        font-weight: 700;
+        margin: 0 0 2px 0;
+        font-size: 13px;
+      }
+      .return-sub {
+        color: var(--muted);
+        font-size: 12px;
+        margin-bottom: 6px;
+      }
+      .return-actions button {
+        width: 100%;
+      }
+      .activity {
+        padding: 14px 18px 18px;
+      }
+      .activity h6 {
+        font-size: 12px;
+        font-weight: 700;
+        margin: 0 0 6px 0;
+        letter-spacing: 0.02em;
+      }
+      .activity-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 6px;
+      }
+      .activity-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 8px;
+        border-radius: 6px;
+        background: #eef2f7;
+        font-size: 12px;
+      }
+      .footer-bar { display: none; }
+      table.table-status {
+        width: 100%;
+        margin-bottom: 0;
+        border-collapse: collapse;
+        font-size: 12px;
+      }
+      #returnStatus table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+      }
+      #returnStatus th, #returnStatus td {
+        border: 1px solid #e6ebf5;
+        padding: 8px;
+        vertical-align: middle;
+      }
+      #returnStatus th {
+        background: #f1f4fb;
+        font-weight: 700;
+        color: #3b4862;
+      }
+      table.table-status th, table.table-status td {
+        border: 1px solid #e6ebf5;
+        padding: 8px;
+        vertical-align: middle;
+      }
+      table.table-status th {
+        background: #f1f4fb;
+        font-weight: 700;
+        color: #3b4862;
+      }
+      .alert-inline {
+        margin: 12px 18px;
+        border-radius: var(--radius);
+        padding: 8px 10px;
+      }
+      .small-note {
+        color: var(--muted);
+        font-size: 11px;
+        margin: 0 18px 10px;
+      }
+      .footer-note {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 12px;
+        text-align: center;
+      }
+      body.tool-mode #msgOtherWebsite,
+      body.tool-mode #msgNotOnReturnDashboard,
+      body.tool-mode #businessInfo,
+      body.tool-mode .activity,
+      body.tool-mode #status,
+      body.tool-mode .footer-note {
+        display: none !important;
+      }
+      body.tool-mode .page {
+        max-width: 980px;
+      }
+      body.tool-mode .header-bar {
+        margin-bottom: 0;
+      }
+      html.embedded,
+      body.embedded {
+        height: 100%;
+        min-height: 100%;
+        overflow: auto;
+        background: #fff;
+      }
+      body.embedded .shell {
+        min-height: 100%;
+        padding: 0;
+      }
+      body.embedded .page {
+        min-height: 100%;
+        max-width: none;
+        gap: 0;
+        display: flex;
+        flex-direction: column;
+      }
+      body.embedded .header-bar,
+      body.embedded .hero,
+      body.embedded .activity,
+      body.embedded .footer-note,
+      body.embedded #msgOtherWebsite,
+      body.embedded #msgNotOnReturnDashboard,
+      body.embedded #status {
+        display: none !important;
+      }
+      body.embedded #businessInfo {
+        border: 0;
+        box-shadow: none;
+        border-radius: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-height: 100%;
+      }
+      body.embedded #businessInfo > .p-3 {
+        padding: 10px 12px 0 !important;
+      }
+      body.embedded #workspace {
+        padding-top: 4px;
+        display: flex;
+        flex-direction: column;
+        min-height: 0;
+      }
+      body.embedded .info-grid {
+        display: block;
+        padding: 0 0 8px;
+        flex: 0 0 auto;
+      }
+      body.embedded .info-grid > div {
+        display: block;
+        margin-bottom: 12px;
+      }
+      body.embedded .info-grid > div:last-child {
+        grid-column: auto !important;
+        margin-bottom: 0;
+      }
+      body.embedded .select-row {
+        padding: 0 0 10px;
+        flex: 0 0 auto;
+      }
+      body.embedded #returnStatus {
+        padding: 0 0 10px !important;
+        flex: 1 1 auto;
+        min-height: 320px;
+        overflow: auto;
+      }
+      body.embedded #returnStatus .row {
+        margin-left: 0;
+        margin-right: 0;
+      }
+      body.embedded #returnStatus [class*="col"] {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .choice-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .choice-pill {
+        border: 1px solid #d9e3f7;
+        background: #f7f9ff;
+        color: var(--text);
+        border-radius: 999px;
+        padding: 7px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .choice-pill.active {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+      }
+      .type-list {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .type-card {
+        width: 100%;
+        min-height: 54px;
+        text-align: center;
+        border: 1px solid #dfe7f5;
+        background: #fbfcff;
+        border-radius: 12px;
+        padding: 12px 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .type-card.active {
+        background: #edf3ff;
+        border-color: #9ebcff;
+      }
+      .type-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text);
+      }
+      .type-sub {
+        color: var(--muted);
+        font-size: 11px;
+        margin-top: 3px;
+      }
+      .type-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 8px;
+      }
+      .converter-panel {
+        padding: 16px 18px 18px;
+      }
+      .converter-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .converter-dropzone {
+        border: 2px dashed #b9c9ef;
+        background: linear-gradient(180deg, #f9fbff, #f3f7ff);
+        border-radius: 16px;
+        padding: 24px 18px;
+        text-align: center;
+        transition: border-color 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
+      }
+      .converter-dropzone.dragover {
+        border-color: var(--primary);
+        box-shadow: 0 12px 30px rgba(20, 86, 255, 0.12);
+        transform: translateY(-1px);
+      }
+      .converter-dropzone h6 {
+        margin: 0 0 6px;
+        font-weight: 700;
+        font-size: 15px;
+      }
+      .converter-dropzone p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .converter-grid {
+        display: grid;
+        grid-template-columns: minmax(220px, 260px) 1fr;
+        gap: 14px;
+        margin-top: 14px;
+      }
+      .converter-side,
+      .converter-main {
+        border: 1px solid #e6ebf5;
+        border-radius: 14px;
+        background: #fff;
+        padding: 14px;
+      }
+      .converter-files {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 8px;
+      }
+      .converter-file {
+        padding: 9px 10px;
+        border-radius: 10px;
+        background: #f5f8ff;
+        border: 1px solid #dfe8fb;
+        font-size: 12px;
+      }
+      .converter-file strong {
+        display: block;
+        font-size: 12px;
+        margin-bottom: 2px;
+      }
+      .converter-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+      .converter-note {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 11px;
+      }
+      .schema-panel {
+        padding: 16px 18px 18px;
+      }
+      .schema-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .schema-grid {
+        display: grid;
+        grid-template-columns: minmax(220px, 280px) 1fr;
+        gap: 14px;
+      }
+      .schema-side,
+      .schema-main {
+        border: 1px solid #e6ebf5;
+        border-radius: 14px;
+        background: #fff;
+        padding: 14px;
+      }
+      .schema-actions {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 12px;
+      }
+      .schema-paste {
+        min-height: 150px;
+        font-size: 12px;
+        font-family: 'JetBrains Mono', monospace;
+      }
+      .schema-table-wrap {
+        max-height: 420px;
+        overflow: auto;
+        border: 1px solid #e6ebf5;
+        border-radius: 12px;
+      }
+      .schema-table {
+        width: 100%;
+        margin-bottom: 0;
+        border-collapse: collapse;
+        font-size: 12px;
+      }
+      .schema-table th,
+      .schema-table td {
+        border: 1px solid #e6ebf5;
+        padding: 8px;
+        vertical-align: middle;
+      }
+      .schema-table th {
+        background: #f1f4fb;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+      }
+      .schema-table input {
+        width: 100%;
+        border: 1px solid #d9e3f7;
+        border-radius: 8px;
+        padding: 6px 8px;
+        font-size: 12px;
+      }
+      .schema-note {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 11px;
+      }
+      @media (max-width: 900px) {
+        .converter-grid {
+          grid-template-columns: 1fr;
+        }
+        .schema-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 900px) {
+        .type-list {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+      @media (max-width: 640px) {
+        .type-list {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+    <title>Neo GST Assistant</title>
+  </head>
+  <body class="shell">
+    <script src="bootstrap.bundle.min.js"></script>
+    <script src="jszip.min.js"></script>
+    <script src="xlsx.full.min.js"></script>
+    <script src="moment.min.js"></script>
+    <script src="popup.js"></script>
+    <div class="page">
+      <div class="header-bar">
+        <div class="d-flex align-items-center">
+          <img src="images/neo-gst-logo.svg" alt="Neo GST Assistant" height="24" width="24" class="mr-2"/>
+          <div>
+            <p class="header-title mb-0" id="appHeaderTitle">Neo GST Assistant</p>
+            <p class="header-sub mb-0" id="appHeaderSub">Download returns faster with a focused workspace.</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-outline-primary btn-sm" type="button" id="openConverterBtn">Converters</button>
+          <button class="btn btn-outline-secondary btn-sm" type="button" id="openSchemaBtn">Schema</button>
+          <button class="btn btn-link p-0 text-muted" title="Settings">
+            <span aria-hidden="true">&#9881;</span>
+          </button>
+        </div>
+      </div>
+      <div class="card-soft mb-2" id="converterPanel" hidden="true">
+        <div class="converter-panel">
+          <div class="converter-toolbar">
+            <div>
+              <p class="header-title mb-0">Standalone Converters</p>
+              <p class="header-sub mb-0">Drop GST JSON files here and generate report-style Excel without opening the portal workspace.</p>
+            </div>
+            <button class="btn btn-link btn-sm p-0" type="button" id="closeConverterBtn">Close</button>
+          </div>
+          <div class="converter-dropzone" id="converterDropzone">
+            <h6>Drag and drop files here</h6>
+            <p>or use the file picker to load one or more JSON files for conversion.</p>
+            <div class="converter-actions justify-content-center">
+              <input type="file" id="converterFileInput" accept=".json,application/json" multiple hidden>
+              <button class="btn btn-primary btn-sm" type="button" id="pickConverterFilesBtn">Choose Files</button>
+            </div>
+          </div>
+          <div class="converter-grid">
+            <div class="converter-side">
+              <label class="info-label mb-2 d-block" for="converterReturnType">Return type</label>
+              <select class="custom-select custom-select-sm mb-3" id="converterReturnType">
+                <option value="AUTO">Auto detect JSON type</option>
+                <option value="GSTR1">GSTR-1 JSON to Excel</option>
+                <option value="GSTR2A">GSTR-2A JSON to Excel</option>
+                <option value="GSTR2B">GSTR-2B JSON to Excel</option>
+                <option value="GSTR3B">GSTR-3B JSON to Excel</option>
+                <option value="GENERIC">Generic JSON to Excel</option>
+              </select>
+              <label class="info-label mb-2 d-block">Loaded files</label>
+              <ul class="converter-files" id="converterFiles">
+                <li class="converter-file text-muted">No files loaded yet.</li>
+              </ul>
+              <div class="converter-actions">
+                <button class="btn btn-outline-secondary btn-sm" type="button" id="clearConverterFilesBtn">Clear</button>
+              </div>
+            </div>
+            <div class="converter-main">
+              <div class="d-flex justify-content-between align-items-center flex-wrap mb-2">
+                <div>
+                  <p class="header-title mb-0" style="font-size:14px;">Conversion Output</p>
+                  <p class="header-sub mb-0" id="converterSummary">Load JSON files to generate Excel output.</p>
+                </div>
+              </div>
+              <div class="converter-actions">
+                <button class="btn btn-success btn-sm" type="button" id="converterDownloadSingleBtn">Download Excel</button>
+                <button class="btn btn-primary btn-sm" type="button" id="converterDownloadCombinedBtn">Download Combined Excel</button>
+              </div>
+              <div class="converter-note" id="converterStatusNote">Single-file mode exports one workbook. Multi-file mode can generate a consolidated workbook too.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-soft mb-2" id="schemaPanel" hidden="true">
+        <div class="schema-panel">
+          <div class="schema-toolbar">
+            <div>
+              <p class="header-title mb-0">Schema Manager</p>
+              <p class="header-sub mb-0">Maintain friendly labels for JSON keys and reuse them automatically during Excel conversion.</p>
+            </div>
+            <button class="btn btn-link btn-sm p-0" type="button" id="closeSchemaBtn">Close</button>
+          </div>
+          <div class="schema-grid">
+            <div class="schema-side">
+              <label class="info-label mb-2 d-block" for="schemaReturnType">Return type</label>
+              <select class="custom-select custom-select-sm mb-3" id="schemaReturnType"></select>
+              <label class="info-label mb-2 d-block" for="schemaPasteArea">Paste schema rows</label>
+              <textarea class="form-control schema-paste" id="schemaPasteArea" placeholder="Paste from Excel like: return|key|abbrevation or key<TAB>abbreviation"></textarea>
+              <input type="file" id="schemaImportFile" accept=".txt,.tsv,.csv,.json" hidden>
+              <div class="schema-actions">
+                <button class="btn btn-primary btn-sm" type="button" id="schemaImportPasteBtn">Import Pasted Rows</button>
+                <button class="btn btn-outline-primary btn-sm" type="button" id="schemaPickFileBtn">Import File</button>
+                <button class="btn btn-outline-secondary btn-sm" type="button" id="schemaExportBtn">Export Excel</button>
+                <button class="btn btn-outline-secondary btn-sm" type="button" id="schemaCopyBtn">Copy Table</button>
+              </div>
+              <div class="schema-note" id="schemaStatusNote">New keys are added automatically whenever you convert JSON to Excel.</div>
+            </div>
+            <div class="schema-main">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div>
+                  <p class="header-title mb-0" style="font-size:14px;">Schema Table</p>
+                  <p class="header-sub mb-0">Edit labels directly. Changes are saved for the selected return type.</p>
+                </div>
+                <button class="btn btn-success btn-sm" type="button" id="schemaSaveBtn">Save Changes</button>
+              </div>
+              <div class="schema-table-wrap">
+                <table class="schema-table">
+                  <thead>
+                    <tr>
+                      <th style="width:72px;">#</th>
+                      <th style="width:220px;">Key</th>
+                      <th>Abbreviation</th>
+                    </tr>
+                  </thead>
+                  <tbody id="schemaTableBody">
+                    <tr><td colspan="3" class="text-muted">No schema entries yet.</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-soft mb-2" id="msgOtherWebsite" hidden="true">
+        <div class="p-3">
+          <h5 class="mb-2">This extension works on GST Portal!</h5>
+          <p class="mb-2 text-muted">Open GST Portal and sign in to download GST returns.</p>
+          <a class="btn btn-primary btn-sm" href="https://www.gst.gov.in" target="_blank">Open GST Portal</a>
+        </div>
+      </div>
+
+      <div class="card-soft mb-2" id="msgNotOnReturnDashboard" hidden="true">
+        <div class="p-3">
+          <h5 class="mb-2">Open Return Dashboard</h5>
+          <p class="mb-0 text-muted">Log in to GST Portal and open the return dashboard to continue.</p>
+        </div>
+      </div>
+
+      <div class="card-soft mb-2" id="businessInfo" hidden="true">
+        <div class="p-3 pb-0">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              <p class="header-title mb-0" id="businessName">Business Name</p>
+              <small class="text-muted" id="businessSub">GSTIN & Reg Type</small>
+            </div>
+            <span class="pill muted" id="gstStatusPill">Not Filed</span>
+          </div>
+          <div id="workspace" hidden="true">
+            <div class="info-grid">
+              <div>
+                <div class="info-value" id="finYearWrap">
+                  <div id="returnPeriodWrap">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                      <span class="info-label mb-0">Financial Year</span>
+                      <button class="btn btn-link btn-sm p-0 text-uppercase font-weight-bold" type="button" id="toggleCustomBtn">Custom Periods</button>
+                    </div>
+                    <select class="custom-select custom-select-sm w-100" id="finYear"></select>
+                    <div id="customPeriodsWrap" hidden class="mt-2">
+                      <div class="d-flex period-range">
+                        <div class="mr-2" style="flex:1">
+                          <label class="info-label mb-1 d-block">From period</label>
+                          <select class="custom-select custom-select-sm w-100" id="periodFrom"></select>
+                        </div>
+                        <div style="flex:1">
+                          <label class="info-label mb-1 d-block">To period</label>
+                          <select class="custom-select custom-select-sm w-100" id="periodTo"></select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="ledgerDateWrap" hidden class="mt-1">
+                    <div class="d-flex period-range">
+                      <div class="mr-2" style="flex:1">
+                        <label class="info-label mb-1 d-block" for="ledgerDateFrom">From date</label>
+                        <input type="date" class="form-control form-control-sm" id="ledgerDateFrom">
+                      </div>
+                      <div style="flex:1">
+                        <label class="info-label mb-1 d-block" for="ledgerDateTo">To date</label>
+                        <input type="date" class="form-control form-control-sm" id="ledgerDateTo">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="grid-column: span 2;">
+                <label class="info-label mb-2 d-block">Category</label>
+                <div class="choice-pills mb-3" id="categoryPills"></div>
+                <label class="info-label mb-2 d-block">Subcategory</label>
+                <div class="type-list" id="typeList"></div>
+                <div hidden>
+                  <select class="custom-select custom-select-sm mb-2" id="gstCategory"></select>
+                  <select class="custom-select custom-select-sm" id="gstReturnType"></select>
+                </div>
+                <small class="text-muted d-block mt-2">Select a subcategory to refresh and load the relevant data below.</small>
+              </div>
+            </div>
+            <div class="select-row">
+              <div>
+                <small class="text-muted d-block" id="hint-return" hidden></small>
+              </div>
+              <button class="btn btn-primary btn-sm" type="button" id="refresh">Refresh</button>
+            </div>
+          </div>
+        </div>
+        <div id="banner-generating" class="alert alert-warning alert-inline" role="alert" hidden>
+          GST Portal is generating your files. Please check again after sometime. Your files will be generated even if you close this window.
+        </div>
+        <div id="returnStatus" class="px-3 pb-3">
+        </div>
+      </div>
+
+      <div class="card-soft mb-2 activity">
+        <h6 class="text-uppercase">Activity Log</h6>
+        <ul class="activity-list" id="activityLog">
+          <li class="activity-item text-muted">No activity yet</li>
+        </ul>
+      </div>
+
+      <div class="row" id="status">
+        <h6 id="statusText" class="mx-3 my-2">Loading...</h6>
+      </div>
+      <div class="footer-note">Need help? Keep the GST Portal tab open while using this dashboard.</div>
+    </div>
+  </body>
+</html>

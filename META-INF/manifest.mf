@@ -1,0 +1,122 @@
+Manifest-Version: 1.0
+
+Name: bootstrap.bundle.min.js
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: QaSDb8AlMyTn5YOQX0e6cZS6yR0=
+SHA256-Digest: E/V4cWE4qvAeO5MOhjtGtqDzPndRO1LBk8lJ/PR7CA4=
+
+Name: bootstrap.min.css
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: Z1/PKPn783E507LAtnb5b2AaQgM=
+SHA256-Digest: eSi1q2PG6J7g7ib17yAaWMcrr5GrtohYChqibrV7PBE=
+
+Name: contentscript.js
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: e3JZsLxCm6eyfFF0oEmxGWHdLMY=
+SHA256-Digest: F2Hm2shu398Ddau8QbVpSz1ZO/vSEtIpT9CAR3OYMWU=
+
+Name: jszip.min.js
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: 3WyYKUCGd6Fam7yCHl4shqTok2s=
+SHA256-Digest: PZ/OvdXxEW1u3nuTAUCSjd4lyaoJ3UJpv/X11x2Gi5c=
+
+Name: manifest.json
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: rURH9U4wdvHvJWigJvzJ5iSGd9s=
+SHA256-Digest: YfXNQMCeDn9pAw1HX9pdPJw9byD36VHHyFuX4aoSqRU=
+
+Name: moment.min.js
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: aasWuoymhDGrWe/yhsftHlILyjA=
+SHA256-Digest: 4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=
+
+Name: popup.html
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: AlmSg+pBf7bqI/7DBcgCkwo9YA4=
+SHA256-Digest: hubTotFD5gVh1X0BW3xrEKThfHlqrNdpj1bZ4Pwrb70=
+
+Name: popup.js
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: /e7yeZKb6W6v+3odX+JTKacvHh8=
+SHA256-Digest: WgzVXD/Qq/jwRxhrED+2MLPStRpg3pmjyoXBmRShAfc=
+
+Name: __MACOSX/._bootstrap.bundle.min.js
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: Vg+Vm8JmXrED5W8Kn+aMXdkwPvs=
+SHA256-Digest: WZt3kDhBpWgBSGvJ7IZhQkQ59omGwWcW+yQwoOZB0ZQ=
+
+Name: __MACOSX/._bootstrap.min.css
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: Vg+Vm8JmXrED5W8Kn+aMXdkwPvs=
+SHA256-Digest: WZt3kDhBpWgBSGvJ7IZhQkQ59omGwWcW+yQwoOZB0ZQ=
+
+Name: __MACOSX/._images
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: WD7oui7ZerMl9vgl2o3bERebiSM=
+SHA256-Digest: csIEqyCuk8kXSuIhpSHWms1Xlk39Bc2wpJhgfBxarL8=
+
+Name: __MACOSX/._jszip.min.js
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: 3OX+WkXg5sPyJCaSC4X0SyY7Kgw=
+SHA256-Digest: w7A9f1MolU2CPV3VZW26mKqPr9XosepfYmdHAYbQALg=
+
+Name: __MACOSX/._manifest.json
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: citTLQjPG4mLsu96+p0gPSweR2A=
+SHA256-Digest: 7Okv/Rj0NHewrMxs4yNpx6ISRHrKMFANSZhDg0SsyMg=
+
+Name: __MACOSX/._moment.min.js
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: Sf3/lYN6pMsEWoO04VVObP7ZE7E=
+SHA256-Digest: KZLmr1f6h4NkLfi0xZGFv2pk7vFlPUP0PhLsotVtmIg=
+
+Name: __MACOSX/._popup.html
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: AaE2TuhOviptqcuZJ1jXDWLTtVY=
+SHA256-Digest: 8b3EHIUABDDgENyHiwqpoT+ZOrKm+FrmGX6rh1uJ0cM=
+
+Name: __MACOSX/images/._.DS_Store
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: C+1+kMK63pdj+hjx+0RB0x+RyHw=
+SHA256-Digest: LzgPSj0FqNkMIQb1DadQZOnOV6WYWZ3FQE+PaaAiOqk=
+
+Name: images/octagst-logo-32.png
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: IDxF3oq73Dsu5SJp6nEOPhK1XCM=
+SHA256-Digest: Ch0SSohuvFaMmjVG1N4nK/+T5hTvG3rb8mvEWqxqGeE=
+
+Name: images/octagst-logo-128.png
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: r051xvqWDxklylsO98n3DIbbRmM=
+SHA256-Digest: 3SMbGTx67SFnB0RaENWUZFZEFCmfzURM0GyLMJLonNA=
+
+Name: images/.DS_Store
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: 3y++sUAKzaCQmjLBz2v0kvESHgc=
+SHA256-Digest: 1lFlJ5EFymdzGAUAaI30vcaaLHt3F1LwpG7xILf9jsM=
+
+Name: images/octagst-logo-96.png
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: CGBKUmk/FihMjlGDLUxmtOB4O/w=
+SHA256-Digest: rYWjrPesKCJvG+uOxY6cNM+y9Q0/zrmOqBL/RwnjCdg=
+
+Name: images/octagst-logo-48.png
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: AZ1SK35IkS3L3gtu5ChEhGNlky0=
+SHA256-Digest: ih2oBVw0kSEPbx1KyjRXU3rvSUdW+9HyrtYLhcLGFuw=
+
+Name: images/octagst-logo-16.png
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: g4g+GFUaMe/0voHVY+M+6KL39Uo=
+SHA256-Digest: 5A6NeGRQCUcXOi0TT/FZ81SSVXusdQLM5RWGBLXNpB8=
+
+Name: META-INF/cose.manifest
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: RT8CopShM7sfWJzWTOIck/T3lC0=
+SHA256-Digest: z6/qlfvjSynhHbIkQS1hch4o+OuN5TK1osd2zC0ZETk=
+
+Name: META-INF/cose.sig
+Digest-Algorithms: SHA1 SHA256
+SHA1-Digest: IW6iogNpNcehntSB2884Q5Ma+Bg=
+SHA256-Digest: 702LtqFUksq1NGgW0V1SaIVpzZi5583zVcqc13x/sOE=
+

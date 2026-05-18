@@ -1,0 +1,235 @@
+body {
+  background:
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 28%),
+    radial-gradient(circle at top right, rgba(45, 212, 191, 0.12), transparent 24%),
+    linear-gradient(180deg, #f8fbff 0%, #eef4fb 100%);
+}
+
+#root > div.min-h-screen {
+  background: transparent !important;
+}
+
+#root > div.min-h-screen > header {
+  background: rgba(255, 255, 255, 0.84) !important;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.18) !important;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.06) !important;
+}
+
+#root > div.min-h-screen > header > div {
+  height: auto !important;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+#root > div.min-h-screen > header img {
+  border-radius: 18px;
+  background: linear-gradient(135deg, #ffffff 0%, #dbeafe 100%);
+  border: 1px solid rgba(125, 211, 252, 0.65);
+  box-shadow: 0 10px 28px rgba(14, 116, 144, 0.14);
+}
+
+#root > div.min-h-screen > header .text-sm.text-gray-500.hidden {
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  color: #475569 !important;
+}
+
+#root > div.min-h-screen > main {
+  padding-top: 1.75rem !important;
+  padding-bottom: 2rem !important;
+  gap: 1.5rem !important;
+}
+
+#root > div.min-h-screen > main > div:first-child {
+  position: relative;
+  overflow: hidden;
+  padding: 1.5rem;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(125, 211, 252, 0.32), transparent 22%),
+    radial-gradient(circle at 85% 18%, rgba(45, 212, 191, 0.14), transparent 18%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 249, 255, 0.96) 100%);
+  box-shadow: 0 28px 60px rgba(15, 23, 42, 0.08);
+}
+
+#root > div.min-h-screen > main > div:first-child > div:first-child h1 {
+  font-size: clamp(2rem, 5vw, 3.25rem) !important;
+  line-height: 1.02 !important;
+  letter-spacing: -0.04em !important;
+  margin-bottom: 0.75rem !important;
+  max-width: 14ch;
+}
+
+#root > div.min-h-screen > main > div:first-child > div:first-child p {
+  max-width: 58ch;
+  font-size: 1rem !important;
+  line-height: 1.7 !important;
+  color: #5b6b80 !important;
+}
+
+#root > div.min-h-screen > main > div:first-child > div:last-child {
+  width: 100%;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 1rem !important;
+}
+
+#root > div.min-h-screen > main > div:first-child > div:last-child > div:first-child {
+  min-width: 220px;
+  align-items: center;
+  gap: 1rem !important;
+  padding: 1rem 1.1rem;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(191, 219, 254, 0.8);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+#root > div.min-h-screen > main > div:first-child > div:last-child > div:first-child > div:first-child {
+  padding: 0.9rem !important;
+  border-radius: 18px !important;
+  background: linear-gradient(135deg, #e0f2fe 0%, #d1fae5 100%) !important;
+}
+
+#root > div.min-h-screen > main > div:first-child > div:last-child > div:first-child .text-xs {
+  color: #64748b !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+}
+
+#root > div.min-h-screen > main > div:first-child > div:last-child > div:first-child .text-gray-900 {
+  font-size: 2rem !important;
+  line-height: 1 !important;
+}
+
+#root > div.min-h-screen > main > div:first-child > div:last-child > button {
+  min-height: 3.4rem;
+  padding: 0.95rem 1.45rem !important;
+  border-radius: 18px !important;
+  background: linear-gradient(135deg, #0f766e 0%, #0ea5e9 100%) !important;
+  box-shadow: 0 16px 30px rgba(14, 116, 144, 0.2) !important;
+  font-weight: 700 !important;
+}
+
+#root > div.min-h-screen > main > div:nth-child(2) {
+  padding: 0.55rem !important;
+  border: 1px solid rgba(191, 219, 254, 0.9) !important;
+  border-radius: 22px !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.06) !important;
+}
+
+#root > div.min-h-screen > main > div:nth-child(2) input {
+  min-height: 3.3rem;
+  border-radius: 18px;
+  color: #0f172a !important;
+  font-size: 1rem;
+}
+
+#root > div.min-h-screen > main > div:nth-child(2) svg {
+  color: #94a3b8 !important;
+}
+
+#root > div.min-h-screen > main > div:nth-child(3) {
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.18) !important;
+  border-radius: 28px !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 28px 60px rgba(15, 23, 42, 0.08) !important;
+}
+
+#root > div.min-h-screen > main > div:nth-child(3) thead tr {
+  background: linear-gradient(180deg, rgba(248, 250, 252, 0.96), rgba(241, 245, 249, 0.9)) !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.95) !important;
+}
+
+#root > div.min-h-screen > main > div:nth-child(3) th {
+  color: #64748b !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.12em !important;
+}
+
+#root > div.min-h-screen > main > div:nth-child(3) tbody tr {
+  transition: background-color 0.16s ease, transform 0.16s ease;
+}
+
+#root > div.min-h-screen > main > div:nth-child(3) tbody tr:hover {
+  background: rgba(240, 249, 255, 0.92) !important;
+}
+
+#root > div.min-h-screen > main > div:nth-child(3) tbody td:first-child > div {
+  align-items: center;
+  gap: 0.85rem !important;
+}
+
+#root > div.min-h-screen > main > div:nth-child(3) tbody td:first-child > div::before {
+  content: "";
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #e0f2fe 0%, #d1fae5 100%);
+  box-shadow: inset 0 0 0 1px rgba(125, 211, 252, 0.45);
+  flex: 0 0 auto;
+}
+
+#root > div.min-h-screen > main > div:nth-child(3) code.bg-gray-50 {
+  display: inline-flex;
+  padding: 0.5rem 0.8rem !important;
+  border-radius: 12px !important;
+  background: #f8fafc !important;
+  border: 1px solid #dbeafe !important;
+  color: #1e293b !important;
+}
+
+#root > div.min-h-screen > main > div:nth-child(3) code.text-gray-600 {
+  color: #475569 !important;
+}
+
+#root > div.min-h-screen > main > div:nth-child(3) td:last-child .group-hover\:opacity-100,
+#root > div.min-h-screen > main > div:nth-child(3) td:last-child > div {
+  opacity: 1 !important;
+  gap: 0.5rem !important;
+}
+
+#root > div.min-h-screen > main > div:nth-child(3) td:last-child button {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 12px !important;
+}
+
+#root > div.min-h-screen > main > div:nth-child(3) td:last-child button:first-child {
+  color: #0369a1 !important;
+  background: rgba(14, 165, 233, 0.08) !important;
+}
+
+#root > div.min-h-screen > main > div:nth-child(3) td:last-child button:last-child {
+  color: #dc2626 !important;
+  background: rgba(254, 226, 226, 0.92) !important;
+}
+
+@media (max-width: 768px) {
+  #root > div.min-h-screen > main {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  #root > div.min-h-screen > main > div:first-child {
+    padding: 1.1rem;
+  }
+
+  #root > div.min-h-screen > main > div:first-child > div:last-child {
+    flex-direction: column;
+    align-items: stretch !important;
+  }
+
+  #root > div.min-h-screen > main > div:first-child > div:last-child > div:first-child,
+  #root > div.min-h-screen > main > div:first-child > div:last-child > button {
+    width: 100%;
+  }
+}
