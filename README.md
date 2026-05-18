@@ -58,9 +58,9 @@ In GST portal go to **"returns dashboard"** in the dashboard for all returns and
 
 ---
 
-# Features: as compared to other
-
-   1. Can be modified by user as per his requirements.
+# Features
+variatiosn as compared to others..
+   1. Can be modified the way the user downloads the excel formated returns from gst portal as per his requirements.
    2. Easier and most accurate processing and handling the downloads.
    3. Runs at local no need of servers or any infrastructure can manage multisessions by creating a GitHub account for storing the client details so everyone can access the same.
 
