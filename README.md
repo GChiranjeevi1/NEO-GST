@@ -41,110 +41,62 @@ about:debugging#/runtime/this-firefox
 ---
 
 ## 3. Load the extension
-
+```
 - Click **"Load Temporary Add-on"**
 - Select a file in the unzipped folder of the extension
-
+```
 ---
 
 ## 4. Login methods
 
-You can use this either:
+```You can use this either:
 
 - Open GST portal directly  
-OR  
+          OR  
 - Enter login username and password in the extension and click on **"login to portal"**
-
----
-
+```
 ## 5. GST Portal navigation instructions
 
+```
 In GST portal go to **"returns dashboard"** in the dashboard for all returns and the ledgers.
-
-### Except:
-
-- For **GSTR2B** → open 1 GSTR2B return in portal
-
-- For challans and cash ledger/challans → click on **"create challan"** in **"dashboard"**  
-  (payments page / way to download)
+   **Except**:
+      - For **GSTR2B** → open 1 GSTR2B return in portal
+      - For challans and cash ledger/challans → click on **"create challan"** in **"dashboard"**  
 
 - To update the client details or get GSTIN numbers or return status → go to **"dashboard"** or other prescribed way
-
+```
 ---
-
-## 6. Important Note
-
-Keeping the correct GSTIN in the client dashboard is crucial for downloading returns and ledgers.
-
----
-
-## 7. Notices and Orders
-
-For notices and orders I dint updated because frankly speaking its easier but currently I had some other works.
+### 6. Important Note:Keeping the correct GSTIN in the client dashboard is crucial for downloading returns and ledgers.
+### 7. Notices and Orders :For notices and orders I dint updated because frankly speaking its easier but currently I had some other works.
 
 ---
 
 # Features: as compared to other
 
-## 1.
-Can be modified by user as per his requirements.
+   1. Can be modified by user as per his requirements.
+   2. Easier and most accurate processing and handling the downloads.
+   3. Runs at local no need of servers or any infrastructure can manage multisessions by creating a GitHub account for storing the client details so everyone can access the same.
 
----
-
-## 2.
-Easier and most accurate processing and handling the downloads.
-
----
-
-## 3.
-Runs at local no need of servers or any infrastructure can manage multisessions by creating a GitHub account for storing the client details so everyone can access the same.
-
-### Personal Access Token generation video:
-
-```text
-https://youtu.be/-s7lcte_EIY?si=KJBK7PiupF2KGD8W
+ ```
+**Personal Access Token generation** video:"https://youtu.be/-s7lcte_EIY?si=KJBK7PiupF2KGD8W"
+Once we get that go to the extension and paste them with the repository link
+(so it can generate a file for the accessing by everyone under same team).
 ```
-
-Once we get that go to the extension and paste them with the repository link  
-(so it can generate a file for the accessing by everyone).
-
----
-
-## 4.
+   4. Josn convertor
+```
 Can **convert** the JSON to Excel for mostly all returns.
+```
+   5. Schema and everything once and can be used multiple time.
+```
+scheme of excel Export
+```
+   6. Once login to get all the status of all GSTIN filing for all clients and once login once or even without login also we can get.
+   7. Reco is yet to implement — so will do in coming update with your help.
+   8. Lowest in size approx 6 MB
 
 ---
-
-## 5.
-Schema and everything once and can be used multiple time.
-
----
-
-## 6.
-Once login to get all the status of all GSTIN filing for all clients and once login once or even without login also we can get.
-
----
-
-## 7.
-Reco is yet to implement — so will do in coming update with your help.
-
----
-
 # Note:
-
-## 1.
-Frankly speaking I didnt get any name so I kept this.  
-For any suggestion of good name please contribute.
-
----
-
-## 2.
-
-> **The aim of this project is to keep it free, open-source, and community-driven so everyone can benefit from it.**
-
----
-
-## 3.
-Incase any copyrights infragrement please inform me as it being developed using ChatGPT ...
-
+1. Frankly speaking I didnt get any name so I kept this.  For any suggestion of good name please contribute.
+2. **The aim of this project is to keep it free, open-source, and community-driven so everyone can benefit from it.**
+3. Incase any copyrights infragrement please inform me as it being developed using ChatGPT ...
 ---
