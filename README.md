@@ -10,22 +10,6 @@ This extension was primarily built using ChatGPT and AI-assisted development. An
 
 ---
 
-# Want to Contribute or want to help?
-
-You can contribute even if you are not an expert developer.
-
-## Ways to contribute:
-
-1. Add new features or automation options  
-2. Improve UI/design  
-3. Fix GST portal compatibility issues  
-4. Improve download speed or reliability  
-5. Add support for notices, orders, or new return types  
-6. Report bugs and issues  
-7. Improve documentation and usage instructions  
-
----
-
 # Steps to work with this:
 
 ## 1. Install Firefox browser
@@ -93,6 +77,23 @@ scheme of excel Export
    6. Once login to get all the status of all GSTIN filing for all clients and once login once or even without login also we can get.
    7. Reco is yet to implement — so will do in coming update with your help.
    8. Lowest in size approx 6 MB
+
+# Want to Contribute or want to help?
+
+You can contribute even if you are not an expert developer.
+
+## Ways to contribute:
+
+1. Add new features or automation options  
+2. Improve UI/design  
+3. Fix GST portal compatibility issues  
+4. Improve download speed or reliability  
+5. Add support for notices, orders, or new return types  
+6. Report bugs and issues  
+7. Improve documentation and usage instructions  
+
+---
+for CA articles by a ca aspirant
 
 ---
 # Note:
