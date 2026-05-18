@@ -7,6 +7,7 @@ A simple Mozilla Firefox extension designed to download GST returns, ledgers, ch
 This extension was primarily built using ChatGPT and AI-assisted development. Anyone can improve, customize, or extend it either by editing the code directly (mainly `popup.js` and related files) or by using AI tools like ChatGPT to analyze and modify the extension.
 
 > **The aim of this project is to keep it free, open-source, and community-driven so everyone can benefit from it.**
+> Any one intrested in helping instructions are below.
 
 ---
 
