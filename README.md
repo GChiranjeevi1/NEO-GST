@@ -1,5 +1,5 @@
 # NEO-GST
-
+<!-- for CA articles by a ca aspirant -->
 A simple Mozilla Firefox extension designed to download GST returns, ledgers, challans, and other related data directly from the GST portal with customizable automation options.
 
 ---
@@ -92,10 +92,6 @@ You can contribute even if you are not an expert developer.
 5. Add support for notices, orders, or new return types  
 6. Report bugs and issues  
 7. Improve documentation and usage instructions  
-
----
-'''for CA articles by a ca aspirant
-```
 
 ---
 # Note:
