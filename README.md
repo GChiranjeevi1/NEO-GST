@@ -94,7 +94,7 @@ You can contribute even if you are not an expert developer.
 7. Improve documentation and usage instructions  
 
 ---
-for CA articles by a ca aspirant
+```for CA articles by a ca aspirant```
 
 ---
 # Note:
