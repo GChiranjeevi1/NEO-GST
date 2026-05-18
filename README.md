@@ -13,11 +13,11 @@ This extension was primarily built using ChatGPT and AI-assisted development. An
 
 # Steps to work with this:
 
-## 1. Install Firefox browser
+### 1. Install Firefox browser
 
 ---
 
-## 2. Open this tab in Firefox
+### 2. Open this tab in Firefox
 
 ```text
 about:debugging#/runtime/this-firefox
@@ -25,14 +25,14 @@ about:debugging#/runtime/this-firefox
 
 ---
 
-## 3. Load the extension
+### 3. Load the extension
 ```
 - Click **"Load Temporary Add-on"**
 - Select a file in the unzipped folder of the extension
 ```
 ---
 
-## 4. Login methods
+### 4. Login methods
 
 ```You can use this either:
 
@@ -40,7 +40,7 @@ about:debugging#/runtime/this-firefox
           OR  
 - Enter login username and password in the extension and click on **"login to portal"**
 ```
-## 5. GST Portal navigation instructions
+### 5. GST Portal navigation instructions
 
 ```
 In GST portal go to **"returns dashboard"** in the dashboard for all returns and the ledgers.
@@ -51,8 +51,10 @@ In GST portal go to **"returns dashboard"** in the dashboard for all returns and
 - To update the client details or get GSTIN numbers or return status → go to **"dashboard"** or other prescribed way
 ```
 ---
-### 6. Important Note:Keeping the correct GSTIN in the client dashboard is crucial for downloading returns and ledgers.
-### 7. Notices and Orders :For notices and orders I dint updated because frankly speaking its easier but currently I had some other works.
+### 6. Important Note:
+          Keeping the correct GSTIN in the client dashboard is crucial for downloading returns and ledgers.
+          Notices and Orders :For notices and orders I dint updated because frankly speaking its easier but currently I had some other works on it.
+          Alos reco are yet to be prepared...
 
 ---
 
@@ -78,6 +80,9 @@ scheme of excel Export
    6. Once login to get all the status of all GSTIN filing for all clients and once login once or even without login also we can get.
    7. Reco is yet to implement — so will do in coming update with your help.
    8. Lowest in size approx 6 MB
+
+## **Cons:**
+> some manual intervension is required..
 
 # Want to Contribute or want to help?
 
