@@ -97,5 +97,5 @@ You can contribute even if you are not an expert developer.
 # Note:
 1. Frankly speaking I didnt get any name so I kept this.  For any suggestion of good name please contribute.
 2. **The aim of this project is to keep it free, open-source, and community-driven so everyone can benefit from it.**
-3. Incase any copyrights infragrement please inform me as it being developed using ChatGPT ...
+3. This project was developed with the help of ChatGPT and AI-assisted tools. If there are any copyright concerns, please feel free to contact me. ...
 ---
