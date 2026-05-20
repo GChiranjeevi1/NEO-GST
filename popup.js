@@ -5500,16 +5500,17 @@ async function buildGstr1WorkbookXlsxBlob(state, options) {
 }
 
 function collectGstr2bWorkbookSheets(payload, includePeriod) {
+  const shouldIncludePeriod = !!includePeriod;
   const source = getGstr2bSectionSourceData(payload);
   const docdata = source && source.docdata && typeof source.docdata === "object" ? source.docdata : {};
   const cpsumm = source && source.cpsumm && typeof source.cpsumm === "object" ? source.cpsumm : {};
   const doc = docdata;
   const metaRows = [
-    { ...(includePeriod ? { report_period: source.rtnprd || "" } : {}), field: "gstin", value: source.gstin || "" },
-    { ...(includePeriod ? { report_period: source.rtnprd || "" } : {}), field: "rtnprd", value: source.rtnprd || "" },
-    { ...(includePeriod ? { report_period: source.rtnprd || "" } : {}), field: "generated_on", value: source.gendt || "" },
-    { ...(includePeriod ? { report_period: source.rtnprd || "" } : {}), field: "version", value: source.version || "" },
-    { ...(includePeriod ? { report_period: source.rtnprd || "" } : {}), field: "checksum", value: payload && payload.chksum ? payload.chksum : "" },
+    { ...(shouldIncludePeriod ? { report_period: source.rtnprd || "" } : {}), field: "gstin", value: source.gstin || "" },
+    { ...(shouldIncludePeriod ? { report_period: source.rtnprd || "" } : {}), field: "rtnprd", value: source.rtnprd || "" },
+    { ...(shouldIncludePeriod ? { report_period: source.rtnprd || "" } : {}), field: "generated_on", value: source.gendt || "" },
+    { ...(shouldIncludePeriod ? { report_period: source.rtnprd || "" } : {}), field: "version", value: source.version || "" },
+    { ...(shouldIncludePeriod ? { report_period: source.rtnprd || "" } : {}), field: "checksum", value: payload && payload.chksum ? payload.chksum : "" },
   ];
 
   const toDate = (value) => {
@@ -5938,11 +5939,11 @@ function collectGstr2bWorkbookSheets(payload, includePeriod) {
     },
   };
 
-  return [
+  const sheetSpecs = [
     {
       name: "Summary",
       rows: metaRows,
-      columns: getSpreadsheetColumns(metaRows || [], includePeriod ? ["report_period", "field", "value"] : ["field", "value"]),
+      columns: getSpreadsheetColumns(metaRows || [], shouldIncludePeriod ? ["report_period", "field", "value"] : ["field", "value"]),
       options: { schemaReturnType: "GSTR2B" },
     },
     {
@@ -6144,10 +6145,134 @@ function collectGstr2bWorkbookSheets(payload, includePeriod) {
       [null, null, null, null, null, null, null, null, null, null, "Integrated Tax(₹)", "Central Tax(₹)", "State/UT Tax(₹)", "Cess(₹)"],
     ], ["K3:N3", "C3:C4", "A3:A4", "P3:P4", "B3:B4", "E3:E4", "G3:G4", "F3:F4", "D3:D4", "H3:H4", "I3:I4", "J3:J4", "O3:O4", "A2:C2", "D2:P2"]),
   ];
+  const collectedSheets = {};
+  const sheetMeta = {};
+  sheetSpecs.forEach((sheet) => {
+    collectedSheets[sheet.name] = Array.isArray(sheet.rows)
+      ? sheet.rows.map((row) => ({ ...(row || {}) }))
+      : [];
+    sheetMeta[sheet.name] = {
+      columns: Array.isArray(sheet.columns) ? sheet.columns.slice() : [],
+      options: cloneGstr2bSheetOptions(sheet.options),
+    };
+  });
+  Object.defineProperty(collectedSheets, "__meta", {
+    value: sheetMeta,
+    enumerable: false,
+    configurable: false,
+    writable: false,
+  });
+  return collectedSheets;
+}
+
+function cloneGstr2bSheetOptions(options) {
+  if (!options || typeof options !== "object") return {};
+  return {
+    ...options,
+    customHeaderRows: Array.isArray(options.customHeaderRows)
+      ? options.customHeaderRows.map((row) => (Array.isArray(row) ? row.slice() : row))
+      : options.customHeaderRows,
+    merges: Array.isArray(options.merges) ? options.merges.slice() : options.merges,
+  };
+}
+
+function buildGstr2bWorkbookSheetSpecs(collectedSheets, leadingColumns) {
+  const sheets = [];
+  const sheetMeta = collectedSheets && collectedSheets.__meta && typeof collectedSheets.__meta === "object"
+    ? collectedSheets.__meta
+    : {};
+  Object.keys(collectedSheets || {}).forEach((sheetName) => {
+    const rows = Array.isArray(collectedSheets[sheetName]) ? collectedSheets[sheetName] : [];
+    const meta = sheetMeta[sheetName] || {};
+    const baseColumns = Array.isArray(meta.columns) ? meta.columns.slice() : [];
+    const preferredColumns = Array.isArray(leadingColumns) && leadingColumns.length
+      ? leadingColumns.concat(baseColumns.filter((column) => !leadingColumns.includes(column)))
+      : baseColumns;
+    sheets.push({
+      name: sheetName,
+      rows,
+      columns: getSpreadsheetColumns(rows, preferredColumns),
+      options: cloneGstr2bSheetOptions(meta.options),
+    });
+  });
+  return sheets;
+}
+
+const GSTR2B_COMBINED_GROUPED_SUMMARY_SHEETS = new Set([
+  "ITC Available",
+  "ITC not available",
+  "ITC Reversal",
+  "ITC Rejected",
+]);
+
+function setGstr2bCombinedSheetMeta(combinedSheetMeta, sheetName, sheetMeta) {
+  if (Object.prototype.hasOwnProperty.call(combinedSheetMeta, sheetName)) return;
+  combinedSheetMeta[sheetName] = {
+    columns: Array.isArray(sheetMeta && sheetMeta.columns) ? sheetMeta.columns.slice() : [],
+    options: cloneGstr2bSheetOptions(sheetMeta && sheetMeta.options),
+  };
+}
+
+function buildCombinedGstr2bSummaryPivotRows(payloads) {
+  const rowConfig = [
+    { key: "rtnprd", label: "Period" },
+    { key: "gstin", label: "GSTIN" },
+    { key: "generated_on", label: "DATA OF Filing" },
+    { key: "version", label: "STATUS" },
+    { key: "checksum", label: "CHECKSUM" },
+  ];
+  const rowsByKey = new Map(rowConfig.map((item) => [item.key, { field: item.label }]));
+  const periods = [];
+
+  (payloads || []).forEach((payload, index) => {
+    const source = getGstr2bSectionSourceData(payload);
+    const period = source.rtnprd || `PERIOD_${index + 1}`;
+    if (!periods.includes(period)) periods.push(period);
+    const collectedSheets = collectGstr2bWorkbookSheets(payload, false);
+    const valuesByField = {};
+    (collectedSheets.Summary || []).forEach((row) => {
+      if (row && row.field) valuesByField[row.field] = row.value == null ? "" : row.value;
+    });
+    rowConfig.forEach((item) => {
+      rowsByKey.get(item.key)[period] = valuesByField[item.key] == null ? "" : valuesByField[item.key];
+    });
+  });
+
+  return {
+    rows: rowConfig.map((item) => rowsByKey.get(item.key)),
+    columns: ["field"].concat(periods),
+  };
+}
+
+function isGstr2bNumericSummaryColumn(column) {
+  return ["c4", "c5", "c6", "c7"].includes(column);
+}
+
+function groupCombinedGstr2bItcSummaryRows(rows, columns) {
+  const grouped = new Map();
+  (rows || []).forEach((row) => {
+    const key = (columns || [])
+      .filter((column) => !isGstr2bNumericSummaryColumn(column))
+      .map((column) => `${column}:${row && row[column] == null ? "" : row[column]}`)
+      .join("||");
+    if (!grouped.has(key)) {
+      grouped.set(key, { ...(row || {}) });
+      return;
+    }
+    const target = grouped.get(key);
+    (columns || []).forEach((column) => {
+      if (!isGstr2bNumericSummaryColumn(column)) return;
+      const current = target[column] == null || target[column] === "" ? 0 : Number(target[column]) || 0;
+      const next = row && row[column] != null && row[column] !== "" ? Number(row[column]) || 0 : 0;
+      target[column] = current + next;
+    });
+  });
+  return Array.from(grouped.values());
 }
 
 async function buildGstr2bWorkbookXlsxBlob(payload) {
-  return buildXlsxBlobFromSheets(collectGstr2bWorkbookSheets(payload, false));
+  const collectedSheets = collectGstr2bWorkbookSheets(payload, false);
+  return buildXlsxBlobFromSheets(buildGstr2bWorkbookSheetSpecs(collectedSheets));
 }
 
 function collectGstr2aWorkbookSheets(payload, includePeriod) {
@@ -6168,65 +6293,87 @@ async function buildGstr2aWorkbookXlsxBlob(payload) {
 }
 
 async function buildCombinedGstr2bWorkbookXlsxBlob(payloads) {
-  const combinedSummary = buildCombinedSummaryRows(payloads);
-  const sectionsByName = new Map();
+  const combinedSheets = {};
+  const combinedSheetMeta = {};
+  const summaryPivot = buildCombinedGstr2bSummaryPivotRows(payloads);
+  combinedSheets.Summary = summaryPivot.rows;
+  combinedSheetMeta.Summary = {
+    columns: summaryPivot.columns,
+    options: { schemaReturnType: "GSTR2B" },
+  };
+
   (payloads || []).forEach((payload) => {
-    const data = buildGstr2bWorkbookData(payload, true);
-    (data.summSectionSheets || []).forEach((section) => {
-      if (!sectionsByName.has(section.name)) sectionsByName.set(section.name, []);
-      (section.rows || []).forEach((row) => {
-        sectionsByName.get(section.name).push(row);
+    const source = getGstr2bSectionSourceData(payload);
+    const returnPeriod = source.rtnprd || "";
+    const fy = getFyFromPeriod(returnPeriod);
+    const gstin = source.gstin || "";
+    const collectedSheets = collectGstr2bWorkbookSheets(payload, false);
+    const sheetMeta = collectedSheets && collectedSheets.__meta && typeof collectedSheets.__meta === "object"
+      ? collectedSheets.__meta
+      : {};
+
+    Object.keys(collectedSheets || {}).forEach((sheetName) => {
+      if (sheetName === "Summary") return;
+      if (!Object.prototype.hasOwnProperty.call(combinedSheets, sheetName)) {
+        combinedSheets[sheetName] = [];
+        setGstr2bCombinedSheetMeta(combinedSheetMeta, sheetName, sheetMeta[sheetName]);
+      }
+      (collectedSheets[sheetName] || []).forEach((row) => {
+        if (GSTR2B_COMBINED_GROUPED_SUMMARY_SHEETS.has(sheetName)) {
+          combinedSheets[sheetName].push({ ...(row || {}) });
+        } else {
+          combinedSheets[sheetName].push({
+            RETURN_PERIOD: returnPeriod,
+            FY: fy,
+            GSTIN: gstin,
+            ...(row || {}),
+          });
+        }
       });
     });
   });
-  const sheets = [
-    { name: "Summary", rows: combinedSummary.rows || [], columns: combinedSummary.columns || ["field"], options: { schemaReturnType: "GSTR2B" } },
-  ];
-  Array.from(sectionsByName.entries()).forEach(([name, rows]) => {
-    sheets.push({
-      name,
-      rows,
-      columns: getSpreadsheetColumns(rows, ["report_period", "row_no"]),
-      options: { schemaReturnType: "GSTR2B" },
-    });
+
+  GSTR2B_COMBINED_GROUPED_SUMMARY_SHEETS.forEach((sheetName) => {
+    if (!Array.isArray(combinedSheets[sheetName])) return;
+    const columns = combinedSheetMeta[sheetName] && Array.isArray(combinedSheetMeta[sheetName].columns)
+      ? combinedSheetMeta[sheetName].columns
+      : [];
+    combinedSheets[sheetName] = groupCombinedGstr2bItcSummaryRows(combinedSheets[sheetName], columns);
   });
-  return buildXlsxBlobFromSheets(sheets);
+
+  Object.defineProperty(combinedSheets, "__meta", {
+    value: combinedSheetMeta,
+    enumerable: false,
+    configurable: false,
+    writable: false,
+  });
+
+  const sheetSpecs = buildGstr2bWorkbookSheetSpecs(combinedSheets, ["RETURN_PERIOD", "FY", "GSTIN"])
+    .map((sheet) => {
+      if (sheet.name === "Summary" || GSTR2B_COMBINED_GROUPED_SUMMARY_SHEETS.has(sheet.name)) {
+        return {
+          ...sheet,
+          columns: getSpreadsheetColumns(sheet.rows || [], combinedSheetMeta[sheet.name] && combinedSheetMeta[sheet.name].columns),
+        };
+      }
+      return sheet;
+    });
+
+  return buildXlsxBlobFromSheets(sheetSpecs);
 }
 
-async function buildCombinedGstr2aWorkbookXlsxBlob(payloads) {
-  const fields = ["gstin", "rtnprd", "status", "message", "date", "time", "generated_on", "version", "checksum", "file_url"];
-  const valuesByField = new Map(fields.map((field) => [field, { field }]));
-  const periods = [];
-  const sectionsByName = new Map();
-  (payloads || []).forEach((payload) => {
-    const meta = extractWorkbookMeta(payload);
-    const period = meta.rtnprd || "";
-    if (period && !periods.includes(period)) periods.push(period);
-    if (period) {
-      valuesByField.get("gstin")[period] = meta.gstin || "";
-      valuesByField.get("rtnprd")[period] = meta.rtnprd || "";
-      valuesByField.get("status")[period] = meta.status || "";
-      valuesByField.get("message")[period] = meta.message || "";
-      valuesByField.get("date")[period] = meta.file_date || "";
-      valuesByField.get("time")[period] = meta.file_time || "";
-      valuesByField.get("generated_on")[period] = meta.generated_on || "";
-      valuesByField.get("version")[period] = meta.version || "";
-      valuesByField.get("checksum")[period] = meta.checksum || "";
-      valuesByField.get("file_url")[period] = meta.file_url || "";
+function getFyFromPeriod(period) {
+
+    if (!period || period.length !== 6) return "";
+
+    const mm = parseInt(period.substring(0, 2), 10);
+    const yyyy = parseInt(period.substring(2), 10);
+
+    if (mm >= 4) {
+        return `${yyyy}-${String(yyyy + 1).slice(-2)}`;
     }
-    const workbookData = buildGstr2aWorkbookData(payload, true);
-    (workbookData.sectionSheets || []).forEach((section) => {
-      if (!sectionsByName.has(section.name)) sectionsByName.set(section.name, []);
-      (section.rows || []).forEach((row) => sectionsByName.get(section.name).push({ ...(row || {}) }));
-    });
-  });
-  const sheets = [
-    { name: "Summary", rows: fields.map((field) => valuesByField.get(field)), columns: ["field"].concat(periods), options: { schemaReturnType: "GSTR2A" } },
-  ];
-  Array.from(sectionsByName.entries()).forEach(([name, rows]) => {
-    sheets.push({ name, rows, columns: getSpreadsheetColumns(rows, ["report_period", "row_no"]), options: { schemaReturnType: "GSTR2A" } });
-  });
-  return buildXlsxBlobFromSheets(sheets);
+
+    return `${yyyy - 1}-${String(yyyy).slice(-2)}`;
 }
 
 function buildCombinedGstr2aWorkbookXml(payloads) {
@@ -6430,16 +6577,26 @@ function sumGstr3bCashRows(rows, fields) {
   );
 }
 
+function hasGstr3bObjectValues(value) {
+  return value && typeof value === "object" && Object.keys(value).length > 0;
+}
+
 function normalizeGstr3bTaxPayment(rawTaxPayment) {
   const source = rawTaxPayment || {};
   const returnsDbCdredList = source.returnsDbCdredList || {};
   const firstItcRow = Array.isArray(source.tax_paiditc)
-    ? (source.tax_paiditc.find((item) => item && typeof item === "object") || {})
+    ? (source.tax_paiditc.find((item) => hasGstr3bObjectValues(item)) || {})
     : {};
+  const returnsItcRow = ((returnsDbCdredList.tax_paid && returnsDbCdredList.tax_paid.pd_by_itc) || [])
+    .find((item) => hasGstr3bObjectValues(item)) || {};
   return {
     net_tax_pay: source.net_tax_pay || returnsDbCdredList.net_tax_pay || source.tax_pay || returnsDbCdredList.tax_pay || source.tx_py || [],
     pdcash: source.pdcash || source.tax_paidcash || (returnsDbCdredList.tax_paid && returnsDbCdredList.tax_paid.pd_by_cash) || [],
-    pditc: source.pditc || firstItcRow || ((returnsDbCdredList.tax_paid && returnsDbCdredList.tax_paid.pd_by_itc && returnsDbCdredList.tax_paid.pd_by_itc[0]) || {}),
+    pditc: hasGstr3bObjectValues(source.pditc)
+      ? source.pditc
+      : hasGstr3bObjectValues(firstItcRow)
+        ? firstItcRow
+        : returnsItcRow,
     tx_py: source.tx_py || returnsDbCdredList.tax_pay || source.tax_pay || [],
   };
 }
@@ -6471,6 +6628,21 @@ function normalizeGstr3bExcelAmount(value) {
 function asGstr3bDisplayValue(value, fallback) {
   if (value === "" || value == null) return fallback || "";
   return value;
+}
+
+function getGstr3bItcPaidThroughCredit(itcRow, liabilityTaxKey, creditTaxKey) {
+  const row = itcRow || {};
+  const shortLiability = { igst: "i", cgst: "c", sgst: "s", cess: "cs" }[liabilityTaxKey] || liabilityTaxKey;
+  const shortCredit = { igst: "i", cgst: "c", sgst: "s", cess: "cs" }[creditTaxKey] || creditTaxKey;
+  const candidates = [
+    `${shortLiability}_pd${shortCredit}`,
+    `${liabilityTaxKey}_${creditTaxKey}_amt`,
+    `${shortLiability}_${shortCredit}_amt`,
+  ];
+  for (const key of candidates) {
+    if (Object.prototype.hasOwnProperty.call(row, key)) return row[key];
+  }
+  return "";
 }
 
 function buildGstr3bPdfStyleRows(payload) {
@@ -6588,27 +6760,31 @@ function buildGstr3bSection61Rows(root, taxPayment) {
   const returnsDbCdredList = (root.taxpayble && root.taxpayble.returnsDbCdredList) || {};
   const liabilities = returnsDbCdredList.tax_pay || taxPayment.net_tax_pay || [];
   const paidByCashRows = (returnsDbCdredList.tax_paid && returnsDbCdredList.tax_paid.pd_by_cash) || taxPayment.pdcash || [];
-  const paidByItcRows = (returnsDbCdredList.tax_paid && returnsDbCdredList.tax_paid.pd_by_itc) || (taxPayment.pditc ? [taxPayment.pditc] : []);
   const interestPaidRows = paidByCashRows;
   const lateFeePaidRows = paidByCashRows;
   const otherLiability = liabilities.find((row) => asNumber(row && row.trancd) === 30002) || liabilities[0] || {};
   const reverseChargeLiability = liabilities.find((row) => asNumber(row && row.trancd) === 30003) || {};
   const reverseChargeCash = paidByCashRows.find((row) => asNumber(row && row.trancd) === 30003) || paidByCashRows[0] || {};
-  const itcRow = paidByItcRows[0] || {};
-  const buildTaxRow = (label, taxKey, liabilityRow, cashRow, options) => ({
-    kind: options && options.kind ? options.kind : "tax",
-    label,
-    taxPayable: normalizeGstr3bExcelAmount(liabilityRow && liabilityRow[taxKey] && liabilityRow[taxKey].tx),
-    adjustment: 0,
-    netTaxPayable: normalizeGstr3bExcelAmount(liabilityRow && liabilityRow[taxKey] && liabilityRow[taxKey].tx),
-    itcIntegrated: normalizeGstr3bExcelAmount(itcRow[`igst_${taxKey}_amt`]),
-    itcCentral: normalizeGstr3bExcelAmount(itcRow[`cgst_${taxKey}_amt`]),
-    itcState: normalizeGstr3bExcelAmount(itcRow[`sgst_${taxKey}_amt`]),
-    itcCess: normalizeGstr3bExcelAmount(itcRow[`cess_${taxKey}_amt`]),
-    paidInCash: normalizeGstr3bExcelAmount(cashRow && cashRow[taxKey] && cashRow[taxKey].tx),
-    interestPaid: normalizeGstr3bExcelAmount(cashRow && cashRow[taxKey] && cashRow[taxKey].intr),
-    lateFeePaid: normalizeGstr3bExcelAmount(cashRow && cashRow[taxKey] && cashRow[taxKey].fee),
-  });
+  const returnsItcRow = ((returnsDbCdredList.tax_paid && returnsDbCdredList.tax_paid.pd_by_itc) || [])
+    .find((row) => hasGstr3bObjectValues(row)) || {};
+  const itcRow = hasGstr3bObjectValues(returnsItcRow) ? returnsItcRow : (taxPayment.pditc || {});
+  const buildTaxRow = (label, taxKey, liabilityRow, cashRow, options) => {
+    const cfg = options || {};
+    return {
+      kind: cfg.kind || "tax",
+      label,
+      taxPayable: normalizeGstr3bExcelAmount(liabilityRow && liabilityRow[taxKey] && liabilityRow[taxKey].tx),
+      adjustment: 0,
+      netTaxPayable: normalizeGstr3bExcelAmount(liabilityRow && liabilityRow[taxKey] && liabilityRow[taxKey].tx),
+      itcIntegrated: cfg.zeroItc ? "" : normalizeGstr3bExcelAmount(getGstr3bItcPaidThroughCredit(itcRow, taxKey, "igst")),
+      itcCentral: cfg.zeroItc ? "" : normalizeGstr3bExcelAmount(getGstr3bItcPaidThroughCredit(itcRow, taxKey, "cgst")),
+      itcState: cfg.zeroItc ? "" : normalizeGstr3bExcelAmount(getGstr3bItcPaidThroughCredit(itcRow, taxKey, "sgst")),
+      itcCess: cfg.zeroItc ? "" : normalizeGstr3bExcelAmount(getGstr3bItcPaidThroughCredit(itcRow, taxKey, "cess")),
+      paidInCash: normalizeGstr3bExcelAmount(cashRow && cashRow[taxKey] && cashRow[taxKey].tx),
+      interestPaid: normalizeGstr3bExcelAmount(cashRow && cashRow[taxKey] && cashRow[taxKey].intr),
+      lateFeePaid: normalizeGstr3bExcelAmount(cashRow && cashRow[taxKey] && cashRow[taxKey].fee),
+    };
+  };
 
   return [
     { kind: "group", label: "(A) Other than reverse charge" },
@@ -6617,10 +6793,10 @@ function buildGstr3bSection61Rows(root, taxPayment) {
     buildTaxRow("State/UT tax", "sgst", otherLiability, {}, { kind: "tax" }),
     buildTaxRow("Cess", "cess", otherLiability, {}, { kind: "tax" }),
     { kind: "group", label: "(B) Reverse charge and supplies made u/s 9(5)" },
-    buildTaxRow("Integrated tax", "igst", reverseChargeLiability, reverseChargeCash, { kind: "tax" }),
-    buildTaxRow("Central tax", "cgst", reverseChargeLiability, reverseChargeCash, { kind: "tax" }),
-    buildTaxRow("State/UT tax", "sgst", reverseChargeLiability, reverseChargeCash, { kind: "tax" }),
-    buildTaxRow("Cess", "cess", reverseChargeLiability, reverseChargeCash, { kind: "tax" }),
+    buildTaxRow("Integrated tax", "igst", reverseChargeLiability, reverseChargeCash, { kind: "tax", zeroItc: true }),
+    buildTaxRow("Central tax", "cgst", reverseChargeLiability, reverseChargeCash, { kind: "tax", zeroItc: true }),
+    buildTaxRow("State/UT tax", "sgst", reverseChargeLiability, reverseChargeCash, { kind: "tax", zeroItc: true }),
+    buildTaxRow("Cess", "cess", reverseChargeLiability, reverseChargeCash, { kind: "tax", zeroItc: true }),
   ];
 }
 
@@ -7689,8 +7865,202 @@ function buildGstr3bWorkbookXml(payload) {
    <Borders><Border ss:Position="Bottom" ss:LineStyle="Continuous" ss:Weight="1"/><Border ss:Position="Left" ss:LineStyle="Continuous" ss:Weight="1"/><Border ss:Position="Right" ss:LineStyle="Continuous" ss:Weight="1"/><Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/></Borders>
  </Style>
  </Styles>
- ${buildGstr3bPdfExactWorksheet(payload, "GSTR-3B")}
+${buildGstr3bPdfExactWorksheet(payload, "GSTR-3B")}
 </Workbook>`;
+}
+
+function addGstr3bTaxAmount(target, source) {
+  const src = source || {};
+  target.txval = asNumber(target.txval) + asNumber(src.txval);
+  target.iamt = asNumber(target.iamt) + asNumber(src.iamt);
+  target.camt = asNumber(target.camt) + asNumber(src.camt);
+  target.samt = asNumber(target.samt) + asNumber(src.samt);
+  target.csamt = asNumber(target.csamt) + asNumber(src.csamt);
+}
+
+function aggregateGstr3bTypedRows(payloads, bucket, typeList) {
+  return (typeList || []).map((type) => {
+    const row = { ty: type, txval: 0, iamt: 0, camt: 0, samt: 0, csamt: 0 };
+    (payloads || []).forEach((payload) => {
+      const root = payload && payload.data ? payload.data : payload || {};
+      const found = findGstr3bTypedRow(root.itc_elg && root.itc_elg[bucket], type) || {};
+      addGstr3bTaxAmount(row, found);
+    });
+    return row;
+  });
+}
+
+function aggregateGstr3bPaymentRows(payloads, transactionCode) {
+  const row = {
+    trancd: transactionCode,
+    igst: { tx: 0, intr: 0, fee: 0 },
+    cgst: { tx: 0, intr: 0, fee: 0 },
+    sgst: { tx: 0, intr: 0, fee: 0 },
+    cess: { tx: 0, intr: 0, fee: 0 },
+  };
+  (payloads || []).forEach((payload) => {
+    const root = payload && payload.data ? payload.data : payload || {};
+    const taxPayment = normalizeGstr3bTaxPayment(pickGstr3bTaxPaymentSource(root));
+    const liability = (taxPayment.net_tax_pay || []).find((item) => asNumber(item && item.trancd) === transactionCode) || {};
+    const cash = (taxPayment.pdcash || []).find((item) => asNumber(item && item.trancd) === transactionCode) || {};
+    ["igst", "cgst", "sgst", "cess"].forEach((taxKey) => {
+      row[taxKey].tx += asNumber(liability[taxKey] && liability[taxKey].tx);
+      row[taxKey].intr += asNumber(cash[taxKey] && cash[taxKey].intr);
+      row[taxKey].fee += asNumber(cash[taxKey] && cash[taxKey].fee);
+    });
+  });
+  return row;
+}
+
+function aggregateGstr3bCashPaymentRows(payloads, transactionCode) {
+  const row = {
+    trancd: transactionCode,
+    igst: { tx: 0, intr: 0, fee: 0 },
+    cgst: { tx: 0, intr: 0, fee: 0 },
+    sgst: { tx: 0, intr: 0, fee: 0 },
+    cess: { tx: 0, intr: 0, fee: 0 },
+  };
+  (payloads || []).forEach((payload) => {
+    const root = payload && payload.data ? payload.data : payload || {};
+    const taxPayment = normalizeGstr3bTaxPayment(pickGstr3bTaxPaymentSource(root));
+    const cash = (taxPayment.pdcash || []).find((item) => asNumber(item && item.trancd) === transactionCode) || {};
+    ["igst", "cgst", "sgst", "cess"].forEach((taxKey) => {
+      row[taxKey].tx += asNumber(cash[taxKey] && cash[taxKey].tx);
+      row[taxKey].intr += asNumber(cash[taxKey] && cash[taxKey].intr);
+      row[taxKey].fee += asNumber(cash[taxKey] && cash[taxKey].fee);
+    });
+  });
+  return row;
+}
+
+function buildAggregatedGstr3bPayload(payloads) {
+  const firstRoot = payloads && payloads[0] && payloads[0].data ? payloads[0].data : (payloads && payloads[0]) || {};
+  const aggregate = {
+    gstin: firstRoot.gstin || "",
+    rtnprd: "Combined",
+    sup_details: {
+      osup_det: { txval: 0, iamt: 0, camt: 0, samt: 0, csamt: 0 },
+      osup_zero: { txval: 0, iamt: 0, camt: 0, samt: 0, csamt: 0 },
+      osup_nil_exmp: { txval: 0, iamt: 0, camt: 0, samt: 0, csamt: 0 },
+      isup_rev: { txval: 0, iamt: 0, camt: 0, samt: 0, csamt: 0 },
+      osup_nongst: { txval: 0, iamt: 0, camt: 0, samt: 0, csamt: 0 },
+    },
+    inter_sup: {
+      unreg_details: [{ txval: 0, iamt: 0 }],
+      comp_details: [{ txval: 0, iamt: 0 }],
+      uin_details: [{ txval: 0, iamt: 0 }],
+    },
+    itc_elg: {
+      itc_avl: [],
+      itc_rev: [],
+      itc_net: { iamt: 0, camt: 0, samt: 0, csamt: 0 },
+      itc_inelg: [],
+    },
+    intr_ltfee: {
+      intr_details: { iamt: 0, camt: 0, samt: 0, csamt: 0 },
+      ltfee_details: { iamt: 0, camt: 0, samt: 0, csamt: 0 },
+    },
+    taxpayble: {
+      returnsDbCdredList: {
+        tax_pay: [],
+        net_tax_pay: [],
+        tax_paid: {
+          pd_by_cash: [],
+          pd_by_itc: [{}],
+        },
+      },
+    },
+  };
+
+  (payloads || []).forEach((payload) => {
+    const root = payload && payload.data ? payload.data : payload || {};
+    ["osup_det", "osup_zero", "osup_nil_exmp", "isup_rev", "osup_nongst"].forEach((key) => {
+      addGstr3bTaxAmount(aggregate.sup_details[key], root.sup_details && root.sup_details[key]);
+    });
+    [["unreg_details", 0], ["comp_details", 0], ["uin_details", 0]].forEach(([key, index]) => {
+      const sourceRow = ((root.inter_sup || {})[key] || [])[0] || {};
+      aggregate.inter_sup[key][index].txval += asNumber(sourceRow.txval);
+      aggregate.inter_sup[key][index].iamt += asNumber(sourceRow.iamt);
+    });
+    addGstr3bTaxAmount(aggregate.itc_elg.itc_net, root.itc_elg && root.itc_elg.itc_net);
+    addGstr3bTaxAmount(aggregate.intr_ltfee.intr_details, root.intr_ltfee && root.intr_ltfee.intr_details);
+    addGstr3bTaxAmount(aggregate.intr_ltfee.ltfee_details, root.intr_ltfee && root.intr_ltfee.ltfee_details);
+    const taxPayment = normalizeGstr3bTaxPayment(pickGstr3bTaxPaymentSource(root));
+    const targetItc = aggregate.taxpayble.returnsDbCdredList.tax_paid.pd_by_itc[0];
+    Object.keys(taxPayment.pditc || {}).forEach((key) => {
+      targetItc[key] = asNumber(targetItc[key]) + asNumber(taxPayment.pditc[key]);
+    });
+  });
+
+  aggregate.itc_elg.itc_avl = aggregateGstr3bTypedRows(payloads, "itc_avl", ["IMPG", "IMPS", "ISRC", "ISD", "OTH"]);
+  aggregate.itc_elg.itc_rev = aggregateGstr3bTypedRows(payloads, "itc_rev", ["RUL", "OTH"]);
+  aggregate.itc_elg.itc_inelg = aggregateGstr3bTypedRows(payloads, "itc_inelg", ["RUL", "OTH"]);
+  aggregate.taxpayble.returnsDbCdredList.tax_pay = [
+    aggregateGstr3bPaymentRows(payloads, 30002),
+    aggregateGstr3bPaymentRows(payloads, 30003),
+  ];
+  aggregate.taxpayble.returnsDbCdredList.net_tax_pay = aggregate.taxpayble.returnsDbCdredList.tax_pay;
+  aggregate.taxpayble.returnsDbCdredList.tax_paid.pd_by_cash = [
+    aggregateGstr3bCashPaymentRows(payloads, 30002),
+    aggregateGstr3bCashPaymentRows(payloads, 30003),
+  ];
+
+  return { data: aggregate };
+}
+
+function extractGstr3bWorksheetRowsOnly(worksheetXml) {
+  const tableMatch = String(worksheetXml || "").match(/<Table>([\s\S]*)<\/Table>/);
+  if (!tableMatch) return "";
+  return tableMatch[1].replace(/<Column[^>]*\/>/g, "");
+}
+
+function buildCombinedGstr3bBreakupTransposedRows(payloads) {
+  const periods = [];
+  const totalsByPeriod = new Map();
+  (payloads || []).forEach((payload) => {
+    const root = payload && payload.data ? payload.data : payload || {};
+    const period = String(root.rtnprd || root.ret_period || root.rtn_prd || root.fp || "");
+    if (!period) return;
+    periods.push(period);
+    const taxPayment = normalizeGstr3bTaxPayment(pickGstr3bTaxPaymentSource(root));
+    totalsByPeriod.set(period, sumPaymentRows(taxPayment.net_tax_pay, "tx"));
+  });
+  const taxRows = [
+    ["Integrated tax", "igst"],
+    ["Central tax", "cgst"],
+    ["State/UT tax", "sgst"],
+    ["Cess", "cess"],
+  ];
+  const columns = ["Description"].concat(periods, ["Total"]);
+  const headerXml = columns.map((column) => `<Cell ss:StyleID="G3BHeader"><Data ss:Type="String">${escapeXml(column)}</Data></Cell>`).join("");
+  const rowsXml = taxRows.map(([label, key]) => {
+    let total = 0;
+    const cells = periods.map((period) => {
+      const value = asNumber((totalsByPeriod.get(period) || {})[key]);
+      total += value;
+      return `<Cell ss:StyleID="G3BNumber"><Data ss:Type="Number">${value}</Data></Cell>`;
+    }).join("");
+    return `<Row><Cell ss:StyleID="G3BItem"><Data ss:Type="String">${escapeXml(label)}</Data></Cell>${cells}<Cell ss:StyleID="G3BNumber"><Data ss:Type="Number">${total}</Data></Cell></Row>`;
+  }).join("");
+  const titleMergeAcross = Math.max(columns.length - 1, 1);
+  return `<Row><Cell ss:StyleID="G3BSectionBar" ss:MergeAcross="${titleMergeAcross}"><Data ss:Type="String">Breakup of tax liability declared (for interest computation)</Data></Cell></Row><Row>${headerXml}</Row>${rowsXml}`;
+}
+
+function buildCombinedGstr3bDetailsWorksheet(payloads) {
+  const periods = [];
+  (payloads || []).forEach((payload) => {
+    const root = payload && payload.data ? payload.data : payload || {};
+    const period = String(root.rtnprd || root.ret_period || root.rtn_prd || root.fp || "");
+    if (period && !periods.includes(period)) periods.push(period);
+  });
+  const summaryRows = extractGstr3bWorksheetRowsOnly(buildCombinedGstr3bSummaryWorksheet(payloads));
+  const detailRows = extractGstr3bWorksheetRowsOnly(buildCombinedGstr3bAllTablesWorksheet(payloads));
+  const breakupRows = buildCombinedGstr3bBreakupTransposedRows(payloads);
+  const columnXml = ['<Column ss:AutoFitWidth="0" ss:Width="420"/>']
+    .concat(periods.map(() => '<Column ss:AutoFitWidth="0" ss:Width="110"/>'))
+    .concat(['<Column ss:AutoFitWidth="0" ss:Width="110"/>'])
+    .join("");
+  return `<Worksheet ss:Name="Details"><Table>${columnXml}${summaryRows}<Row><Cell/></Row>${detailRows}<Row><Cell/></Row>${breakupRows}</Table></Worksheet>`;
 }
 
 function buildCombinedGstr3bWorkbookXml(payloads) {
@@ -7771,10 +8141,8 @@ function buildCombinedGstr3bWorkbookXml(payloads) {
    <Alignment ss:Vertical="Center"/>
  </Style>
  </Styles>
- ${buildCombinedGstr3bSummaryWorksheet(payloads)}
- ${buildCombinedGstr3bTotalsWorksheet(payloads)}
- ${buildCombinedGstr3bBreakupWorksheet(payloads)}
- ${buildCombinedGstr3bAllTablesWorksheet(payloads)}
+ ${buildGstr3bPdfExactWorksheet(buildAggregatedGstr3bPayload(payloads), "Summary")}
+ ${buildCombinedGstr3bDetailsWorksheet(payloads)}
 </Workbook>`;
 }
 
