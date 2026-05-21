@@ -1,6 +1,6 @@
 # NEO-GST
 <!-- for CA articles by a ca aspirant -->
-A simple Mozilla Firefox extension designed to download GST returns, ledgers, challans, and other related data directly from the GST portal with customizable automation options.
+A simple designed to download GST returns, ledgers, challans, and other related data directly from the GST portal with customizable automation options.
 
 ---
 
@@ -13,50 +13,26 @@ This extension was primarily built using ChatGPT and AI-assisted development. An
 
 # Steps to work with this:
 
-### 1. Install Firefox browser
+### 1. open chrome Browser
 
----
+### 2. Open Extenions tab or cliect on "chrome://extensions/" and cleick on developer and click on load unpacked
 
-### 2. Open this tab in Firefox
-
-```text
-about:debugging#/runtime/this-firefox
-```
-
----
-
-### 3. Load the extension
-```
-- Click **"Load Temporary Add-on"**
-- Select a file in the unzipped folder of the extension
-```
----
+### 3.click on extenison to open it
 
 ### 4. Login methods
-
-```You can use this either:
-
+```
 - Open GST portal directly  
           OR  
-- Enter login username and password in the extension and click on **"login to portal"**
+- Enter login details in client management and click on **"login to portal"**
 ```
 ### 5. GST Portal navigation instructions
 
-```
-In GST portal go to **"returns dashboard"** in the dashboard for all returns and the ledgers.
+In GST portal go to **"dashboard-->returns dashboard"**  for **all returns and the ledgers**.
    **Except**:
       - For **GSTR2B** → open 1 GSTR2B return in portal
       - For challans and cash ledger/challans → click on **"create challan"** in **"dashboard"**  
 
-- To update the client details or get GSTIN numbers or return status → go to **"dashboard"** or other prescribed way
-```
----
-### 6. Important Note:
-          Keeping the correct GSTIN in the client dashboard is crucial for downloading returns and ledgers.
-          Notices and Orders :For notices and orders I dint updated because frankly speaking its easier but currently I had some other works on it.
-          Alos reco are yet to be prepared...
-
----
+- To update the client details or get GSTIN numbers or return status → go to **"dashboard"** or other prescribed way.
 
 # Features
 variatiosn as compared to others..
