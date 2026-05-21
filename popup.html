@@ -567,8 +567,74 @@
           grid-template-columns: 1fr;
         }
       }
+
+      /* ── Dark Mode ─────────────────────────────────────────── */
+      body.dark {
+        --bg: #0f1117;
+        --bg-accent: #1a1a2e;
+        --primary: #5b8aff;
+        --success: #22c55e;
+        --warning: #f0b429;
+        --danger: #ef4444;
+        --card: #1e2130;
+        --text: #e2e8f8;
+        --muted: #8892a4;
+        --shadow: 0 16px 40px rgba(0,0,0,0.45);
+        background: radial-gradient(circle at top left, #1a1f3a, transparent 55%),
+          radial-gradient(circle at top right, #1a1a2e, transparent 50%),
+          #0f1117;
+      }
+      body.dark .card-soft { border-color: #2a3050; }
+      body.dark .header-bar {
+        background: linear-gradient(120deg, #1a1f3a, #1e2130);
+        border-color: #2a3050;
+      }
+      body.dark .hero-card { background: #1a1f3a; border-color: #2a3050; }
+      body.dark .btn-outline-primary { color: var(--primary); border-color: var(--primary); }
+      body.dark .btn-outline-secondary { color: var(--muted); border-color: #2a3050; }
+      body.dark .btn-outline-primary:hover { background: var(--primary); color: #fff; }
+      body.dark select, body.dark input, body.dark textarea {
+        background: #1a1f3a; color: var(--text); border-color: #2a3050;
+      }
+      body.dark .schema-input { background: #1a1f3a; color: var(--text); border-color: #2a3050; }
+      body.dark table th { background: #1a1f3a; }
+      body.dark table td { border-color: #2a3050; }
+      body.dark .pill { background: #2a3050; }
+      body.dark .type-list .type-item { border-color: #2a3050; }
+      body.dark .type-item.active { background: #1e3060; border-color: var(--primary); }
+
+      /* ── Dark Mode Toggle Button ───────────────────────────── */
+      #darkModeBtn {
+        background: none; border: 1px solid #dfe7ff; border-radius: 20px;
+        padding: 3px 10px; font-size: 14px; cursor: pointer;
+        color: var(--muted); transition: all 0.2s;
+        display: flex; align-items: center; gap: 4px;
+      }
+      #darkModeBtn:hover { background: var(--card); }
+      body.dark #darkModeBtn { border-color: #2a3050; color: var(--muted); }
+
+      /* ── Client Folder Toggle ──────────────────────────────── */
+      #folderToggleWrap {
+        display: flex; align-items: center; gap: 6px;
+        font-size: 12px; color: var(--muted); user-select: none; cursor: pointer;
+      }
+      .neo-toggle {
+        position: relative; width: 32px; height: 18px; flex-shrink: 0;
+      }
+      .neo-toggle input { opacity: 0; width: 0; height: 0; }
+      .neo-toggle-track {
+        position: absolute; inset: 0; background: #cdd5e0;
+        border-radius: 18px; transition: background 0.2s;
+      }
+      .neo-toggle input:checked ~ .neo-toggle-track { background: var(--primary); }
+      .neo-toggle-thumb {
+        position: absolute; top: 2px; left: 2px;
+        width: 14px; height: 14px; background: #fff;
+        border-radius: 50%; transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      }
+      .neo-toggle input:checked ~ .neo-toggle-thumb { left: 16px; }
     </style>
-    <title>Neo GST Assistant</title>
+    <title>GC Returns Pro</title>
   </head>
   <body class="shell">
     <script src="bootstrap.bundle.min.js"></script>
@@ -579,13 +645,22 @@
     <div class="page">
       <div class="header-bar">
         <div class="d-flex align-items-center">
-          <img src="images/neo-gst-logo.svg" alt="Neo GST Assistant" height="24" width="24" class="mr-2"/>
+          <img src="images/neo-gst-logo.svg" alt="GC Returns Pro" height="24" width="24" class="mr-2"/>
           <div>
-            <p class="header-title mb-0" id="appHeaderTitle">Neo GST Assistant</p>
+            <p class="header-title mb-0" id="appHeaderTitle">GC Returns Pro</p>
             <p class="header-sub mb-0" id="appHeaderSub">Download returns faster with a focused workspace.</p>
           </div>
         </div>
         <div class="header-actions">
+          <label id="folderToggleWrap" title="Save downloads in a folder named after the client">
+            <span class="neo-toggle">
+              <input type="checkbox" id="clientFolderToggle">
+              <span class="neo-toggle-track"></span>
+              <span class="neo-toggle-thumb"></span>
+            </span>
+            <span>📁 Client Folder</span>
+          </label>
+          <button id="darkModeBtn" title="Toggle dark / light mode">🌙 <span id="darkModeBtnLabel">Dark</span></button>
           <button class="btn btn-outline-primary btn-sm" type="button" id="openConverterBtn">Converters</button>
           <button class="btn btn-outline-secondary btn-sm" type="button" id="openSchemaBtn">Schema</button>
           <button class="btn btn-link p-0 text-muted" title="Settings">

@@ -516,14 +516,14 @@ const connectToTab = (tab) =>
     } catch (e) {
       /* ignore */
     }
-    port = browser.tabs.connect(tab.id, { name: "octa-gst-assistant" });
+    port = browser.tabs.connect(tab.id, { name: "gc-returns-pro-assistant" });
     port.onMessage.addListener((msg) => {
       const handler = msg && typeof msg.Id !== "undefined" ? responseHandlers[msg.Id] : null;
       if (typeof handler === "function") {
         handler(msg);
         return;
       }
-      console.warn("Neo GST popup received an unexpected port message.", msg);
+      console.warn("GC Returns Pro popup received an unexpected port message.", msg);
     });
     resolve(true);
   });
@@ -544,6 +544,40 @@ const ensureConnectedToHost = async (preferredHost) => {
 document.addEventListener(
   "DOMContentLoaded",
   function () {
+    // ── Dark Mode ──────────────────────────────────────────────────
+    (function initDarkMode() {
+      const prefs = loadPrefs();
+      const btn = document.getElementById("darkModeBtn");
+      const label = document.getElementById("darkModeBtnLabel");
+      function applyDark(on) {
+        document.body.classList.toggle("dark", !!on);
+        if (btn) btn.textContent = on ? "☀️ Light" : "🌙 Dark";
+      }
+      applyDark(!!prefs.darkMode);
+      if (btn) {
+        btn.addEventListener("click", () => {
+          const nowDark = document.body.classList.toggle("dark");
+          const p = loadPrefs();
+          p.darkMode = nowDark;
+          savePrefs(p);
+          btn.textContent = nowDark ? "☀️ Light" : "🌙 Dark";
+        });
+      }
+    })();
+
+    // ── Client Folder Toggle ────────────────────────────────────────
+    (function initFolderToggle() {
+      const toggle = document.getElementById("clientFolderToggle");
+      if (!toggle) return;
+      const prefs = loadPrefs();
+      toggle.checked = !!prefs.useClientFolder;
+      toggle.addEventListener("change", () => {
+        const p = loadPrefs();
+        p.useClientFolder = toggle.checked;
+        savePrefs(p);
+      });
+    })();
+
     setupStandaloneConverter();
     setupSchemaPanel();
     try {
@@ -1084,7 +1118,7 @@ function downloadSchemaExcel() {
  ${buildSpreadsheetWorksheet("Schema", rows, ["return_type", "key", "abbreviation", "label", "updated_at"], { schemaReturnType: "GENERIC" })}
 </Workbook>`;
   const blobUrl = URL.createObjectURL(new Blob([workbookXml], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }));
-  downloadAs(blobUrl, `neo-gst-schema-${returnType}.xlsx`);
+  downloadAs(blobUrl, `gc-returns-pro-schema-${returnType}.xlsx`);
   setSchemaStatus("Schema Excel exported.");
 }
 async function buildCombinedGstr2aWorkbookXlsxBlob(payloads) {
@@ -1283,7 +1317,7 @@ function collectCachedProfiles() {
   try {
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (!key || !key.startsWith("neo-gst-profile-")) continue;
+      if (!key || !key.startsWith("gc-returns-pro-profile-")) continue;
       const raw = localStorage.getItem(key);
       if (!raw) continue;
       const parsed = JSON.parse(raw);
@@ -1380,7 +1414,7 @@ function applyBusinessIdentity(options) {
 
   if (businessNameEl) businessNameEl.textContent = finalName || "GST Portal";
   if (businessSubEl) businessSubEl.textContent = subLine;
-  if (appHeaderTitleEl) appHeaderTitleEl.textContent = titleWithGstin || "Neo GST Assistant";
+  if (appHeaderTitleEl) appHeaderTitleEl.textContent = titleWithGstin || "GC Returns Pro";
   if (appHeaderSubEl) {
     appHeaderSubEl.textContent = subLine || "Download returns faster with a focused workspace.";
   }
@@ -1408,7 +1442,7 @@ function readSelectedClientFromEmbeddedParent() {
     const selectedGstin = normalizeGstin(gstinMatch ? gstinMatch[0] : "");
     if (!selectedGstin) return null;
     const rawClients =
-      localStorage.getItem("neo-gst-clients") || localStorage.getItem("neo-gst-dataset-cache") || "";
+      localStorage.getItem("gc-returns-pro-clients") || localStorage.getItem("gc-returns-pro-dataset-cache") || "";
     if (!rawClients) return { gstin: selectedGstin, name: "" };
     let parsed = JSON.parse(rawClients);
     if (parsed && !Array.isArray(parsed) && Array.isArray(parsed.clients)) {
@@ -1841,7 +1875,7 @@ const addActivity = (text, cls) => {
   list.prepend(li);
 };
 
-const PREF_KEY = "octa-gst-prefs";
+const PREF_KEY = "gc-returns-pro-prefs";
 
 const loadPrefs = () => {
   try {
@@ -2029,7 +2063,43 @@ const gstn = {
 };
 
 const reportButtonClicked = () => {}; // noop placeholder
-const downloadAs = (url, filename) => browser.downloads.download({ url, filename });
+
+// ── Sanitize a string to be safe as a folder/file name component ──
+function sanitizeFolderName(name) {
+  return String(name || "")
+    .trim()
+    .replace(/[\\/:*?"<>|]/g, "_")  // replace Windows-unsafe chars
+    .replace(/\s+/g, "_")           // spaces → underscores
+    .replace(/_+/g, "_")            // collapse consecutive underscores
+    .replace(/^_|_$/g, "")         // trim leading/trailing underscores
+    .slice(0, 60) || "Client";     // max 60 chars, never empty
+}
+
+// ── Core download function: prepends client folder when enabled ──
+const downloadAs = (url, filename) => {
+  const prefs = loadPrefs();
+  let finalName = filename;
+  if (prefs.useClientFolder) {
+    const clientName = sanitizeFolderName(
+      session.selectedClientName || session.businessName || ""
+    );
+    if (clientName) {
+      finalName = `NEO-GST/${clientName}/${filename}`;
+    }
+  }
+  const dlPromise = browser.downloads.download({ url, filename: finalName });
+  // Notify background to show a notification when this download completes
+  dlPromise && dlPromise.then && dlPromise.then((downloadId) => {
+    if (typeof downloadId === "number") {
+      browser.runtime.sendMessage({
+        type: "gc-returns-pro-download-started",
+        downloadId,
+        filename: finalName.split("/").pop(),
+      }).catch(() => {});
+    }
+  }).catch(() => {});
+  return dlPromise;
+};
 async function downloadBlobAs(blob, filename) {
   const blobUrl = URL.createObjectURL(blob);
   try {
@@ -2142,7 +2212,7 @@ const GSTR1_BULK_CONCURRENCY = 4;
 const GSTR1_SHEET_CHUNK_THRESHOLD = 10000;
 const GSTR1_SHEET_CHUNK_THRESHOLD_MIN = 3000;
 const GSTR1_SHEET_CHUNK_THRESHOLD_MAX = 15000;
-const GSTR1_SECTION_FILTER_STORAGE_KEY = "neo-gst-gstr1-section-filter";
+const GSTR1_SECTION_FILTER_STORAGE_KEY = "gc-returns-pro-gstr1-section-filter";
 
 function buildWorksheetChunkName(baseName, chunkIndex) {
   const suffix = chunkIndex > 0 ? `(${chunkIndex})` : "";
@@ -2372,10 +2442,10 @@ const GSTR1_COLUMN_LABELS = {
   doc_num: "Doc Num",
 };
 
-const SCHEMA_STORAGE_KEY = "neo-gst-schema-store-v1";
+const SCHEMA_STORAGE_KEY = "gc-returns-pro-schema-store-v1";
 const SCHEMA_GITHUB_CONFIG_SRC = "ui/github-config.json";
 const SCHEMA_GITHUB_CONFIG_FALLBACK_SRC = "ui/github-config.example.json";
-const SCHEMA_DATASET_FORMAT = "neo-gst-client-store";
+const SCHEMA_DATASET_FORMAT = "gc-returns-pro-client-store";
 const SCHEMA_DATASET_FORMAT_VERSION = 2;
 const SCHEMA_RETURN_TYPES = [
   { code: "GSTR1", label: "GSTR-1" },
@@ -2797,7 +2867,7 @@ async function writeSchemaStoreToGithub(store) {
   nextDataset.updatedAt = nextDataset.data.updatedAt;
   const encodedPath = config.path.split("/").map((part) => encodeURIComponent(part)).join("/");
   const body = {
-    message: `${current.missing ? "Create" : "Update"} schema store in ${config.path} from Neo GST`,
+    message: `${current.missing ? "Create" : "Update"} schema store in ${config.path} from GC Returns Pro`,
     content: encodeBase64Utf8(JSON.stringify(nextDataset, null, 2)),
     branch: config.branch,
   };
@@ -5017,7 +5087,7 @@ function createGstr1HsnBulkAccumulator() {
     manager: null,
     threshold: 45000,
     spilled: false,
-    spillKey: `neo-gst-gstr1-hsnspill-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+    spillKey: `gc-returns-pro-gstr1-hsnspill-${Date.now()}-${Math.random().toString(36).slice(2)}`,
   };
 }
 
@@ -5063,7 +5133,7 @@ async function spillHsnAccumulatorIfNeeded(acc, force) {
       cache: null,
       useIndexedDb: true,
       dbName: acc.spillKey,
-      basePrefix: "https://neo-gst.local/gstr1/hsnspill",
+      basePrefix: "https://gc-returns-pro.local/gstr1/hsnspill",
       bufferSize: 1000,
     });
   }
@@ -9533,10 +9603,10 @@ async function buildGstr1PayloadViaBrowserCacheLayers(payloads) {
   }
 
   const cacheSupported = typeof caches !== "undefined" && typeof caches.open === "function";
-  const cacheName = `neo-gst-gstr1-link-layers-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-  const rawLayerName = `neo-gst-gstr1-link-raw-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-  const sectionLayerName = `neo-gst-gstr1-link-sections-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-  const mergedLayerName = `neo-gst-gstr1-link-merged-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const cacheName = `gc-returns-pro-gstr1-link-layers-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const rawLayerName = `gc-returns-pro-gstr1-link-raw-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const sectionLayerName = `gc-returns-pro-gstr1-link-sections-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const mergedLayerName = `gc-returns-pro-gstr1-link-merged-${Date.now()}-${Math.random().toString(36).slice(2)}`;
   const memRaw = new Map();
   const memLayer1 = new Map();
   const memMerged = new Map();
@@ -9545,9 +9615,9 @@ async function buildGstr1PayloadViaBrowserCacheLayers(payloads) {
   let sectionCache = null;
   let mergedCache = null;
 
-  const rawKey = (index) => `https://neo-gst.local/gstr1/raw/${index}.json`;
-  const layer1Key = (index) => `https://neo-gst.local/gstr1/layer1/${index}.json`;
-  const mergedKey = (name) => `https://neo-gst.local/gstr1/merged/${encodeURIComponent(String(name || ""))}.json`;
+  const rawKey = (index) => `https://gc-returns-pro.local/gstr1/raw/${index}.json`;
+  const layer1Key = (index) => `https://gc-returns-pro.local/gstr1/layer1/${index}.json`;
+  const mergedKey = (name) => `https://gc-returns-pro.local/gstr1/merged/${encodeURIComponent(String(name || ""))}.json`;
 
   try {
     if (cacheSupported) {
@@ -11956,9 +12026,9 @@ class SectionBufferManager {
     const cfg = config && typeof config === "object" ? config : {};
     this.cache = cfg.cache || null;
     this.useIndexedDb = !!cfg.useIndexedDb;
-    this.dbName = String(cfg.dbName || "neo-gst-section-stage");
+    this.dbName = String(cfg.dbName || "gc-returns-pro-section-stage");
     this.dbPromise = null;
-    this.basePrefix = String(cfg.basePrefix || "https://neo-gst.local/gstr1/stage");
+    this.basePrefix = String(cfg.basePrefix || "https://gc-returns-pro.local/gstr1/stage");
     this.bufferSize = Math.max(100, Number(cfg.bufferSize) || 2000);
     this.buffers = new Map(); // section -> { columns: {key:[]}, rowCount:number, keys:Set }
     this.sectionOrder = [];
@@ -12164,7 +12234,7 @@ class SectionBufferManager {
 }
 
 function buildGstr1BulkCacheKey(periodValue) {
-  return `https://neo-gst.local/gstr1-bulk/${encodeURIComponent(String(periodValue || ""))}.json`;
+  return `https://gc-returns-pro.local/gstr1-bulk/${encodeURIComponent(String(periodValue || ""))}.json`;
 }
 
 async function downloadAllStructuredReturn(mode) {

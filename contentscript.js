@@ -6,12 +6,12 @@ var initDone = !!globalThis.__neoGstInitDone;
 var port;
 var process;
 var SEARCHTP_BRIDGE_VERSION = "2";
-var SEARCHTP_REQUEST_EVENT = "neo-gst-searchtp-request-v2";
-var SEARCHTP_RESPONSE_EVENT = "neo-gst-searchtp-response-v2";
-var GOODSERVICE_REQUEST_EVENT = "neo-gst-goodservice-request-v1";
-var GOODSERVICE_RESPONSE_EVENT = "neo-gst-goodservice-response-v1";
-var GST_TEMPLATE_STATUS_REQUEST_EVENT = "neo-gst-template-status-request-v1";
-var GST_TEMPLATE_STATUS_RESPONSE_EVENT = "neo-gst-template-status-response-v1";
+var SEARCHTP_REQUEST_EVENT = "gc-returns-pro-searchtp-request-v2";
+var SEARCHTP_RESPONSE_EVENT = "gc-returns-pro-searchtp-response-v2";
+var GOODSERVICE_REQUEST_EVENT = "gc-returns-pro-goodservice-request-v1";
+var GOODSERVICE_RESPONSE_EVENT = "gc-returns-pro-goodservice-response-v1";
+var GST_TEMPLATE_STATUS_REQUEST_EVENT = "gc-returns-pro-template-status-request-v1";
+var GST_TEMPLATE_STATUS_RESPONSE_EVENT = "gc-returns-pro-template-status-response-v1";
 
 if (!initDone) {
     init();
@@ -55,7 +55,7 @@ function init() {
 function ensureGoodservicePageBridge() {
   if (globalThis.__neoGstGoodserviceBridgeReady === SEARCHTP_BRIDGE_VERSION) return;
   const script = document.createElement("script");
-  script.id = "neo-gst-goodservice-bridge";
+  script.id = "gc-returns-pro-goodservice-bridge";
   script.textContent = `(function () {
     if (window.__neoGstGoodserviceBridgeInstalled === "${SEARCHTP_BRIDGE_VERSION}") return;
     window.__neoGstGoodserviceBridgeInstalled = "${SEARCHTP_BRIDGE_VERSION}";
@@ -495,7 +495,7 @@ function ensureGoodservicePageBridge() {
 function readGoodserviceTemplateStatusViaPage() {
   return new Promise(function (resolve) {
     ensureGoodservicePageBridge();
-    var requestId = "neo-gst-template-status-" + Date.now() + "-" + Math.random().toString(36).slice(2);
+    var requestId = "gc-returns-pro-template-status-" + Date.now() + "-" + Math.random().toString(36).slice(2);
     var done = false;
     var timer = setTimeout(function () {
       if (done) return;
@@ -521,7 +521,7 @@ function readGoodserviceTemplateStatusViaPage() {
 function requestGoodserviceViaPage(payload) {
   return new Promise(function (resolve) {
     ensureGoodservicePageBridge();
-    var requestId = "neo-gst-goodservice-" + Date.now() + "-" + Math.random().toString(36).slice(2);
+    var requestId = "gc-returns-pro-goodservice-" + Date.now() + "-" + Math.random().toString(36).slice(2);
     var done = false;
     var timer = setTimeout(function () {
       if (done) return;
@@ -547,7 +547,7 @@ function requestGoodserviceViaPage(payload) {
 function ensureSearchTpPageBridge() {
   if (globalThis.__neoGstSearchBridgeReady === SEARCHTP_BRIDGE_VERSION) return;
   const script = document.createElement("script");
-  script.id = "neo-gst-searchtp-bridge";
+  script.id = "gc-returns-pro-searchtp-bridge";
   script.textContent = `(function () {
     if (window.__neoGstSearchBridgeInstalled === "${SEARCHTP_BRIDGE_VERSION}") return;
     window.__neoGstSearchBridgeInstalled = "${SEARCHTP_BRIDGE_VERSION}";
@@ -633,7 +633,7 @@ function ensureSearchTpPageBridge() {
           body: JSON.stringify({ gstin: gstin, fy: fy || year })
         }).then(function (returnResp) {
           window.postMessage({
-            type: "neo-gst-searchtp-response",
+            type: "gc-returns-pro-searchtp-response",
             type: "${SEARCHTP_RESPONSE_EVENT}",
             requestId: data.requestId,
             payload: {
@@ -649,7 +649,7 @@ function ensureSearchTpPageBridge() {
         });
       }).catch(function (error) {
         window.postMessage({
-          type: "neo-gst-searchtp-response",
+          type: "gc-returns-pro-searchtp-response",
           type: "${SEARCHTP_RESPONSE_EVENT}",
           requestId: data.requestId,
           payload: {
@@ -670,7 +670,7 @@ function ensureSearchTpPageBridge() {
 function requestSearchTpViaPage(payload) {
   return new Promise(function (resolve) {
     ensureSearchTpPageBridge();
-    var requestId = "neo-gst-" + Date.now() + "-" + Math.random().toString(36).slice(2);
+    var requestId = "gc-returns-pro-" + Date.now() + "-" + Math.random().toString(36).slice(2);
     var completed = false;
     var timer = setTimeout(function () {
       if (completed) return;
@@ -830,7 +830,7 @@ if (!globalThis.__neoGstPortalMessageListenerAdded) {
 
 async function httpGetAsync(url, responseType, headers) {
   return new Promise(function (resolve, reject) {
-    let xhr = new content.XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function() {
       if (this.readyState == 4) {
@@ -865,7 +865,7 @@ async function httpGetAsync(url, responseType, headers) {
 
 async function httpPostAsync(url, responseType, body) {
   return new Promise(function (resolve, reject) {
-    let xhr = new content.XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function() {
       if (this.readyState == 4) {
@@ -893,7 +893,7 @@ async function httpPostAsync(url, responseType, body) {
 
 async function httpRequestAsync(options) {
   return new Promise(function (resolve) {
-    let xhr = new content.XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function() {
       if (this.readyState !== 4) return;

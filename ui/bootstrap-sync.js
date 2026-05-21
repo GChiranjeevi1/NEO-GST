@@ -2,12 +2,12 @@ const APP_BUNDLE_SRC = "./assets/index-DYccarUx.js";
 const FALLBACK_DATASET_SRC = "./client-masters1.json";
 const GITHUB_CONFIG_SRC = "./github-config.json";
 const GITHUB_CONFIG_FALLBACK_SRC = "./github-config.example.json";
-const CLIENTS_KEY = "neo-gst-clients";
-const DATASET_CACHE_KEY = "neo-gst-dataset-cache";
-const USER_GITHUB_CONFIG_KEY = "neo-gst-github-config";
-const STATUS_EVENT = "neo-gst-remote-status";
+const CLIENTS_KEY = "gc-returns-pro-clients";
+const DATASET_CACHE_KEY = "gc-returns-pro-dataset-cache";
+const USER_GITHUB_CONFIG_KEY = "gc-returns-pro-github-config";
+const STATUS_EVENT = "gc-returns-pro-remote-status";
 const SAVE_DEBOUNCE_MS = 900;
-const DATASET_FORMAT = "neo-gst-client-store";
+const DATASET_FORMAT = "gc-returns-pro-client-store";
 const DATASET_FORMAT_VERSION = 2;
 const CLIENT_SHEET_NAME = "Clients";
 const RETURN_SHEET_NAME = "ReturnStatus";
@@ -296,7 +296,7 @@ function emitStatus(detail) {
 function showBootMessage(message) {
   const root = document.getElementById("root");
   if (!root) return;
-  root.innerHTML = `<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#f8fafc;font-family:Inter,Arial,sans-serif;color:#0f172a;"><div style="max-width:560px;width:100%;background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:24px;box-shadow:0 12px 36px rgba(15,23,42,0.08);"><div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0f766e;margin-bottom:10px;">Neo GST Sync</div><div style="font-size:16px;line-height:1.6;">${escapeHtml(
+  root.innerHTML = `<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#f8fafc;font-family:Inter,Arial,sans-serif;color:#0f172a;"><div style="max-width:560px;width:100%;background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:24px;box-shadow:0 12px 36px rgba(15,23,42,0.08);"><div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0f766e;margin-bottom:10px;">GC Returns Pro Sync</div><div style="font-size:16px;line-height:1.6;">${escapeHtml(
     message,
   )}</div></div></div>`;
 }
@@ -304,7 +304,7 @@ function showBootMessage(message) {
 function clearBootMessage() {
   const root = document.getElementById("root");
   if (!root) return;
-  if (root.children.length === 1 && /Neo GST Sync/i.test(root.textContent || "")) {
+  if (root.children.length === 1 && /GC Returns Pro Sync/i.test(root.textContent || "")) {
     root.innerHTML = "";
   }
 }
@@ -900,7 +900,7 @@ function renderClientDetailsRows(tableModel) {
       return `<tr data-gstin="${escapeHtml(client.gstin || "")}">${(tableModel.columns || [])
         .map((column) => {
           if (column.label === "Actions") {
-            return `<td><button type="button" class="neo-gst-btn neo-gst-btn-secondary neo-gst-clear-details" data-gstin="${escapeHtml(client.gstin || "")}" style="padding:6px 10px;font-size:11px;">Clear Details</button></td>`;
+            return `<td><button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-secondary gc-returns-pro-clear-details" data-gstin="${escapeHtml(client.gstin || "")}" style="padding:6px 10px;font-size:11px;">Clear Details</button></td>`;
           }
           return `<td>${escapeHtml(column.getValue(client, profile, dynamicFields) || "")}</td>`;
         })
@@ -1509,8 +1509,8 @@ async function buildWorkbookBase64(dataset) {
     "docProps/core.xml",
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <dc:creator>Neo GST</dc:creator>
-  <cp:lastModifiedBy>Neo GST</cp:lastModifiedBy>
+  <dc:creator>GC Returns Pro</dc:creator>
+  <cp:lastModifiedBy>GC Returns Pro</cp:lastModifiedBy>
   <dcterms:created xsi:type="dcterms:W3CDTF">${new Date().toISOString()}</dcterms:created>
   <dcterms:modified xsi:type="dcterms:W3CDTF">${new Date().toISOString()}</dcterms:modified>
 </cp:coreProperties>`,
@@ -1519,7 +1519,7 @@ async function buildWorkbookBase64(dataset) {
     "docProps/app.xml",
     `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes">
-  <Application>Neo GST</Application>
+  <Application>GC Returns Pro</Application>
 </Properties>`,
   );
   zip.file(
@@ -1607,7 +1607,7 @@ function getDatasetCache() {
 function maybeHydrateMountedApp(clients) {
   const list = Array.isArray(clients) ? clients : [];
   if (!list.length) return;
-  const flag = "neo-gst-client-hydrated";
+  const flag = "gc-returns-pro-client-hydrated";
   const nextSignature = JSON.stringify(
     list.map((client) => ({
       id: text(client.id),
@@ -1922,7 +1922,7 @@ async function writeRemoteDataset(dataset, meta) {
     .map((part) => encodeURIComponent(part))
     .join("/");
   const body = {
-    message: `${current.missing ? "Create" : "Update"} ${config.path} from Neo GST`,
+    message: `${current.missing ? "Create" : "Update"} ${config.path} from GC Returns Pro`,
     content: encodeBase64Text(jsonText),
     branch: config.branch,
   };
@@ -1990,7 +1990,7 @@ async function flushSave(reason) {
 function scheduleSave(reason) {
   if (state.saveTimer) clearTimeout(state.saveTimer);
   state.saveTimer = setTimeout(() => {
-    flushSave(reason).catch((error) => console.warn("Neo GST remote save failed", error));
+    flushSave(reason).catch((error) => console.warn("GC Returns Pro remote save failed", error));
   }, SAVE_DEBOUNCE_MS);
 }
 
@@ -2024,12 +2024,12 @@ function patchStorage() {
         setClientShadow(state.dataset.clients);
         scheduleSave("clients-changed");
         setTimeout(() => {
-          flushSave("clients-changed-immediate").catch((error) => console.warn("Neo GST immediate client save failed", error));
+          flushSave("clients-changed-immediate").catch((error) => console.warn("GC Returns Pro immediate client save failed", error));
         }, 0);
       }
       return;
     }
-    if (this === localStorage && /^neo-gst-profile-/i.test(String(key || ""))) {
+    if (this === localStorage && /^gc-returns-pro-profile-/i.test(String(key || ""))) {
       const parsed = parseJson(String(value || "{}"), null);
       if (parsed && typeof parsed === "object") {
         const dataset = state.dataset ? normalizeDataset(state.dataset) : buildEmptyDataset();
@@ -2062,7 +2062,7 @@ function patchStorage() {
           scheduleSave("company-profile-local-save");
           setTimeout(() => {
             flushSave("company-profile-local-save-immediate").catch((error) =>
-              console.warn("Neo GST immediate company profile save failed", error),
+              console.warn("GC Returns Pro immediate company profile save failed", error),
             );
           }, 0);
         }
@@ -2195,59 +2195,59 @@ function returnStatusViewData() {
 }
 
 function ensureModalStyle() {
-  if (document.getElementById("neo-gst-return-style")) return;
+  if (document.getElementById("gc-returns-pro-return-style")) return;
   const style = document.createElement("style");
-  style.id = "neo-gst-return-style";
+  style.id = "gc-returns-pro-return-style";
   style.textContent = `
-    .neo-gst-overlay{position:fixed;inset:0;z-index:9999;background:rgba(15,23,42,.34);backdrop-filter:blur(4px);padding:28px;display:flex;justify-content:center;align-items:flex-start;overflow:auto}
-    .neo-gst-modal{width:min(1480px,100%);margin:20px 0;background:#ffffff;border:1px solid #cfd8e3;border-radius:18px;box-shadow:0 28px 80px rgba(15,23,42,.20);overflow:hidden;display:flex;flex-direction:column;font-family:Calibri,Arial,sans-serif}
-    .neo-gst-head{padding:22px 24px;background:linear-gradient(180deg,#f8fbff 0%,#eef6ff 100%);border-bottom:1px solid #d9e1ea;display:flex;justify-content:space-between;gap:18px;align-items:flex-start}
-    .neo-gst-body{padding:20px 24px 24px;overflow:auto}
-    .neo-gst-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:nowrap}
-    .neo-gst-toolbar-row{display:flex;gap:10px;flex-wrap:nowrap;align-items:center;justify-content:flex-start}
-    .neo-gst-btn{border:1px solid #c7d2e0;border-radius:10px;padding:9px 14px;font-size:12px;font-weight:700;letter-spacing:.01em;cursor:pointer;background:#fff;color:#1f2937;transition:all .18s ease;box-shadow:0 6px 16px rgba(15,23,42,.05)}
-    .neo-gst-btn:hover{transform:translateY(-1px);background:#f8fbff;border-color:#8fb0d6;box-shadow:0 10px 22px rgba(15,23,42,.08)}
-    .neo-gst-btn:active{transform:translateY(0)}
-    .neo-gst-btn-secondary{background:#fff;color:#334155}
-    .neo-gst-btn-primary{background:linear-gradient(135deg,#0f766e 0%,#0b8f84 100%);color:#fff;border-color:#0f766e;box-shadow:0 12px 24px rgba(15,118,110,.22)}
-    .neo-gst-btn-primary:hover{background:linear-gradient(135deg,#0d6d66 0%,#0a8379 100%);border-color:#0d6d66}
-    .neo-gst-btn-accent{background:linear-gradient(135deg,#d97706 0%,#ea580c 100%);color:#fff;border-color:#d97706;box-shadow:0 12px 24px rgba(217,119,6,.22)}
-    .neo-gst-btn-accent:hover{background:linear-gradient(135deg,#c56b05 0%,#d65109 100%);border-color:#c56b05}
-    .neo-gst-btn-danger{background:#fff7f7;color:#b42318;border-color:#efb4b4}
-    .neo-gst-btn-danger:hover{background:#fff1f1;border-color:#e78f8f}
-    .neo-gst-select-compact{width:auto;min-width:120px;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:700;background:#f8fbff;border:1px solid #c7d2e0;color:#0f172a;box-shadow:0 6px 16px rgba(15,23,42,.04)}
-    .neo-gst-inline-label{font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.04em}
-    .neo-gst-mini-overlay{position:fixed;inset:0;background:rgba(15,23,42,.28);display:flex;align-items:center;justify-content:center;z-index:10001}
-    .neo-gst-mini-modal{width:min(560px,92vw);background:#fff;border:1px solid #cfd8e3;border-radius:14px;box-shadow:0 24px 70px rgba(15,23,42,.20);padding:18px}
-    .neo-gst-mini-title{font-size:18px;font-weight:700;color:#0f172a;margin-bottom:8px}
-    .neo-gst-mini-copy{font-size:13px;color:#64748b;margin-bottom:12px}
-    .neo-gst-mini-textarea{width:100%;min-height:180px;border:1px solid #c7d2e0;border-radius:10px;padding:12px;font:12px Consolas,"Courier New",monospace;resize:vertical;outline:none}
-    .neo-gst-mini-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}
-    .neo-gst-table-wrap{background:#fff;border:1px solid #cfd8e3;border-radius:14px;overflow:auto;box-shadow:inset 0 1px 0 rgba(255,255,255,.65)}
-    .neo-gst-table{width:100%;border-collapse:separate;border-spacing:0;min-width:900px}
-    .neo-gst-table th{position:sticky;top:0;background:linear-gradient(180deg,#dbeafe 0%,#bfdbfe 100%);text-align:left;padding:12px 14px;font-size:12px;font-weight:700;border-right:1px solid #b7c8de;border-bottom:1px solid #b7c8de;color:#0f172a;white-space:nowrap}
-    .neo-gst-table th:first-child{border-left:none}
-    .neo-gst-table td{padding:12px 14px;border-right:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;font-size:13px;color:#111827;white-space:nowrap;line-height:1.35;vertical-align:middle;background:#fff}
-    .neo-gst-table tbody tr:nth-child(even) td{background:#f8fbff}
-    .neo-gst-table tbody tr:hover td{background:#eef6ff}
-    .neo-gst-table th:last-child,.neo-gst-table td:last-child{border-right:none}
-    .neo-gst-filter-row th{background:#eef4fb;padding:4px 6px;position:sticky;top:31px;z-index:1}
-    .neo-gst-filter-input,.neo-gst-filter-select{width:100%;border:1px solid #b8c4d1;border-radius:6px;padding:4px 6px;font-size:11px;background:#fff;color:#111827;outline:none;min-height:28px}
-    .neo-gst-filter-input:focus,.neo-gst-filter-select:focus{border-color:#2563eb;box-shadow:0 0 0 2px rgba(37,99,235,.12)}
-    .neo-gst-filter-select{min-width:96px}
-    .neo-gst-code{font-family:Consolas,"Courier New",monospace}
-    .neo-gst-status-filed{background:#dcfce7;color:#166534;font-weight:700}
-    .neo-gst-status-pending{background:#fef3c7;color:#92400e;font-weight:700}
-    .neo-gst-status-missing{background:#f1f5f9;color:#64748b}
-    @media (max-width:768px){.neo-gst-overlay{padding:10px}.neo-gst-head,.neo-gst-body{padding:14px}.neo-gst-head{align-items:flex-start}}
+    .gc-returns-pro-overlay{position:fixed;inset:0;z-index:9999;background:rgba(15,23,42,.34);backdrop-filter:blur(4px);padding:28px;display:flex;justify-content:center;align-items:flex-start;overflow:auto}
+    .gc-returns-pro-modal{width:min(1480px,100%);margin:20px 0;background:#ffffff;border:1px solid #cfd8e3;border-radius:18px;box-shadow:0 28px 80px rgba(15,23,42,.20);overflow:hidden;display:flex;flex-direction:column;font-family:Calibri,Arial,sans-serif}
+    .gc-returns-pro-head{padding:22px 24px;background:linear-gradient(180deg,#f8fbff 0%,#eef6ff 100%);border-bottom:1px solid #d9e1ea;display:flex;justify-content:space-between;gap:18px;align-items:flex-start}
+    .gc-returns-pro-body{padding:20px 24px 24px;overflow:auto}
+    .gc-returns-pro-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:nowrap}
+    .gc-returns-pro-toolbar-row{display:flex;gap:10px;flex-wrap:nowrap;align-items:center;justify-content:flex-start}
+    .gc-returns-pro-btn{border:1px solid #c7d2e0;border-radius:10px;padding:9px 14px;font-size:12px;font-weight:700;letter-spacing:.01em;cursor:pointer;background:#fff;color:#1f2937;transition:all .18s ease;box-shadow:0 6px 16px rgba(15,23,42,.05)}
+    .gc-returns-pro-btn:hover{transform:translateY(-1px);background:#f8fbff;border-color:#8fb0d6;box-shadow:0 10px 22px rgba(15,23,42,.08)}
+    .gc-returns-pro-btn:active{transform:translateY(0)}
+    .gc-returns-pro-btn-secondary{background:#fff;color:#334155}
+    .gc-returns-pro-btn-primary{background:linear-gradient(135deg,#0f766e 0%,#0b8f84 100%);color:#fff;border-color:#0f766e;box-shadow:0 12px 24px rgba(15,118,110,.22)}
+    .gc-returns-pro-btn-primary:hover{background:linear-gradient(135deg,#0d6d66 0%,#0a8379 100%);border-color:#0d6d66}
+    .gc-returns-pro-btn-accent{background:linear-gradient(135deg,#d97706 0%,#ea580c 100%);color:#fff;border-color:#d97706;box-shadow:0 12px 24px rgba(217,119,6,.22)}
+    .gc-returns-pro-btn-accent:hover{background:linear-gradient(135deg,#c56b05 0%,#d65109 100%);border-color:#c56b05}
+    .gc-returns-pro-btn-danger{background:#fff7f7;color:#b42318;border-color:#efb4b4}
+    .gc-returns-pro-btn-danger:hover{background:#fff1f1;border-color:#e78f8f}
+    .gc-returns-pro-select-compact{width:auto;min-width:120px;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:700;background:#f8fbff;border:1px solid #c7d2e0;color:#0f172a;box-shadow:0 6px 16px rgba(15,23,42,.04)}
+    .gc-returns-pro-inline-label{font-size:11px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.04em}
+    .gc-returns-pro-mini-overlay{position:fixed;inset:0;background:rgba(15,23,42,.28);display:flex;align-items:center;justify-content:center;z-index:10001}
+    .gc-returns-pro-mini-modal{width:min(560px,92vw);background:#fff;border:1px solid #cfd8e3;border-radius:14px;box-shadow:0 24px 70px rgba(15,23,42,.20);padding:18px}
+    .gc-returns-pro-mini-title{font-size:18px;font-weight:700;color:#0f172a;margin-bottom:8px}
+    .gc-returns-pro-mini-copy{font-size:13px;color:#64748b;margin-bottom:12px}
+    .gc-returns-pro-mini-textarea{width:100%;min-height:180px;border:1px solid #c7d2e0;border-radius:10px;padding:12px;font:12px Consolas,"Courier New",monospace;resize:vertical;outline:none}
+    .gc-returns-pro-mini-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px}
+    .gc-returns-pro-table-wrap{background:#fff;border:1px solid #cfd8e3;border-radius:14px;overflow:auto;box-shadow:inset 0 1px 0 rgba(255,255,255,.65)}
+    .gc-returns-pro-table{width:100%;border-collapse:separate;border-spacing:0;min-width:900px}
+    .gc-returns-pro-table th{position:sticky;top:0;background:linear-gradient(180deg,#dbeafe 0%,#bfdbfe 100%);text-align:left;padding:12px 14px;font-size:12px;font-weight:700;border-right:1px solid #b7c8de;border-bottom:1px solid #b7c8de;color:#0f172a;white-space:nowrap}
+    .gc-returns-pro-table th:first-child{border-left:none}
+    .gc-returns-pro-table td{padding:12px 14px;border-right:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;font-size:13px;color:#111827;white-space:nowrap;line-height:1.35;vertical-align:middle;background:#fff}
+    .gc-returns-pro-table tbody tr:nth-child(even) td{background:#f8fbff}
+    .gc-returns-pro-table tbody tr:hover td{background:#eef6ff}
+    .gc-returns-pro-table th:last-child,.gc-returns-pro-table td:last-child{border-right:none}
+    .gc-returns-pro-filter-row th{background:#eef4fb;padding:4px 6px;position:sticky;top:31px;z-index:1}
+    .gc-returns-pro-filter-input,.gc-returns-pro-filter-select{width:100%;border:1px solid #b8c4d1;border-radius:6px;padding:4px 6px;font-size:11px;background:#fff;color:#111827;outline:none;min-height:28px}
+    .gc-returns-pro-filter-input:focus,.gc-returns-pro-filter-select:focus{border-color:#2563eb;box-shadow:0 0 0 2px rgba(37,99,235,.12)}
+    .gc-returns-pro-filter-select{min-width:96px}
+    .gc-returns-pro-code{font-family:Consolas,"Courier New",monospace}
+    .gc-returns-pro-status-filed{background:#dcfce7;color:#166534;font-weight:700}
+    .gc-returns-pro-status-pending{background:#fef3c7;color:#92400e;font-weight:700}
+    .gc-returns-pro-status-missing{background:#f1f5f9;color:#64748b}
+    @media (max-width:768px){.gc-returns-pro-overlay{padding:10px}.gc-returns-pro-head,.gc-returns-pro-body{padding:14px}.gc-returns-pro-head{align-items:flex-start}}
   `;
   document.head.appendChild(style);
 }
 
 function pill(status) {
   const value = text(status) || "-";
-  const cls = /filed/i.test(value) ? "neo-gst-pill-filed" : /pending/i.test(value) ? "neo-gst-pill-pending" : "neo-gst-pill-other";
-  return `<span class="neo-gst-pill ${cls}">${escapeHtml(value)}</span>`;
+  const cls = /filed/i.test(value) ? "gc-returns-pro-pill-filed" : /pending/i.test(value) ? "gc-returns-pro-pill-pending" : "gc-returns-pro-pill-other";
+  return `<span class="gc-returns-pro-pill ${cls}">${escapeHtml(value)}</span>`;
 }
 
 function excelMonthLabel(month) {
@@ -2258,9 +2258,9 @@ function excelMonthLabel(month) {
 
 function renderStatusCell(status) {
   const value = text(status);
-  if (!value) return '<td class="neo-gst-status-missing">-</td>';
-  if (/filed/i.test(value)) return `<td class="neo-gst-status-filed">${escapeHtml(value)}</td>`;
-  if (/pending|not filed/i.test(value)) return `<td class="neo-gst-status-pending">${escapeHtml(value)}</td>`;
+  if (!value) return '<td class="gc-returns-pro-status-missing">-</td>';
+  if (/filed/i.test(value)) return `<td class="gc-returns-pro-status-filed">${escapeHtml(value)}</td>`;
+  if (/pending|not filed/i.test(value)) return `<td class="gc-returns-pro-status-pending">${escapeHtml(value)}</td>`;
   return `<td>${escapeHtml(value)}</td>`;
 }
 
@@ -2558,17 +2558,17 @@ function mergePublicClientDetailsResults(results) {
 }
 
 function openReturnStatusModal() {
-  const existing = document.getElementById("neo-gst-return-overlay");
+  const existing = document.getElementById("gc-returns-pro-return-overlay");
   if (existing) existing.remove();
   ensureModalStyle();
   const yearOptions = returnStatusYearOptions();
   const defaultYear = yearOptions[0] || String(new Date().getFullYear());
   const overlay = document.createElement("div");
-  overlay.id = "neo-gst-return-overlay";
-  overlay.className = "neo-gst-overlay";
+  overlay.id = "gc-returns-pro-return-overlay";
+  overlay.className = "gc-returns-pro-overlay";
   overlay.innerHTML = `
-    <div class="neo-gst-modal" role="dialog" aria-modal="true" aria-label="Return Status">
-      <div class="neo-gst-head">
+    <div class="gc-returns-pro-modal" role="dialog" aria-modal="true" aria-label="Return Status">
+      <div class="gc-returns-pro-head">
         <div>
           <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0f766e;margin-bottom:6px;">Dynamic Filters</div>
           <div style="font-size:28px;font-weight:700;line-height:1.1;">Return Status</div>
@@ -2579,53 +2579,53 @@ function openReturnStatusModal() {
             <span style="padding:6px 10px;border-radius:999px;background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8;font-size:12px;font-weight:700;">3. Compliance tracking of clients/vendors</span>
           </div>
         </div>
-        <button type="button" class="neo-gst-btn neo-gst-btn-secondary" id="neo-gst-close-return">Close</button>
+        <button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-secondary" id="gc-returns-pro-close-return">Close</button>
       </div>
-      <div class="neo-gst-body">
-        <div class="neo-gst-toolbar">
-          <div class="neo-gst-toolbar-row">
-            <div id="neo-gst-summary" style="font-size:13px;color:#64748b;margin-right:6px;white-space:nowrap;">Loading...</div>
-            <span class="neo-gst-inline-label">From</span>
-            <select class="neo-gst-select-compact" id="neo-gst-return-year-from">
+      <div class="gc-returns-pro-body">
+        <div class="gc-returns-pro-toolbar">
+          <div class="gc-returns-pro-toolbar-row">
+            <div id="gc-returns-pro-summary" style="font-size:13px;color:#64748b;margin-right:6px;white-space:nowrap;">Loading...</div>
+            <span class="gc-returns-pro-inline-label">From</span>
+            <select class="gc-returns-pro-select-compact" id="gc-returns-pro-return-year-from">
               ${yearOptions.map((year) => `<option value="${escapeHtml(year)}" ${year === defaultYear ? "selected" : ""}>${escapeHtml(year)}</option>`).join("")}
             </select>
-            <span class="neo-gst-inline-label">To</span>
-            <select class="neo-gst-select-compact" id="neo-gst-return-year-to">
+            <span class="gc-returns-pro-inline-label">To</span>
+            <select class="gc-returns-pro-select-compact" id="gc-returns-pro-return-year-to">
               ${yearOptions.map((year) => `<option value="${escapeHtml(year)}" ${year === defaultYear ? "selected" : ""}>${escapeHtml(year)}</option>`).join("")}
             </select>
-            <button type="button" class="neo-gst-btn neo-gst-btn-secondary" id="neo-gst-open-portal">Open GST Portal</button>
-            <button type="button" class="neo-gst-btn neo-gst-btn-primary" id="neo-gst-fetch-return">Get Return Status</button>
-            <button type="button" class="neo-gst-btn neo-gst-btn-accent" id="neo-gst-export-excel">Export To Excel</button>
+            <button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-secondary" id="gc-returns-pro-open-portal">Open GST Portal</button>
+            <button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-primary" id="gc-returns-pro-fetch-return">Get Return Status</button>
+            <button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-accent" id="gc-returns-pro-export-excel">Export To Excel</button>
           </div>
-          <div class="neo-gst-toolbar-row" style="justify-content:flex-end;">
-            <button type="button" class="neo-gst-btn neo-gst-btn-secondary" id="neo-gst-bulk-gstin">Bulk Paste GSTINs</button>
-            <button type="button" class="neo-gst-btn neo-gst-btn-danger" id="neo-gst-clear-all-gstin">Clear All GSTINs</button>
-            <button type="button" class="neo-gst-btn neo-gst-btn-danger" id="neo-gst-clear-return-data">Clear All Data</button>
+          <div class="gc-returns-pro-toolbar-row" style="justify-content:flex-end;">
+            <button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-secondary" id="gc-returns-pro-bulk-gstin">Bulk Paste GSTINs</button>
+            <button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-danger" id="gc-returns-pro-clear-all-gstin">Clear All GSTINs</button>
+            <button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-danger" id="gc-returns-pro-clear-return-data">Clear All Data</button>
           </div>
         </div>
-        <div class="neo-gst-table-wrap">
-          <table class="neo-gst-table">
+        <div class="gc-returns-pro-table-wrap">
+          <table class="gc-returns-pro-table">
             <thead>
-              <tr id="neo-gst-return-head"></tr>
-              <tr class="neo-gst-filter-row" id="neo-gst-return-filter-row"></tr>
+              <tr id="gc-returns-pro-return-head"></tr>
+              <tr class="gc-returns-pro-filter-row" id="gc-returns-pro-return-filter-row"></tr>
             </thead>
-            <tbody id="neo-gst-return-body"></tbody>
+            <tbody id="gc-returns-pro-return-body"></tbody>
           </table>
         </div>
       </div>
     </div>`;
   document.body.appendChild(overlay);
 
-  const head = overlay.querySelector("#neo-gst-return-head");
-  const filterRow = overlay.querySelector("#neo-gst-return-filter-row");
-  const body = overlay.querySelector("#neo-gst-return-body");
-  const summary = overlay.querySelector("#neo-gst-summary");
+  const head = overlay.querySelector("#gc-returns-pro-return-head");
+  const filterRow = overlay.querySelector("#gc-returns-pro-return-filter-row");
+  const body = overlay.querySelector("#gc-returns-pro-return-body");
+  const summary = overlay.querySelector("#gc-returns-pro-summary");
   let data = returnStatusViewData();
 
   function rebuildTableChrome() {
-    const previousGstin = overlay.querySelector("#neo-gst-filter-gstin");
-    const previousName = overlay.querySelector("#neo-gst-filter-name");
-    const previousType = overlay.querySelector("#neo-gst-filter-type");
+    const previousGstin = overlay.querySelector("#gc-returns-pro-filter-gstin");
+    const previousName = overlay.querySelector("#gc-returns-pro-filter-name");
+    const previousType = overlay.querySelector("#gc-returns-pro-filter-type");
     const previousMonthStatuses = {};
     Array.from(filterRow.querySelectorAll("[data-month-filter]")).forEach((select) => {
       previousMonthStatuses[text(select.getAttribute("data-month-filter"))] = text(select.value);
@@ -2636,10 +2636,10 @@ function openReturnStatusModal() {
       .join("")}`;
 
     filterRow.innerHTML = `
-      <th><input class="neo-gst-filter-input" id="neo-gst-filter-gstin" type="text" placeholder="Filter GSTIN" /></th>
-      <th><input class="neo-gst-filter-input" id="neo-gst-filter-name" type="text" placeholder="Filter name" /></th>
+      <th><input class="gc-returns-pro-filter-input" id="gc-returns-pro-filter-gstin" type="text" placeholder="Filter GSTIN" /></th>
+      <th><input class="gc-returns-pro-filter-input" id="gc-returns-pro-filter-name" type="text" placeholder="Filter name" /></th>
       <th>
-        <select class="neo-gst-filter-select" id="neo-gst-filter-type">
+        <select class="gc-returns-pro-filter-select" id="gc-returns-pro-filter-type">
           <option value="">All</option>
           ${data.returnTypes.map((type) => `<option value="${escapeHtml(type)}">${escapeHtml(type)}</option>`).join("")}
         </select>
@@ -2649,14 +2649,14 @@ function openReturnStatusModal() {
           const options = (data.monthStatuses[month] || [])
             .map((status) => `<option value="${escapeHtml(status)}">${escapeHtml(status)}</option>`)
             .join("");
-          return `<th><select class="neo-gst-filter-select" data-month-filter="${escapeHtml(month)}"><option value="">All</option>${options}</select></th>`;
+          return `<th><select class="gc-returns-pro-filter-select" data-month-filter="${escapeHtml(month)}"><option value="">All</option>${options}</select></th>`;
         })
         .join("")}
     `;
 
-    overlay.querySelector("#neo-gst-filter-gstin").value = previousGstin ? previousGstin.value : "";
-    overlay.querySelector("#neo-gst-filter-name").value = previousName ? previousName.value : "";
-    overlay.querySelector("#neo-gst-filter-type").value = previousType ? previousType.value : "";
+    overlay.querySelector("#gc-returns-pro-filter-gstin").value = previousGstin ? previousGstin.value : "";
+    overlay.querySelector("#gc-returns-pro-filter-name").value = previousName ? previousName.value : "";
+    overlay.querySelector("#gc-returns-pro-filter-type").value = previousType ? previousType.value : "";
     Array.from(filterRow.querySelectorAll("[data-month-filter]")).forEach((select) => {
       const month = text(select.getAttribute("data-month-filter"));
       select.value = previousMonthStatuses[month] || "";
@@ -2669,9 +2669,9 @@ function openReturnStatusModal() {
   }
 
   function matches(row) {
-    const gstinInput = overlay.querySelector("#neo-gst-filter-gstin");
-    const nameInput = overlay.querySelector("#neo-gst-filter-name");
-    const returnTypeSelect = overlay.querySelector("#neo-gst-filter-type");
+    const gstinInput = overlay.querySelector("#gc-returns-pro-filter-gstin");
+    const nameInput = overlay.querySelector("#gc-returns-pro-filter-name");
+    const returnTypeSelect = overlay.querySelector("#gc-returns-pro-filter-type");
     const gstinNeedle = upper(gstinInput.value);
     const nameNeedle = text(nameInput.value).toLowerCase();
     const selectedType = text(returnTypeSelect && returnTypeSelect.value);
@@ -2689,14 +2689,14 @@ function openReturnStatusModal() {
 
   function renderRows() {
     refreshData();
-    const gstinInput = overlay.querySelector("#neo-gst-filter-gstin");
-    const nameInput = overlay.querySelector("#neo-gst-filter-name");
+    const gstinInput = overlay.querySelector("#gc-returns-pro-filter-gstin");
+    const nameInput = overlay.querySelector("#gc-returns-pro-filter-name");
     const filtered = data.rows.filter(matches);
     summary.textContent = `${filtered.length} of ${data.rows.length} rows shown`;
     body.innerHTML = filtered.length
       ? filtered
           .map(
-            (row) => `<tr><td class="neo-gst-code">${escapeHtml(row.gstin || "-")}</td><td>${escapeHtml(
+            (row) => `<tr><td class="gc-returns-pro-code">${escapeHtml(row.gstin || "-")}</td><td>${escapeHtml(
               row.taxpayerName || "-",
             )}</td><td>${escapeHtml(row.returnType || "-")}</td>${data.months
               .map((month) => renderStatusCell(text((row.filings || {})[month]) || "-"))
@@ -2707,8 +2707,8 @@ function openReturnStatusModal() {
   }
 
   function resetFilters() {
-    const gstinInput = overlay.querySelector("#neo-gst-filter-gstin");
-    const nameInput = overlay.querySelector("#neo-gst-filter-name");
+    const gstinInput = overlay.querySelector("#gc-returns-pro-filter-gstin");
+    const nameInput = overlay.querySelector("#gc-returns-pro-filter-name");
     gstinInput.value = "";
     nameInput.value = "";
     Array.from(filterRow.querySelectorAll("select")).forEach((select) => {
@@ -2743,26 +2743,26 @@ function openReturnStatusModal() {
 
 function openBulkGstinDialog() {
     const dialog = document.createElement("div");
-    dialog.className = "neo-gst-mini-overlay";
+    dialog.className = "gc-returns-pro-mini-overlay";
     dialog.innerHTML = `
-      <div class="neo-gst-mini-modal" role="dialog" aria-modal="true" aria-label="Bulk Paste GSTINs">
-        <div class="neo-gst-mini-title">Bulk Paste GSTINs</div>
-        <div class="neo-gst-mini-copy">Paste GSTINs separated by new lines, commas, or spaces.</div>
-        <textarea class="neo-gst-mini-textarea" id="neo-gst-bulk-text" placeholder="29AALFN5621M1ZT&#10;27AAQCS1842K1Z7"></textarea>
-        <div class="neo-gst-mini-actions">
-          <button type="button" class="neo-gst-btn neo-gst-btn-secondary" id="neo-gst-bulk-cancel">Cancel</button>
-          <button type="button" class="neo-gst-btn neo-gst-btn-primary" id="neo-gst-bulk-save">Add GSTINs</button>
+      <div class="gc-returns-pro-mini-modal" role="dialog" aria-modal="true" aria-label="Bulk Paste GSTINs">
+        <div class="gc-returns-pro-mini-title">Bulk Paste GSTINs</div>
+        <div class="gc-returns-pro-mini-copy">Paste GSTINs separated by new lines, commas, or spaces.</div>
+        <textarea class="gc-returns-pro-mini-textarea" id="gc-returns-pro-bulk-text" placeholder="29AALFN5621M1ZT&#10;27AAQCS1842K1Z7"></textarea>
+        <div class="gc-returns-pro-mini-actions">
+          <button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-secondary" id="gc-returns-pro-bulk-cancel">Cancel</button>
+          <button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-primary" id="gc-returns-pro-bulk-save">Add GSTINs</button>
         </div>
       </div>`;
     document.body.appendChild(dialog);
-    const textarea = dialog.querySelector("#neo-gst-bulk-text");
+    const textarea = dialog.querySelector("#gc-returns-pro-bulk-text");
     textarea.focus();
     const close = () => dialog.remove();
-    dialog.querySelector("#neo-gst-bulk-cancel").addEventListener("click", close);
+    dialog.querySelector("#gc-returns-pro-bulk-cancel").addEventListener("click", close);
     dialog.addEventListener("click", (event) => {
       if (event.target === dialog) close();
     });
-    dialog.querySelector("#neo-gst-bulk-save").addEventListener("click", () => {
+    dialog.querySelector("#gc-returns-pro-bulk-save").addEventListener("click", () => {
       const tokens = String(textarea.value || "")
         .split(/[\s,;]+/)
         .map((item) => upper(item))
@@ -2820,7 +2820,7 @@ function openBulkClientGstinDialog(statusNode, onComplete) {
     setClientShadow(state.dataset.clients);
     scheduleSave("clients-bulk-gstin");
     setTimeout(() => {
-      flushSave("clients-bulk-gstin-immediate").catch((error) => console.warn("Neo GST immediate bulk client save failed", error));
+      flushSave("clients-bulk-gstin-immediate").catch((error) => console.warn("GC Returns Pro immediate bulk client save failed", error));
     }, 0);
     if (statusNode) {
       statusNode.textContent = `${nativeUnique.length} GSTIN(s) processed for client list.`;
@@ -2833,29 +2833,29 @@ function openBulkClientGstinDialog(statusNode, onComplete) {
     return;
   }
   if (statusNode) statusNode.textContent = "No valid GSTINs found in bulk paste.";
-  const existing = document.querySelector(".neo-gst-mini-overlay");
+  const existing = document.querySelector(".gc-returns-pro-mini-overlay");
   if (existing) existing.remove();
   const dialog = document.createElement("div");
-  dialog.className = "neo-gst-mini-overlay";
+  dialog.className = "gc-returns-pro-mini-overlay";
   dialog.innerHTML = `
-    <div class="neo-gst-mini-modal" role="dialog" aria-modal="true" aria-label="Bulk Add Client GSTINs">
-      <div class="neo-gst-mini-title">Bulk Add Client GSTINs</div>
-      <div class="neo-gst-mini-copy">Paste GSTINs separated by new lines, commas, or spaces. New client rows will be created automatically.</div>
-      <textarea class="neo-gst-mini-textarea" id="neo-gst-client-bulk-text" placeholder="29AALFN5621M1ZT&#10;27AAQCS1842K1Z7"></textarea>
-      <div class="neo-gst-mini-actions">
-        <button type="button" class="neo-gst-btn neo-gst-btn-secondary" id="neo-gst-client-bulk-cancel">Cancel</button>
-        <button type="button" class="neo-gst-btn neo-gst-btn-primary" id="neo-gst-client-bulk-save">Add GSTINs</button>
+    <div class="gc-returns-pro-mini-modal" role="dialog" aria-modal="true" aria-label="Bulk Add Client GSTINs">
+      <div class="gc-returns-pro-mini-title">Bulk Add Client GSTINs</div>
+      <div class="gc-returns-pro-mini-copy">Paste GSTINs separated by new lines, commas, or spaces. New client rows will be created automatically.</div>
+      <textarea class="gc-returns-pro-mini-textarea" id="gc-returns-pro-client-bulk-text" placeholder="29AALFN5621M1ZT&#10;27AAQCS1842K1Z7"></textarea>
+      <div class="gc-returns-pro-mini-actions">
+        <button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-secondary" id="gc-returns-pro-client-bulk-cancel">Cancel</button>
+        <button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-primary" id="gc-returns-pro-client-bulk-save">Add GSTINs</button>
       </div>
     </div>`;
   document.body.appendChild(dialog);
-  const textarea = dialog.querySelector("#neo-gst-client-bulk-text");
+  const textarea = dialog.querySelector("#gc-returns-pro-client-bulk-text");
   if (textarea) textarea.focus();
   const close = () => dialog.remove();
-  dialog.querySelector("#neo-gst-client-bulk-cancel").addEventListener("click", close);
+  dialog.querySelector("#gc-returns-pro-client-bulk-cancel").addEventListener("click", close);
   dialog.addEventListener("click", (event) => {
     if (event.target === dialog) close();
   });
-  dialog.querySelector("#neo-gst-client-bulk-save").addEventListener("click", () => {
+  dialog.querySelector("#gc-returns-pro-client-bulk-save").addEventListener("click", () => {
     const tokens = String(textarea.value || "")
       .split(/[\s,;]+/)
       .map((item) => upper(item))
@@ -2886,7 +2886,7 @@ function openBulkClientGstinDialog(statusNode, onComplete) {
     setClientShadow(state.dataset.clients);
     scheduleSave("clients-bulk-gstin");
     setTimeout(() => {
-      flushSave("clients-bulk-gstin-immediate").catch((error) => console.warn("Neo GST immediate bulk client save failed", error));
+      flushSave("clients-bulk-gstin-immediate").catch((error) => console.warn("GC Returns Pro immediate bulk client save failed", error));
     }, 0);
     if (statusNode) {
       statusNode.textContent = `${unique.length} GSTIN(s) processed for client list.`;
@@ -2908,7 +2908,7 @@ function openBulkClientGstinDialog(statusNode, onComplete) {
         const blob = new Blob([bytes], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const anchor = document.createElement("a");
         anchor.href = URL.createObjectURL(blob);
-        anchor.download = `neo-gst-return-status-${new Date().toISOString().slice(0, 10)}.xlsx`;
+        anchor.download = `gc-returns-pro-return-status-${new Date().toISOString().slice(0, 10)}.xlsx`;
         anchor.style.display = "none";
         document.body.appendChild(anchor);
         anchor.click();
@@ -2956,8 +2956,8 @@ function openBulkClientGstinDialog(statusNode, onComplete) {
 
   function fetchReturnStatusData() {
     let activeGstTabId = null;
-    const fromYear = text(overlay.querySelector("#neo-gst-return-year-from").value) || defaultYear;
-    const toYear = text(overlay.querySelector("#neo-gst-return-year-to").value) || defaultYear;
+    const fromYear = text(overlay.querySelector("#gc-returns-pro-return-year-from").value) || defaultYear;
+    const toYear = text(overlay.querySelector("#gc-returns-pro-return-year-to").value) || defaultYear;
     const selectedYears = yearRange(fromYear, toYear);
     const sourceDataset = syncStatusesFromClients(normalizeDataset(state.dataset || buildEmptyDataset()));
     state.dataset = sourceDataset;
@@ -3024,13 +3024,13 @@ function openBulkClientGstinDialog(statusNode, onComplete) {
       });
   }
 
-  overlay.querySelector("#neo-gst-close-return").addEventListener("click", () => overlay.remove());
-  overlay.querySelector("#neo-gst-clear-all-gstin").addEventListener("click", clearAllGstins);
-  overlay.querySelector("#neo-gst-clear-return-data").addEventListener("click", clearAllReturnData);
-  overlay.querySelector("#neo-gst-bulk-gstin").addEventListener("click", openBulkGstinDialog);
-  overlay.querySelector("#neo-gst-open-portal").addEventListener("click", openPortalSearch);
-  overlay.querySelector("#neo-gst-fetch-return").addEventListener("click", getReturnStatus);
-  overlay.querySelector("#neo-gst-export-excel").addEventListener("click", exportCurrentDataToExcel);
+  overlay.querySelector("#gc-returns-pro-close-return").addEventListener("click", () => overlay.remove());
+  overlay.querySelector("#gc-returns-pro-clear-all-gstin").addEventListener("click", clearAllGstins);
+  overlay.querySelector("#gc-returns-pro-clear-return-data").addEventListener("click", clearAllReturnData);
+  overlay.querySelector("#gc-returns-pro-bulk-gstin").addEventListener("click", openBulkGstinDialog);
+  overlay.querySelector("#gc-returns-pro-open-portal").addEventListener("click", openPortalSearch);
+  overlay.querySelector("#gc-returns-pro-fetch-return").addEventListener("click", getReturnStatus);
+  overlay.querySelector("#gc-returns-pro-export-excel").addEventListener("click", exportCurrentDataToExcel);
   overlay.addEventListener("input", renderRows);
   overlay.addEventListener("change", renderRows);
   overlay.addEventListener("click", (event) => {
@@ -3041,11 +3041,11 @@ function openBulkClientGstinDialog(statusNode, onComplete) {
 }
 
 function addReturnStatusButton() {
-  if (document.getElementById("neo-gst-return-btn")) return;
+  if (document.getElementById("gc-returns-pro-return-btn")) return;
   const addButton = Array.from(document.querySelectorAll("button")).find((button) => text(button.textContent) === "Add Client");
   if (!addButton || !addButton.parentElement) return;
   const button = document.createElement("button");
-  button.id = "neo-gst-return-btn";
+  button.id = "gc-returns-pro-return-btn";
   button.type = "button";
   button.className = addButton.className;
   button.style.background = "#0f766e";
@@ -3062,12 +3062,12 @@ function addReturnStatusButton() {
 }
 
 function addBulkClientGstinButton() {
-  const existing = document.getElementById("neo-gst-client-bulk-btn");
+  const existing = document.getElementById("gc-returns-pro-client-bulk-btn");
   if (existing) return;
 }
 
 function addGetDetailsByGstinButton() {
-  if (document.getElementById("neo-gst-profile-btn")) return;
+  if (document.getElementById("gc-returns-pro-profile-btn")) return;
   const addButton = Array.from(document.querySelectorAll("button")).find((button) => text(button.textContent) === "Add Client");
   if (!addButton || !addButton.parentElement) return;
   const toolbarHost = addButton.parentElement.parentElement || addButton.parentElement;
@@ -3076,10 +3076,10 @@ function addGetDetailsByGstinButton() {
   toolbarHost.style.alignItems = "center";
   toolbarHost.style.gap = "14px";
   toolbarHost.style.justifyContent = "flex-end";
-  let status = document.getElementById("neo-gst-profile-status");
+  let status = document.getElementById("gc-returns-pro-profile-status");
   if (!status) {
     status = document.createElement("div");
-    status.id = "neo-gst-profile-status";
+    status.id = "gc-returns-pro-profile-status";
     status.style.minHeight = "22px";
     status.style.maxWidth = "320px";
     status.style.display = "flex";
@@ -3097,7 +3097,7 @@ function addGetDetailsByGstinButton() {
     toolbarHost && toolbarHost.appendChild(status);
   }
   const button = document.createElement("button");
-  button.id = "neo-gst-profile-btn";
+  button.id = "gc-returns-pro-profile-btn";
   button.type = "button";
   button.className = addButton.className;
   button.style.background = "linear-gradient(135deg,#1d4ed8 0%,#2563eb 100%)";
@@ -3118,7 +3118,7 @@ function addGetDetailsByGstinButton() {
 }
 
 function openClientDetailsModal(statusNode) {
-  const existing = document.getElementById("neo-gst-client-details-overlay");
+  const existing = document.getElementById("gc-returns-pro-client-details-overlay");
   if (existing) existing.remove();
   ensureModalStyle();
   const dataset = normalizeDataset(state.dataset || buildEmptyDataset());
@@ -3129,31 +3129,31 @@ function openClientDetailsModal(statusNode) {
   const rowsHtml = renderClientDetailsRows(tableModel);
   const emptyStateHtml = `<tr><td colspan="${Math.max(1, (tableModel.columns || []).length)}" style="text-align:center;color:#64748b;padding:28px;">No client details available.</td></tr>`;
   const overlay = document.createElement("div");
-  overlay.id = "neo-gst-client-details-overlay";
-  overlay.className = "neo-gst-overlay";
+  overlay.id = "gc-returns-pro-client-details-overlay";
+  overlay.className = "gc-returns-pro-overlay";
   overlay.innerHTML = `
-    <div class="neo-gst-modal" role="dialog" aria-modal="true" aria-label="Client Details">
-      <div class="neo-gst-head">
+    <div class="gc-returns-pro-modal" role="dialog" aria-modal="true" aria-label="Client Details">
+      <div class="gc-returns-pro-head">
         <div>
           <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#1d4ed8;margin-bottom:6px;">GitHub JSON View</div>
           <div style="font-size:28px;font-weight:700;line-height:1.1;">Client Details</div>
-          <div id="neo-gst-client-details-summary" style="margin-top:10px;font-size:14px;color:#64748b;line-height:1.55;max-width:760px;">${rows.length} client(s) loaded from the JSON file.</div>
+          <div id="gc-returns-pro-client-details-summary" style="margin-top:10px;font-size:14px;color:#64748b;line-height:1.55;max-width:760px;">${rows.length} client(s) loaded from the JSON file.</div>
         </div>
         <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:flex-end;margin-left:auto;">
-          <button type="button" class="neo-gst-btn neo-gst-btn-secondary" id="neo-gst-client-bulk">Bulk GSTIN</button>
-          <button type="button" class="neo-gst-btn neo-gst-btn-secondary" id="neo-gst-client-analyze">Analyze</button>
-          <button type="button" class="neo-gst-btn neo-gst-btn-primary" id="neo-gst-client-fetch" disabled style="opacity:.55;cursor:not-allowed;">Get Details</button>
-          <button type="button" class="neo-gst-btn neo-gst-btn-primary" id="neo-gst-client-save">Save JSON</button>
-          <button type="button" class="neo-gst-btn neo-gst-btn-accent" id="neo-gst-client-export">Download Excel</button>
-          <button type="button" class="neo-gst-btn neo-gst-btn-secondary" id="neo-gst-client-close">Close</button>
+          <button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-secondary" id="gc-returns-pro-client-bulk">Bulk GSTIN</button>
+          <button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-secondary" id="gc-returns-pro-client-analyze">Analyze</button>
+          <button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-primary" id="gc-returns-pro-client-fetch" disabled style="opacity:.55;cursor:not-allowed;">Get Details</button>
+          <button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-primary" id="gc-returns-pro-client-save">Save JSON</button>
+          <button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-accent" id="gc-returns-pro-client-export">Download Excel</button>
+          <button type="button" class="gc-returns-pro-btn gc-returns-pro-btn-secondary" id="gc-returns-pro-client-close">Close</button>
         </div>
       </div>
-      <div class="neo-gst-body">
+      <div class="gc-returns-pro-body">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:14px;">
           <div style="font-size:13px;color:#64748b;line-height:1.5;">Only columns with at least one value are shown, so the table stays cleaner and easier to scan.</div>
         </div>
-        <div class="neo-gst-table-wrap" id="neo-gst-client-details-list" style="max-height:72vh;overflow:auto;">
-          <table class="neo-gst-table" style="min-width:2200px;">
+        <div class="gc-returns-pro-table-wrap" id="gc-returns-pro-client-details-list" style="max-height:72vh;overflow:auto;">
+          <table class="gc-returns-pro-table" style="min-width:2200px;">
             <thead>
               <tr>
                 ${headerHtml}
@@ -3168,9 +3168,9 @@ function openClientDetailsModal(statusNode) {
     </div>`;
   document.body.appendChild(overlay);
 
-  const summary = overlay.querySelector("#neo-gst-client-details-summary");
-  const analyzeButton = overlay.querySelector("#neo-gst-client-analyze");
-  const fetchButton = overlay.querySelector("#neo-gst-client-fetch");
+  const summary = overlay.querySelector("#gc-returns-pro-client-details-summary");
+  const analyzeButton = overlay.querySelector("#gc-returns-pro-client-analyze");
+  const fetchButton = overlay.querySelector("#gc-returns-pro-client-fetch");
   let analysisReady = false;
   let analyzePollTimer = null;
   const analysisCount = (status) =>
@@ -3230,7 +3230,7 @@ function openClientDetailsModal(statusNode) {
     state.dataset = syncStatusesFromClients(dataset);
     setClientShadow(state.dataset.clients);
   };
-  overlay.querySelector("#neo-gst-client-close").addEventListener("click", () => {
+  overlay.querySelector("#gc-returns-pro-client-close").addEventListener("click", () => {
     if (analyzePollTimer) {
       clearInterval(analyzePollTimer);
       analyzePollTimer = null;
@@ -3238,7 +3238,7 @@ function openClientDetailsModal(statusNode) {
     overlay.remove();
   });
   overlay.addEventListener("click", (event) => {
-    const button = event.target && event.target.closest ? event.target.closest(".neo-gst-clear-details") : null;
+    const button = event.target && event.target.closest ? event.target.closest(".gc-returns-pro-clear-details") : null;
     if (!button) return;
     event.preventDefault();
     event.stopPropagation();
@@ -3320,7 +3320,7 @@ function openClientDetailsModal(statusNode) {
         if (statusNode) statusNode.textContent = summary.textContent;
       });
   });
-  const bulkButton = overlay.querySelector("#neo-gst-client-bulk");
+  const bulkButton = overlay.querySelector("#gc-returns-pro-client-bulk");
   const handleBulkComplete = ({ addedCount }) => {
       const counts = refreshClientDetailsTable();
       summary.textContent = `${addedCount} GSTIN(s) added locally. Showing ${counts.visibleCount} row(s) in Client Details.`;
@@ -3372,7 +3372,7 @@ function openClientDetailsModal(statusNode) {
   };
   bulkButton.addEventListener("pointerdown", openBulkDialog, true);
   bulkButton.addEventListener("click", openBulkDialog, true);
-  overlay.querySelector("#neo-gst-client-save").addEventListener("click", () => {
+  overlay.querySelector("#gc-returns-pro-client-save").addEventListener("click", () => {
     summary.textContent = "Saving current table to GitHub JSON...";
     flushSave("client-details-manual-save")
       .then((saved) => {
@@ -3387,7 +3387,7 @@ function openClientDetailsModal(statusNode) {
         if (statusNode) statusNode.textContent = summary.textContent;
       });
   });
-  overlay.querySelector("#neo-gst-client-export").addEventListener("click", () => {
+  overlay.querySelector("#gc-returns-pro-client-export").addEventListener("click", () => {
     const snapshot = stripTransientFields(syncStatusesFromClients(normalizeDataset(state.dataset || buildEmptyDataset())));
     buildWorkbookBase64(snapshot)
       .then((base64) => {
@@ -3395,7 +3395,7 @@ function openClientDetailsModal(statusNode) {
         const blob = new Blob([bytes], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         const anchor = document.createElement("a");
         anchor.href = URL.createObjectURL(blob);
-        anchor.download = `neo-gst-client-details-${new Date().toISOString().slice(0, 10)}.xlsx`;
+        anchor.download = `gc-returns-pro-client-details-${new Date().toISOString().slice(0, 10)}.xlsx`;
         anchor.style.display = "none";
         document.body.appendChild(anchor);
         anchor.click();
@@ -3461,13 +3461,13 @@ function openClientDetailsModal(statusNode) {
 }
 
 function addRemoteBadge() {
-  if (document.getElementById("neo-gst-remote-badge")) return;
+  if (document.getElementById("gc-returns-pro-remote-badge")) return;
   const header = Array.from(document.querySelectorAll("header")).find((node) => /neo gst/i.test(node.textContent || ""));
   if (!header) return;
   const anchor = Array.from(header.querySelectorAll("div")).find((node) => /secure session active/i.test(node.textContent || "")) || header.querySelector("div");
   if (!anchor) return;
   const badge = document.createElement("div");
-  badge.id = "neo-gst-remote-badge";
+  badge.id = "gc-returns-pro-remote-badge";
   badge.style.marginLeft = "12px";
   badge.style.padding = "7px 12px";
   badge.style.borderRadius = "999px";
@@ -3554,7 +3554,7 @@ function downloadGithubConfigJson(config) {
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
   const anchor = document.createElement("a");
   anchor.href = URL.createObjectURL(blob);
-  anchor.download = `neo-gst-github-config-${new Date().toISOString().slice(0, 10)}.json`;
+  anchor.download = `gc-returns-pro-github-config-${new Date().toISOString().slice(0, 10)}.json`;
   anchor.style.display = "none";
   document.body.appendChild(anchor);
   anchor.click();
@@ -3595,7 +3595,7 @@ function downloadGithubDataJson(dataset) {
   const blob = new Blob([buildRemoteJsonText(safeDataset)], { type: "application/json" });
   const anchor = document.createElement("a");
   anchor.href = URL.createObjectURL(blob);
-  anchor.download = `neo-gst-data-${new Date().toISOString().slice(0, 10)}.json`;
+  anchor.download = `gc-returns-pro-data-${new Date().toISOString().slice(0, 10)}.json`;
   anchor.style.display = "none";
   document.body.appendChild(anchor);
   anchor.click();
@@ -3672,11 +3672,11 @@ async function applyGithubConfig(config) {
 }
 
 function openGithubSetupModal() {
-  const existing = document.getElementById("neo-gst-github-setup-overlay");
+  const existing = document.getElementById("gc-returns-pro-github-setup-overlay");
   if (existing) existing.remove();
   const stored = readStoredGithubConfig();
   const overlay = document.createElement("div");
-  overlay.id = "neo-gst-github-setup-overlay";
+  overlay.id = "gc-returns-pro-github-setup-overlay";
   overlay.innerHTML = `
     <div style="position:fixed;inset:0;background:rgba(15,23,42,.34);backdrop-filter:blur(5px);z-index:10000;"></div>
     <div role="dialog" aria-modal="true" aria-label="GitHub setup" style="position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(720px,calc(100vw - 48px));max-height:calc(100vh - 48px);background:#fff;border:1px solid #dbe7f5;border-radius:18px;box-shadow:0 24px 70px rgba(15,23,42,.2);z-index:10001;overflow:hidden;display:flex;flex-direction:column;">
@@ -3685,47 +3685,47 @@ function openGithubSetupModal() {
           <div style="font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#2563eb;">GitHub sync</div>
           <div style="font-size:20px;font-weight:800;color:#0f172a;margin-top:3px;">Connect client JSON file</div>
         </div>
-        <button type="button" id="neo-gst-github-close" style="border:0;background:#eff6ff;color:#1d4ed8;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:800;cursor:pointer;">Close</button>
+        <button type="button" id="gc-returns-pro-github-close" style="border:0;background:#eff6ff;color:#1d4ed8;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:800;cursor:pointer;">Close</button>
       </div>
       <div style="padding:18px 20px;display:grid;gap:14px;overflow:auto;">
         <div style="display:flex;gap:10px;flex-wrap:wrap;font-size:13px;color:#334155;">
           <label style="display:inline-flex;align-items:center;gap:7px;padding:8px 10px;border:1px solid #cbdcf3;border-radius:999px;background:#f8fbff;cursor:pointer;">
-            <input type="radio" name="neo-gst-github-mode" value="combo" checked>
+            <input type="radio" name="gc-returns-pro-github-mode" value="combo" checked>
             Token and GitHub file link
           </label>
           <label style="display:inline-flex;align-items:center;gap:7px;padding:8px 10px;border:1px solid #cbdcf3;border-radius:999px;background:#fff;cursor:pointer;">
-            <input type="radio" name="neo-gst-github-mode" value="table">
+            <input type="radio" name="gc-returns-pro-github-mode" value="table">
             Enter details separately
           </label>
         </div>
-        <div id="neo-gst-github-combo-panel">
+        <div id="gc-returns-pro-github-combo-panel">
           <label style="display:grid;gap:7px;">
             <span style="font-size:12px;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:.06em;">Token and GitHub file link</span>
-            <input id="neo-gst-github-combo" type="password" placeholder="github_token&https://github.com/owner/repo/blob/main/neo-gst-data.json" style="width:100%;box-sizing:border-box;border:1px solid #cbdcf3;border-radius:12px;padding:12px 14px;font-size:13px;color:#0f172a;outline:none;">
+            <input id="gc-returns-pro-github-combo" type="password" placeholder="github_token&https://github.com/owner/repo/blob/main/gc-returns-pro-data.json" style="width:100%;box-sizing:border-box;border:1px solid #cbdcf3;border-radius:12px;padding:12px 14px;font-size:13px;color:#0f172a;outline:none;">
           </label>
           <div style="font-size:12px;color:#64748b;line-height:1.55;margin-top:8px;">Paste one value. Everything before the GitHub link is treated as the token. The link is used to read owner, repository, branch, and file path.</div>
         </div>
-        <div id="neo-gst-github-table-panel" hidden>
+        <div id="gc-returns-pro-github-table-panel" hidden>
           <table style="width:100%;border-collapse:separate;border-spacing:0;border:1px solid #cbdcf3;border-radius:12px;overflow:hidden;font-size:13px;">
             <tbody>
               ${[
                 ["token", "Token", "GitHub token"],
                 ["owner", "Owner", "GitHub username or organization"],
                 ["repo", "Repository", "Repository name"],
-                ["path", "File path", "neo-gst-data.json"],
+                ["path", "File path", "gc-returns-pro-data.json"],
                 ["branch", "Branch", "main"],
               ].map(([key, label, placeholder]) => `
                 <tr>
                   <th style="text-align:left;padding:10px 12px;border-bottom:1px solid #e5edf7;background:#f8fbff;color:#475569;width:150px;">${label}</th>
                   <td style="padding:8px 10px;border-bottom:1px solid #e5edf7;">
-                    <input id="neo-gst-github-${key}" type="${key === "token" ? "password" : "text"}" value="${escapeHtml(stored && stored[key] ? stored[key] : key === "branch" ? "main" : "")}" placeholder="${escapeHtml(placeholder)}" style="width:100%;box-sizing:border-box;border:1px solid #dbe7f5;border-radius:9px;padding:9px 10px;font-size:13px;color:#0f172a;outline:none;">
+                    <input id="gc-returns-pro-github-${key}" type="${key === "token" ? "password" : "text"}" value="${escapeHtml(stored && stored[key] ? stored[key] : key === "branch" ? "main" : "")}" placeholder="${escapeHtml(placeholder)}" style="width:100%;box-sizing:border-box;border:1px solid #dbe7f5;border-radius:9px;padding:9px 10px;font-size:13px;color:#0f172a;outline:none;">
                   </td>
                 </tr>`).join("")}
             </tbody>
           </table>
         </div>
         <table style="width:100%;border-collapse:separate;border-spacing:0;border:1px solid #cbdcf3;border-radius:12px;overflow:hidden;font-size:13px;">
-          <tbody id="neo-gst-github-details">${renderGithubConfigRows(stored)}</tbody>
+          <tbody id="gc-returns-pro-github-details">${renderGithubConfigRows(stored)}</tbody>
         </table>
         <div style="border:1px solid #dbe7f5;background:#f8fbff;border-radius:12px;padding:12px 14px;font-size:12px;color:#475569;line-height:1.55;">
           <div style="font-weight:800;color:#0f172a;margin-bottom:6px;">Config JSON format</div>
@@ -3733,19 +3733,19 @@ function openGithubSetupModal() {
   "token": "github_token",
   "owner": "github_user_or_org",
   "repo": "repository_name",
-  "path": "neo-gst-data.json",
+  "path": "gc-returns-pro-data.json",
   "branch": "main"
 }</code>
         </div>
-        <div id="neo-gst-github-status" style="min-height:20px;font-size:13px;color:#64748b;"></div>
+        <div id="gc-returns-pro-github-status" style="min-height:20px;font-size:13px;color:#64748b;"></div>
         <div style="display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;">
-          <input type="file" id="neo-gst-github-upload-file" accept="application/json,.json" hidden>
-          <button type="button" id="neo-gst-github-upload" style="border:1px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer;">Upload Data JSON</button>
-          <button type="button" id="neo-gst-github-download-data" style="border:1px solid #bfdbfe;background:#fff;color:#1d4ed8;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer;">Download Data JSON</button>
-          <button type="button" id="neo-gst-github-copy" style="border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer;">Copy Config JSON</button>
-          <button type="button" id="neo-gst-github-download" style="border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer;">Download Config JSON</button>
-          <button type="button" id="neo-gst-github-clear" style="border:1px solid #fecaca;background:#fff;color:#b91c1c;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer;">Use Local Mode</button>
-          <button type="button" id="neo-gst-github-test" style="border:0;background:#0f766e;color:#fff;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 10px 22px rgba(15,118,110,.18);">Test & Save</button>
+          <input type="file" id="gc-returns-pro-github-upload-file" accept="application/json,.json" hidden>
+          <button type="button" id="gc-returns-pro-github-upload" style="border:1px solid #bfdbfe;background:#eff6ff;color:#1d4ed8;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer;">Upload Data JSON</button>
+          <button type="button" id="gc-returns-pro-github-download-data" style="border:1px solid #bfdbfe;background:#fff;color:#1d4ed8;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer;">Download Data JSON</button>
+          <button type="button" id="gc-returns-pro-github-copy" style="border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer;">Copy Config JSON</button>
+          <button type="button" id="gc-returns-pro-github-download" style="border:1px solid #bbf7d0;background:#f0fdf4;color:#166534;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer;">Download Config JSON</button>
+          <button type="button" id="gc-returns-pro-github-clear" style="border:1px solid #fecaca;background:#fff;color:#b91c1c;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:800;cursor:pointer;">Use Local Mode</button>
+          <button type="button" id="gc-returns-pro-github-test" style="border:0;background:#0f766e;color:#fff;border-radius:10px;padding:10px 14px;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 10px 22px rgba(15,118,110,.18);">Test & Save</button>
         </div>
       </div>
     </div>
@@ -3753,22 +3753,22 @@ function openGithubSetupModal() {
   document.body.appendChild(overlay);
   const close = () => overlay.remove();
   const backdrop = overlay.firstElementChild;
-  const input = overlay.querySelector("#neo-gst-github-combo");
-  const modeInputs = Array.from(overlay.querySelectorAll("input[name='neo-gst-github-mode']"));
-  const comboPanel = overlay.querySelector("#neo-gst-github-combo-panel");
-  const tablePanel = overlay.querySelector("#neo-gst-github-table-panel");
-  const tableBody = overlay.querySelector("#neo-gst-github-details");
-  const status = overlay.querySelector("#neo-gst-github-status");
-  const testButton = overlay.querySelector("#neo-gst-github-test");
-  const clearButton = overlay.querySelector("#neo-gst-github-clear");
-  const uploadButton = overlay.querySelector("#neo-gst-github-upload");
-  const downloadButton = overlay.querySelector("#neo-gst-github-download");
-  const copyButton = overlay.querySelector("#neo-gst-github-copy");
-  const downloadDataButton = overlay.querySelector("#neo-gst-github-download-data");
-  const uploadFile = overlay.querySelector("#neo-gst-github-upload-file");
+  const input = overlay.querySelector("#gc-returns-pro-github-combo");
+  const modeInputs = Array.from(overlay.querySelectorAll("input[name='gc-returns-pro-github-mode']"));
+  const comboPanel = overlay.querySelector("#gc-returns-pro-github-combo-panel");
+  const tablePanel = overlay.querySelector("#gc-returns-pro-github-table-panel");
+  const tableBody = overlay.querySelector("#gc-returns-pro-github-details");
+  const status = overlay.querySelector("#gc-returns-pro-github-status");
+  const testButton = overlay.querySelector("#gc-returns-pro-github-test");
+  const clearButton = overlay.querySelector("#gc-returns-pro-github-clear");
+  const uploadButton = overlay.querySelector("#gc-returns-pro-github-upload");
+  const downloadButton = overlay.querySelector("#gc-returns-pro-github-download");
+  const copyButton = overlay.querySelector("#gc-returns-pro-github-copy");
+  const downloadDataButton = overlay.querySelector("#gc-returns-pro-github-download-data");
+  const uploadFile = overlay.querySelector("#gc-returns-pro-github-upload-file");
   let parsedConfig = stored;
   const tableFields = ["token", "owner", "repo", "path", "branch"].reduce((acc, key) => {
-    acc[key] = overlay.querySelector(`#neo-gst-github-${key}`);
+    acc[key] = overlay.querySelector(`#gc-returns-pro-github-${key}`);
     return acc;
   }, {});
   const activeMode = () => {
@@ -3928,12 +3928,12 @@ function openGithubSetupModal() {
     }
   });
   backdrop.addEventListener("click", close);
-  overlay.querySelector("#neo-gst-github-close").addEventListener("click", close);
+  overlay.querySelector("#gc-returns-pro-github-close").addEventListener("click", close);
   updatePreview();
 }
 
 function openGstApiGuideModal() {
-  const existing = document.getElementById("neo-gst-api-guide-overlay");
+  const existing = document.getElementById("gc-returns-pro-api-guide-overlay");
   if (existing) existing.remove();
   const rows = [
     ["Client details by GSTIN", "services.gst.gov.in"],
@@ -3943,7 +3943,7 @@ function openGstApiGuideModal() {
     ["Cash ledger and challans", "payment.gst.gov.in"],
   ];
   const overlay = document.createElement("div");
-  overlay.id = "neo-gst-api-guide-overlay";
+  overlay.id = "gc-returns-pro-api-guide-overlay";
   overlay.innerHTML = `
     <div style="position:fixed;inset:0;background:rgba(15,23,42,.34);backdrop-filter:blur(5px);z-index:10000;"></div>
     <div role="dialog" aria-modal="true" aria-label="GST API guide" style="position:fixed;right:24px;top:72px;width:min(560px,calc(100vw - 48px));background:#fff;border:1px solid #dbe7f5;border-radius:18px;box-shadow:0 24px 70px rgba(15,23,42,.2);z-index:10001;overflow:hidden;">
@@ -3952,7 +3952,7 @@ function openGstApiGuideModal() {
           <div style="font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#2563eb;">GST portal guide</div>
           <div style="font-size:20px;font-weight:800;color:#0f172a;margin-top:3px;">Where to go for each task</div>
         </div>
-        <button type="button" id="neo-gst-api-guide-close" style="border:0;background:#eff6ff;color:#1d4ed8;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:800;cursor:pointer;">Close</button>
+        <button type="button" id="gc-returns-pro-api-guide-close" style="border:0;background:#eff6ff;color:#1d4ed8;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:800;cursor:pointer;">Close</button>
       </div>
       <div style="padding:18px 20px;">
         <table style="width:100%;border-collapse:separate;border-spacing:0;border:1px solid #cbdcf3;border-radius:12px;overflow:hidden;font-size:13px;">
@@ -3976,11 +3976,11 @@ function openGstApiGuideModal() {
   document.body.appendChild(overlay);
   const close = () => overlay.remove();
   overlay.firstElementChild.addEventListener("click", close);
-  overlay.querySelector("#neo-gst-api-guide-close").addEventListener("click", close);
+  overlay.querySelector("#gc-returns-pro-api-guide-close").addEventListener("click", close);
 }
 
 function addGstInfoButton() {
-  const existing = document.getElementById("neo-gst-api-info-btn");
+  const existing = document.getElementById("gc-returns-pro-api-info-btn");
   if (existing) existing.remove();
   const loginButton = Array.from(document.querySelectorAll("button")).find((button) =>
     /\bLogin to Portal\b/i.test((button.textContent || "").trim()),
@@ -3990,7 +3990,7 @@ function addGstInfoButton() {
   const activePill = Array.from(headerActions.children).find((node) => /^active$/i.test(text(node.textContent)));
   if (!activePill) return;
   const button = document.createElement("button");
-  button.id = "neo-gst-api-info-btn";
+  button.id = "gc-returns-pro-api-info-btn";
   button.type = "button";
   button.title = "GST portal guide";
   button.setAttribute("aria-label", "GST portal guide");
@@ -4029,14 +4029,14 @@ function removePortalDebugNavigation() {
 function enhanceReconciliationWorkspace() {
   const label = currentViewLabel().toLowerCase();
   if (!/recon/.test(label)) return;
-  if (document.getElementById("neo-gst-reconciliation-tabs")) return;
+  if (document.getElementById("gc-returns-pro-reconciliation-tabs")) return;
   const main = Array.from(document.querySelectorAll("div")).find((node) => {
     const className = text(node.className);
     return /\bflex-1\b/.test(className) && /overflow-y-auto/.test(className) && !/text-slate-300/.test(className);
   });
   if (!main) return;
   main.innerHTML = `
-    <div id="neo-gst-reconciliation-tabs" style="padding:28px;min-height:100%;background:#f8fafc;">
+    <div id="gc-returns-pro-reconciliation-tabs" style="padding:28px;min-height:100%;background:#f8fafc;">
       <div style="max-width:1180px;margin:0 auto;">
         <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px;">
           <div>
@@ -4130,12 +4130,12 @@ function activeDownloadNavigationPresent() {
 }
 
 function ensureDownloadProfileHideStyle() {
-  if (document.getElementById("neo-gst-download-profile-hide-style")) return;
+  if (document.getElementById("gc-returns-pro-download-profile-hide-style")) return;
   const style = document.createElement("style");
-  style.id = "neo-gst-download-profile-hide-style";
+  style.id = "gc-returns-pro-download-profile-hide-style";
   style.textContent = `
-    body.neo-gst-download-active #neo-gst-company-profile-card,
-    body.neo-gst-download-active [data-neo-gst-hidden-download-profile="1"] {
+    body.gc-returns-pro-download-active #gc-returns-pro-company-profile-card,
+    body.gc-returns-pro-download-active [data-gc-returns-pro-hidden-download-profile="1"] {
       display: none !important;
     }
   `;
@@ -4151,11 +4151,11 @@ function downloadEmptyPeriodMessageNode() {
 
 function removeInjectedCompanyProfileDetails() {
   const cards = new Set();
-  const idCard = document.getElementById("neo-gst-company-profile-card");
+  const idCard = document.getElementById("gc-returns-pro-company-profile-card");
   if (idCard) cards.add(idCard);
   Array.from(document.querySelectorAll("h1,h2,h3,div")).forEach((node) => {
     if (!/^company profile details$/i.test(text(node.textContent))) return;
-    let candidate = node.closest("#neo-gst-company-profile-card") || node;
+    let candidate = node.closest("#gc-returns-pro-company-profile-card") || node;
     let cursor = candidate.parentElement;
     while (cursor && cursor !== document.body) {
       const cursorText = text(cursor.textContent).toLowerCase();
@@ -4175,11 +4175,11 @@ function removeInjectedCompanyProfileDetails() {
 
 function forceHideCompanyProfileDetails() {
   ensureDownloadProfileHideStyle();
-  document.body.classList.add("neo-gst-download-active");
+  document.body.classList.add("gc-returns-pro-download-active");
   removeInjectedCompanyProfileDetails();
   Array.from(document.querySelectorAll("h1,h2,h3,div")).forEach((node) => {
     if (!/^company profile details$/i.test(text(node.textContent))) return;
-    let card = node.closest("#neo-gst-company-profile-card") || node;
+    let card = node.closest("#gc-returns-pro-company-profile-card") || node;
     let cursor = card.parentElement;
     while (cursor && cursor !== document.body) {
       const cursorText = text(cursor.textContent).toLowerCase();
@@ -4192,23 +4192,23 @@ function forceHideCompanyProfileDetails() {
     }
     if (card) {
       card.style.display = "none";
-      card.setAttribute("data-neo-gst-hidden-download-profile", "1");
+      card.setAttribute("data-gc-returns-pro-hidden-download-profile", "1");
     }
   });
 }
 
 function restoreHiddenCompanyProfileDetails() {
-  document.body.classList.remove("neo-gst-download-active");
-  Array.from(document.querySelectorAll("[data-neo-gst-hidden-download-profile='1']")).forEach((node) => {
+  document.body.classList.remove("gc-returns-pro-download-active");
+  Array.from(document.querySelectorAll("[data-gc-returns-pro-hidden-download-profile='1']")).forEach((node) => {
     node.style.display = "";
-    node.removeAttribute("data-neo-gst-hidden-download-profile");
+    node.removeAttribute("data-gc-returns-pro-hidden-download-profile");
   });
 }
 
 function restoreHiddenDownloadShells() {
-  Array.from(document.querySelectorAll("[data-neo-gst-hidden-download-shell='1']")).forEach((node) => {
+  Array.from(document.querySelectorAll("[data-gc-returns-pro-hidden-download-shell='1']")).forEach((node) => {
     node.style.display = "";
-    node.removeAttribute("data-neo-gst-hidden-download-shell");
+    node.removeAttribute("data-gc-returns-pro-hidden-download-shell");
   });
 }
 
@@ -4217,7 +4217,7 @@ function currentViewIsCompanyProfile() {
     activeDownloadNavigationPresent() ||
     downloadEmptyPeriodMessageNode() ||
     findDownloadPeriodsTable() ||
-    document.getElementById("neo-gst-download-workspace")
+    document.getElementById("gc-returns-pro-download-workspace")
   ) {
     return false;
   }
@@ -4302,7 +4302,7 @@ function renderCompanyProfileDetailCard(client) {
   const pairs = companyProfilePairsForClient(client);
   if (!pairs.length) return "";
   return `
-    <div id="neo-gst-company-profile-card" style="margin:18px 0 0;border:1px solid #d7e2ee;border-radius:16px;background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%);box-shadow:0 12px 34px rgba(15,23,42,.06);padding:18px 20px;">
+    <div id="gc-returns-pro-company-profile-card" style="margin:18px 0 0;border:1px solid #d7e2ee;border-radius:16px;background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%);box-shadow:0 12px 34px rgba(15,23,42,.06);padding:18px 20px;">
       <div style="font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#1d4ed8;margin-bottom:6px;">GST Portal Details</div>
       <div style="font-size:22px;font-weight:700;color:#0f172a;line-height:1.2;">Company Profile Details</div>
       <div style="margin-top:8px;font-size:13px;color:#64748b;line-height:1.6;">Mapped GST profile fields are shown here and are synced into the GitHub JSON when portal data is loaded.</div>
@@ -4312,7 +4312,7 @@ function renderCompanyProfileDetailCard(client) {
 }
 
 function enhanceCompanyProfileView() {
-  const existingCard = document.getElementById("neo-gst-company-profile-card");
+  const existingCard = document.getElementById("gc-returns-pro-company-profile-card");
   if (existingCard) existingCard.remove();
   removeInjectedCompanyProfileDetails();
   return;
@@ -4449,17 +4449,17 @@ function downloadTableHasNoPeriods(table) {
   if (!table) return false;
   const bodyText = text(table.textContent);
   if (/no periods available/i.test(bodyText)) return true;
-  const bodyRows = Array.from(table.querySelectorAll("tbody tr")).filter((row) => !row.id.startsWith("neo-gst-"));
+  const bodyRows = Array.from(table.querySelectorAll("tbody tr")).filter((row) => !row.id.startsWith("gc-returns-pro-"));
   if (!bodyRows.length) return true;
   return bodyRows.every((row) => /no periods available/i.test(text(row.textContent)));
 }
 
 function ensureDashboardDownloadStyles() {
-  if (document.getElementById("neo-gst-download-fallback-style")) return;
+  if (document.getElementById("gc-returns-pro-download-fallback-style")) return;
   const style = document.createElement("style");
-  style.id = "neo-gst-download-fallback-style";
+  style.id = "gc-returns-pro-download-fallback-style";
   style.textContent = `
-    #neo-gst-download-workspace {
+    #gc-returns-pro-download-workspace {
       border: 1px solid #d7e2ee;
       border-radius: 14px;
       background: #ffffff;
@@ -4467,13 +4467,13 @@ function ensureDashboardDownloadStyles() {
       margin: 0 0 14px;
       padding: 14px;
     }
-    #neo-gst-download-workspace .neo-gst-download-controls {
+    #gc-returns-pro-download-workspace .gc-returns-pro-download-controls {
       display: flex;
       flex-wrap: wrap;
       align-items: end;
       gap: 12px;
     }
-    #neo-gst-download-workspace label {
+    #gc-returns-pro-download-workspace label {
       display: grid;
       gap: 6px;
       color: #475569;
@@ -4482,7 +4482,7 @@ function ensureDashboardDownloadStyles() {
       letter-spacing: .08em;
       text-transform: uppercase;
     }
-    #neo-gst-download-workspace select {
+    #gc-returns-pro-download-workspace select {
       min-width: 150px;
       border: 1px solid #c9d8ea;
       border-radius: 10px;
@@ -4493,13 +4493,13 @@ function ensureDashboardDownloadStyles() {
       outline: none;
       padding: 10px 12px;
     }
-    #neo-gst-download-workspace .neo-gst-download-note {
+    #gc-returns-pro-download-workspace .gc-returns-pro-download-note {
       margin-top: 10px;
       color: #64748b;
       font-size: 12px;
       line-height: 1.5;
     }
-    .neo-gst-period-action {
+    .gc-returns-pro-period-action {
       border: 1px solid #bad7ff;
       border-radius: 9px;
       background: #eef6ff;
@@ -4509,10 +4509,10 @@ function ensureDashboardDownloadStyles() {
       font-weight: 700;
       padding: 7px 10px;
     }
-    .neo-gst-period-action:hover {
+    .gc-returns-pro-period-action:hover {
       background: #dfeeff;
     }
-    #neo-gst-download-workspace {
+    #gc-returns-pro-download-workspace {
       width: 100%;
       min-height: calc(100vh - 90px);
       margin: 0;
@@ -4522,7 +4522,7 @@ function ensureDashboardDownloadStyles() {
       background: transparent;
       box-shadow: none;
     }
-    #neo-gst-download-workspace-frame {
+    #gc-returns-pro-download-workspace-frame {
       display: block;
       width: 100%;
       height: calc(100vh - 88px);
@@ -4577,9 +4577,9 @@ function findNativeDownloadShell(table) {
 function hideNativeDownloadShell() {
   const table = findDownloadPeriodsTable();
   const shell = findNativeDownloadShell(table);
-  if (shell && shell.id !== "neo-gst-download-workspace") {
+  if (shell && shell.id !== "gc-returns-pro-download-workspace") {
     shell.style.display = "none";
-    shell.setAttribute("data-neo-gst-hidden-download-shell", "1");
+    shell.setAttribute("data-gc-returns-pro-hidden-download-shell", "1");
   }
   return shell;
 }
@@ -4592,8 +4592,8 @@ function downloadWorkspaceInsertionHost(anchor) {
 function selectedDownloadFallbackValues(existingCard) {
   const fyOptions = financialYearOptionsFrom2016();
   const returnTypes = downloadReturnTypes();
-  const fySelect = existingCard && existingCard.querySelector("#neo-gst-download-fy");
-  const typeSelect = existingCard && existingCard.querySelector("#neo-gst-download-return-type");
+  const fySelect = existingCard && existingCard.querySelector("#gc-returns-pro-download-fy");
+  const typeSelect = existingCard && existingCard.querySelector("#gc-returns-pro-download-return-type");
   return {
     fy: text(fySelect && fySelect.value) || fyOptions[0],
     returnType: text(typeSelect && typeSelect.value) || returnTypes[0].key,
@@ -4604,10 +4604,10 @@ function renderDownloadFallbackControls(card, values) {
   const fyOptions = financialYearOptionsFrom2016();
   const returnTypes = downloadReturnTypes();
   card.innerHTML = `
-    <div class="neo-gst-download-controls">
+    <div class="gc-returns-pro-download-controls">
       <label>
         Financial Year
-        <select id="neo-gst-download-fy">
+        <select id="gc-returns-pro-download-fy">
           ${fyOptions
             .map((fy) => `<option value="${escapeHtml(fy)}"${fy === values.fy ? " selected" : ""}>${escapeHtml(fy)}</option>`)
             .join("")}
@@ -4615,7 +4615,7 @@ function renderDownloadFallbackControls(card, values) {
       </label>
       <label>
         Return Type
-        <select id="neo-gst-download-return-type">
+        <select id="gc-returns-pro-download-return-type">
           ${returnTypes
             .map(
               (item) =>
@@ -4627,7 +4627,7 @@ function renderDownloadFallbackControls(card, values) {
         </select>
       </label>
     </div>
-    <div class="neo-gst-download-note">No periods came from the portal page, so periods are generated from FY 2016-17 through the current financial year.</div>
+    <div class="gc-returns-pro-download-note">No periods came from the portal page, so periods are generated from FY 2016-17 through the current financial year.</div>
   `;
   Array.from(card.querySelectorAll("select")).forEach((select) => {
     select.addEventListener("change", () => renderDownloadWorkspace());
@@ -4654,27 +4654,27 @@ function patchDownloadFallbackRows(table, values) {
     (downloadReturnTypes().find((item) => item.key === values.returnType) || downloadReturnTypes()[0]).label || "Return";
   rows.forEach((period) => {
     const row = document.createElement("tr");
-    row.id = `neo-gst-download-period-${period.value.replace(/[^A-Za-z0-9]+/g, "-")}`;
+    row.id = `gc-returns-pro-download-period-${period.value.replace(/[^A-Za-z0-9]+/g, "-")}`;
     row.innerHTML = `
       <td>${escapeHtml(period.label)}</td>
       <td>Available</td>
-      <td><button type="button" class="neo-gst-period-action" data-return-type="${escapeHtml(
+      <td><button type="button" class="gc-returns-pro-period-action" data-return-type="${escapeHtml(
         values.returnType,
       )}">Open ${escapeHtml(returnTypeLabel)}</button></td>
       <td>-</td>
     `;
     tbody.appendChild(row);
   });
-  Array.from(tbody.querySelectorAll(".neo-gst-period-action")).forEach((button) => {
+  Array.from(tbody.querySelectorAll(".gc-returns-pro-period-action")).forEach((button) => {
     button.addEventListener("click", () => openDownloadPopupForSelection(text(button.getAttribute("data-return-type"))));
   });
 }
 
 function renderStandaloneDownloadFallbackTable(card, values) {
-  let table = document.getElementById("neo-gst-download-fallback-table");
+  let table = document.getElementById("gc-returns-pro-download-fallback-table");
   if (!table) {
     table = document.createElement("table");
-    table.id = "neo-gst-download-fallback-table";
+    table.id = "gc-returns-pro-download-fallback-table";
     table.style.width = "100%";
     table.style.marginTop = "12px";
     table.style.borderCollapse = "collapse";
@@ -4699,23 +4699,23 @@ function downloadFallbackInsertionHost(anchor) {
 }
 
 function renderDownloadWorkspace() {
-  const fallbackTable = document.getElementById("neo-gst-download-fallback-table");
+  const fallbackTable = document.getElementById("gc-returns-pro-download-fallback-table");
   if (fallbackTable) fallbackTable.remove();
   if (currentViewIsDownload()) {
     ensureDashboardDownloadStyles();
     forceHideCompanyProfileDetails();
     const nativeShell = hideNativeDownloadShell();
     if (!nativeShell || !nativeShell.parentElement) {
-      const misplacedWorkspace = document.getElementById("neo-gst-download-workspace");
+      const misplacedWorkspace = document.getElementById("gc-returns-pro-download-workspace");
       if (misplacedWorkspace) misplacedWorkspace.remove();
       return;
     }
     const src = downloadWorkspaceSrc();
-    let workspace = document.getElementById("neo-gst-download-workspace");
+    let workspace = document.getElementById("gc-returns-pro-download-workspace");
     if (!workspace) {
       workspace = document.createElement("div");
-      workspace.id = "neo-gst-download-workspace";
-      workspace.innerHTML = `<iframe id="neo-gst-download-workspace-frame" title="Downloads Workspace" src="${escapeHtml(src)}"></iframe>`;
+      workspace.id = "gc-returns-pro-download-workspace";
+      workspace.innerHTML = `<iframe id="gc-returns-pro-download-workspace-frame" title="Downloads Workspace" src="${escapeHtml(src)}"></iframe>`;
       nativeShell.insertAdjacentElement("beforebegin", workspace);
       return;
     }
@@ -4727,7 +4727,7 @@ function renderDownloadWorkspace() {
     workspace.style.display = "";
     return;
   }
-  const existingCard = document.getElementById("neo-gst-download-workspace");
+  const existingCard = document.getElementById("gc-returns-pro-download-workspace");
   if (existingCard) existingCard.remove();
   restoreHiddenDownloadShells();
   restoreHiddenCompanyProfileDetails();
@@ -4876,7 +4876,7 @@ function loadAppBundle() {
 }
 
 function closeToolOverlay() {
-  const existing = document.getElementById("neo-gst-tool-overlay");
+  const existing = document.getElementById("gc-returns-pro-tool-overlay");
   if (existing) existing.remove();
 }
 
@@ -4884,14 +4884,14 @@ function openToolOverlay(tool) {
   const safeTool = /^(schema|converter)$/i.test(String(tool || "")) ? String(tool).toLowerCase() : "schema";
   closeToolOverlay();
   const overlay = document.createElement("div");
-  overlay.id = "neo-gst-tool-overlay";
+  overlay.id = "gc-returns-pro-tool-overlay";
   overlay.innerHTML = `
     <div style="position:fixed;inset:0;background:rgba(15,23,42,.38);backdrop-filter:blur(6px);z-index:9998;"></div>
     <div style="position:fixed;inset:24px;z-index:9999;display:flex;align-items:stretch;justify-content:center;">
       <div style="width:min(1180px,100%);height:100%;background:#fff;border:1px solid #dbe7f5;border-radius:24px;box-shadow:0 24px 70px rgba(15,23,42,.18);overflow:hidden;display:flex;flex-direction:column;">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid #e5edf7;background:linear-gradient(180deg,#f9fbff,#f4f8ff);">
           <div style="font-size:15px;font-weight:700;color:#0f172a;">${safeTool === "schema" ? "Schema Manager" : "Converters"}</div>
-          <button type="button" id="neo-gst-tool-overlay-close" style="border:0;background:#eff6ff;color:#1d4ed8;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer;">Close</button>
+          <button type="button" id="gc-returns-pro-tool-overlay-close" style="border:0;background:#eff6ff;color:#1d4ed8;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer;">Close</button>
         </div>
         <iframe title="${safeTool}" src="../popup.html?tool=${safeTool}&open${safeTool === "schema" ? "Schema" : "Converter"}=1" style="flex:1 1 auto;width:100%;border:0;background:#fff;"></iframe>
       </div>
@@ -4900,14 +4900,14 @@ function openToolOverlay(tool) {
   document.body.appendChild(overlay);
   const dismiss = () => closeToolOverlay();
   const backdrop = overlay.firstElementChild;
-  const closeBtn = document.getElementById("neo-gst-tool-overlay-close");
+  const closeBtn = document.getElementById("gc-returns-pro-tool-overlay-close");
   if (backdrop) backdrop.addEventListener("click", dismiss);
   if (closeBtn) closeBtn.addEventListener("click", dismiss);
 }
 
 function injectTopToolButtons() {
-  const existingSchema = document.getElementById("neo-gst-schema-top-btn");
-  const existingConverter = document.getElementById("neo-gst-converter-top-btn");
+  const existingSchema = document.getElementById("gc-returns-pro-schema-top-btn");
+  const existingConverter = document.getElementById("gc-returns-pro-converter-top-btn");
   const addClientButton = Array.from(document.querySelectorAll("button")).find((button) =>
     /\bAdd Client\b/i.test((button.textContent || "").trim()),
   );
@@ -4929,7 +4929,7 @@ function injectTopToolButtons() {
   };
   const schemaButton = makeButton(
     existingSchema,
-    "neo-gst-schema-top-btn",
+    "gc-returns-pro-schema-top-btn",
     "Schema",
     "Open Schema Manager",
     { bg: "#d1fae5", fg: "#047857", icon: "#" },
@@ -4937,7 +4937,7 @@ function injectTopToolButtons() {
   );
   const converterButton = makeButton(
     existingConverter,
-    "neo-gst-converter-top-btn",
+    "gc-returns-pro-converter-top-btn",
     "Converters",
     "Open Converters",
     { bg: "#dbeafe", fg: "#1d4ed8", icon: "C" },
@@ -4990,7 +4990,7 @@ async function bootstrap() {
   try {
     await initializeRemoteState();
     } catch (error) {
-      console.error("Neo GST bootstrap failed to initialize any dataset", error);
+      console.error("GC Returns Pro bootstrap failed to initialize any dataset", error);
       try {
       const fallback = cachedDataset || (await fetchBundledDataset());
       state.remoteInitialized = true;
@@ -5025,7 +5025,7 @@ async function bootstrap() {
 }
 
 bootstrap().catch((error) => {
-  console.error("Neo GST bootstrap failed", error);
+  console.error("GC Returns Pro bootstrap failed", error);
   state.dataset = buildEmptyDataset();
   setClientShadow([]);
   showBootMessage(error && error.message ? error.message : "Unable to load the client data from GitHub.");

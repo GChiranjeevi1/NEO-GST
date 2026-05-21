@@ -528,3 +528,37 @@ runtimeApi.tabs.onUpdated.addListener((tabId, changeInfo) => {
   };
   sendFill(1);
 });
+
+// MV3 Service Worker keep-alive: maintain port connections from content scripts or popup
+// so the service worker is not killed during long-running GST portal requests.
+runtimeApi.runtime.onConnect.addListener((port) => {
+  port.onDisconnect.addListener(() => {});
+});
+
+// ── Download Notifications ──────────────────────────────────────────
+// When popup signals a download has started, watch for completion and notify.
+const pendingDownloadNotifs = new Map(); // downloadId → filename
+
+runtimeApi.runtime.onMessage.addListener((msg) => {
+  if (!msg || msg.type !== "gc-returns-pro-download-started") return;
+  const { downloadId, filename } = msg;
+  if (typeof downloadId === "number" && filename) {
+    pendingDownloadNotifs.set(downloadId, filename);
+  }
+});
+
+runtimeApi.downloads.onChanged.addListener((delta) => {
+  if (!delta || typeof delta.id !== "number") return;
+  if (!delta.state || delta.state.current !== "complete") return;
+  const filename = pendingDownloadNotifs.get(delta.id);
+  if (!filename) return;
+  pendingDownloadNotifs.delete(delta.id);
+
+  runtimeApi.notifications.create(`gc-returns-pro-dl-${delta.id}`, {
+    type: "basic",
+    iconUrl: runtimeApi.runtime.getURL("images/gc-returns-pro-logo-48.png"),
+    title: "GC Returns Pro — Download Complete",
+    message: filename,
+    priority: 1,
+  });
+});

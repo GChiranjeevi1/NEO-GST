@@ -1,5 +1,5 @@
 {
-  "format": "neo-gst-client-store",
+  "format": "gc-returns-pro-client-store",
   "version": 2,
   "updatedAt": "2026-05-10T00:00:00.000Z",
   "source": "bundled",
