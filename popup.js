@@ -1087,6 +1087,42 @@ function downloadSchemaExcel() {
   downloadAs(blobUrl, `neo-gst-schema-${returnType}.xlsx`);
   setSchemaStatus("Schema Excel exported.");
 }
+async function buildCombinedGstr2aWorkbookXlsxBlob(payloads) {
+  const fields = ["gstin", "rtnprd", "status", "message", "date", "time", "generated_on", "version", "checksum", "file_url"];
+  const valuesByField = new Map(fields.map((field) => [field, { field }]));
+  const periods = [];
+  const sectionsByName = new Map();
+  (payloads || []).forEach((payload) => {
+    const meta = extractWorkbookMeta(payload);
+    const period = meta.rtnprd || "";
+    if (period && !periods.includes(period)) periods.push(period);
+    if (period) {
+      valuesByField.get("gstin")[period] = meta.gstin || "";
+      valuesByField.get("rtnprd")[period] = meta.rtnprd || "";
+      valuesByField.get("status")[period] = meta.status || "";
+      valuesByField.get("message")[period] = meta.message || "";
+      valuesByField.get("date")[period] = meta.file_date || "";
+      valuesByField.get("time")[period] = meta.file_time || "";
+      valuesByField.get("generated_on")[period] = meta.generated_on || "";
+      valuesByField.get("version")[period] = meta.version || "";
+      valuesByField.get("checksum")[period] = meta.checksum || "";
+      valuesByField.get("file_url")[period] = meta.file_url || "";
+    }
+    const workbookData = buildGstr2aWorkbookData(payload, true);
+    (workbookData.sectionSheets || []).forEach((section) => {
+      if (!sectionsByName.has(section.name)) sectionsByName.set(section.name, []);
+      (section.rows || []).forEach((row) => sectionsByName.get(section.name).push({ ...(row || {}) }));
+    });
+  });
+  const sheets = [
+    { name: "Summary", rows: fields.map((field) => valuesByField.get(field)), columns: ["field"].concat(periods), options: { schemaReturnType: "GSTR2A" } },
+  ];
+  Array.from(sectionsByName.entries()).forEach(([name, rows]) => {
+    sheets.push({ name, rows, columns: getSpreadsheetColumns(rows, ["report_period", "row_no"]), options: { schemaReturnType: "GSTR2A" } });
+  });
+  return buildXlsxBlobFromSheets(sheets);
+}
+
 
 async function importSchemaFile(file) {
   if (!file) return;
