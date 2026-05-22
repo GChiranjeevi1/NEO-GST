@@ -13,19 +13,21 @@ This extension was primarily built using ChatGPT and AI-assisted development. An
 
 # Steps to work with this:
 
-### 1. Open chrome Browser
+#### 1. Click on the code and download zip file.unzip the file
 
-### 2. Open Extenions tab or cliect on "chrome://extensions/" and click on load unpacked (if not found enable developer)
+#### 2. Open chrome Browser
 
-### 3. Click on extenison to open it
+#### 3. Open Extenions tab or cliect on "chrome://extensions/" and click on load unpacked (if not found enable developer)
 
-### 4. Login methods
+#### 4. Click on extenison to open it
+
+#### 5. Login methods
 ```
 - Open GST portal directly  
           OR  
 - Enter login details in client management and click on **"login to portal"**
 ```
-### 5. GST Portal navigation instructions
+#### 6. GST Portal navigation instructions
 
 In GST portal go to **"dashboard-->returns dashboard"**  for **all returns and the ledgers**.
    **Except**:
@@ -35,7 +37,7 @@ In GST portal go to **"dashboard-->returns dashboard"**  for **all returns and t
 - To update the client details or get GSTIN numbers or return status → go to **"dashboard"** or other prescribed way.
 
 # Advanced Features
-variation as compared to others softwares..
+###Variation as compared to others softwares..
    1. Can be modified the way the user downloads the excel formated returns from gst portal as per his requirements.
    2. Easier and most accurate processing and handling the downloads.
    3. Runs at local no need of servers or any infrastructure.
@@ -65,7 +67,7 @@ scheme of excel Export
 
 You can contribute even if you are not an expert developer.
 
-## Ways to contribute:(give to the claude the required format and the extenion downloaded file it iwll give a revised version)
+## Ways to contribute:(give to the claude the required format and the extenion downloaded file it will give a revised version)
 
 1. Add new features or automation options  
 2. Improve UI/design  
