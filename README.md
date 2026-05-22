@@ -1,5 +1,5 @@
 # NEO-GST
-<!-- for CA articles by a ca aspirant -->
+<!-- for CA and ca Articles by a ca aspirant -->
 A simple designed to download GST returns, ledgers, challans, and other related data directly from the GST portal with customizable automation options.
 
 ---
@@ -13,11 +13,11 @@ This extension was primarily built using ChatGPT and AI-assisted development. An
 
 # Steps to work with this:
 
-### 1. open chrome Browser
+### 1. Open chrome Browser
 
-### 2. Open Extenions tab or cliect on "chrome://extensions/" and cleick on developer and click on load unpacked
+### 2. Open Extenions tab or cliect on "chrome://extensions/" and click on load unpacked (if not found enable developer)
 
-### 3.click on extenison to open it
+### 3. Click on extenison to open it
 
 ### 4. Login methods
 ```
@@ -34,28 +34,29 @@ In GST portal go to **"dashboard-->returns dashboard"**  for **all returns and t
 
 - To update the client details or get GSTIN numbers or return status → go to **"dashboard"** or other prescribed way.
 
-# Features
-variatiosn as compared to others..
+# Advanced Features
+variation as compared to others softwares..
    1. Can be modified the way the user downloads the excel formated returns from gst portal as per his requirements.
    2. Easier and most accurate processing and handling the downloads.
-   3. Runs at local no need of servers or any infrastructure can manage multisessions by creating a GitHub account for storing the client details so everyone can access the same.
+   3. Runs at local no need of servers or any infrastructure.
+   4, Can manage multisessions by creating a GitHub account for storing the client details so everyone in a team can access the same.
 
  ```
-**Personal Access Token generation** video:"https://youtu.be/-s7lcte_EIY?si=KJBK7PiupF2KGD8W"
-Once we get that go to the extension and paste them with the repository link
+**Personal Access Token generationinstructions ** video:"https://youtu.be/-s7lcte_EIY?si=KJBK7PiupF2KGD8W"
+Once we get that go to the extension and paste them with the repository link and the token
 (so it can generate a file for the accessing by everyone under same team).
 ```
-   4. Josn convertor
+   5. Josn convertor
 ```
 Can **convert** the JSON to Excel for mostly all returns.
 ```
-   5. Schema and everything once and can be used multiple time.
+   6. Schema and everything once and can be used multiple time.
 ```
 scheme of excel Export
 ```
-   6. Once login to get all the status of all GSTIN filing for all clients and once login once or even without login also we can get.
-   7. Reco is yet to implement — so will do in coming update with your help.
-   8. Lowest in size approx 6 MB
+   7. Once login to get all the status of all GSTIN filing for all clients and once login once or even without login also we can get.
+   8. Reco is yet to implement — so will do in coming update with your help.
+   9. Lowest in size approx 6 MB
 
 ## **Cons:**
 > some manual intervension is required..
@@ -64,7 +65,7 @@ scheme of excel Export
 
 You can contribute even if you are not an expert developer.
 
-## Ways to contribute:
+## Ways to contribute:(give to the claude the required format and the extenion downloaded file it iwll give a revised version)
 
 1. Add new features or automation options  
 2. Improve UI/design  
