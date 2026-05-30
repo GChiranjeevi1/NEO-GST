@@ -1,21 +1,25 @@
-# NEO-GST
-CGGSTPRO-
-GST Returns downlaoder free
-completely safe-100% and completely free-100%
-runs in ur pc.
-fastest and 100% error Free.
+# NEOGST -
+<!-- for CA and ca Articles by a ca aspirant -->
+# **The best loot is the persons you get along the way.**
+<br>
+GCGSTPRO-<br>
+-GST Returns downlaoder free.<br>
+-completely safe-100% and completely free-100%.<br>
+-runs in ur pc.<br>
+-fastest and 100% error Free.<br>
 
 **in case it shows error - generaete fiels again maybe it error in gst portal and not in app.**
-**The best loot is the friends you help along the way.**
-<!-- for CA and ca Articles by a ca aspirant -->
+
+
+
 A simple designed to download GST returns, ledgers, challans, and other related data directly from the GST portal with customizable automation options.
 
 ---
-
+Claude ai give the best results as i see as compared to chatgpt codex.
 This extension was primarily built using ChatGPT and AI-assisted development. Anyone can improve, customize, or extend it either by editing the code directly (mainly `popup.js` and related files) or by using AI tools like ChatGPT to analyze and modify the extension.
 
 > **The aim of this project is to keep it free, open-source, and community-driven so everyone can benefit from it.**
-> Any one intrested in helping instructions are below.
+> Any one intrested in helping instructions are at last.
 
 ---
 
