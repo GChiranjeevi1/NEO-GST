@@ -1,29 +1,5 @@
 # NEOGST -
 <!-- for CA and ca Articles by a ca aspirant -->
-# **The best loot is the persons you get along the way.**
-<br>
-GCGSTPRO-<br>
--free GST return downloader" or "JSON to Excel extension
--GST Returns downlaoder free.<br>
--completely safe-100% and completely free-100%.<br>
--runs in ur pc.<br>
--fastest and 100% error Free.<br>
-
-**in case it shows error - generaete fiels again maybe it error in gst portal and not in app.**
-
-
-
-A simple designed to download GST returns, ledgers, challans, and other related data directly from the GST portal with customizable automation options.
-
----
-Claude ai give the best results as i see as compared to chatgpt codex.
-This extension was primarily built using ChatGPT and AI-assisted development. Anyone can improve, customize, or extend it either by editing the code directly (mainly `popup.js` and related files) or by using AI tools like ChatGPT to analyze and modify the extension.
-
-> **The aim of this project is to keep it free, open-source, and community-driven so everyone can benefit from it.**
-> Any one intrested in helping instructions are at last.
-
----
-
 # Steps to work with this:
 
 #### 1. Click on the code and download zip file.unzip the file
@@ -48,6 +24,34 @@ In GST portal go to **"dashboard-->returns dashboard"**  for **all returns and t
       - For challans and cash ledger/challans → click on **"create challan"** in **"dashboard"**  
 
 - To update the client details or get GSTIN numbers or return status → go to **"dashboard"** or other prescribed way.
+**note: in case it shows error - generaete fiels again maybe it error in gst portal and not in app.
+only this freeezing bug is there -in case of screen freeze of showing gstr-2b in gst portal go to return dashbord and refesh extension and once opening the download in the extension then open a2b return in gst poral to download gstr2b **
+
+# **The best loot is the persons you get along the way.**
+<br>
+-free GST return downloader" or "JSON to Excel extension
+-GST Returns downlaoder free.<br>
+-completely safe-100% and completely free-100%.<br>
+-runs in ur pc.<br>
+-fastest and 100% error Free.<br>
+
+
+**in case it shows error - generaete fiels again maybe it error in gst portal and not in app.
+only this -in case of screen freeze of showing gstr-2b in gst portal go to return dashbord and refesh extension and once opening the download in the extension then open a2b return in gst poral to download gstr2b **
+
+
+
+A simple designed to download GST returns, ledgers, challans, and other related data directly from the GST portal with customizable automation options.
+
+---
+Claude ai give the best results as i see as compared to chatgpt codex.
+This extension was primarily built using ChatGPT and AI-assisted development. Anyone can improve, customize, or extend it either by editing the code directly (mainly `popup.js` and related files) or by using AI tools like ChatGPT to analyze and modify the extension.
+
+> **The aim of this project is to keep it free, open-source, and community-driven so everyone can benefit from it.**
+> Any one intrested in helping instructions are at last.
+
+---
+
 
 # Advanced Features
 ###Variation as compared to others softwares..
