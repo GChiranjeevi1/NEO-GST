@@ -1,22 +1,17 @@
 # NEOGST -
 <!-- for CA and ca Articles by a ca aspirant -->
-# Steps to work with this:
+# Simple 5 steps:
 
 #### 1. Click on the code and download zip file.unzip the file
-
-#### 2. Open chrome Browser
-
-#### 3. Open Extenions tab or cliect on "chrome://extensions/" and click on load unpacked (if not found enable developer)
-
-#### 4. Click on extenison to open it
-
-#### 5. Login methods
+#### 2. In chrome paste this "chrome://extensions/" and eneable developer on right cornwe and click on load unpacked.f not found enable developer)
+#### 3. Open extension and create a client(gstin number is important -in case give random and once login change it.)
+#### 4. Login methods
 ```
 - Open GST portal directly  
           OR  
 - Enter login details in client management and click on **"login to portal"**
 ```
-#### 6. GST Portal navigation instructions
+#### 5. GST Portal navigation instructions
 
 In GST portal go to **"dashboard-->returns dashboard"**  for **all returns and the ledgers**.
    **Except**:
@@ -24,16 +19,17 @@ In GST portal go to **"dashboard-->returns dashboard"**  for **all returns and t
       - For challans and cash ledger/challans → click on **"create challan"** in **"dashboard"**  
 
 - To update the client details or get GSTIN numbers or return status → go to **"dashboard"** or other prescribed way.
-**note: in case it shows error - generaete fiels again maybe it error in gst portal and not in app.
+**note**: **in case it shows error - generaete fiels again maybe it error in gst portal and not in app.
 only this freeezing bug is there -in case of screen freeze of showing gstr-2b in gst portal go to return dashbord and refesh extension and once opening the download in the extension then open a2b return in gst poral to download gstr2b **
-
-# **The best loot is the persons you get along the way.**
 <br>
--free GST return downloader" or "JSON to Excel extension
--GST Returns downlaoder free.<br>
--completely safe-100% and completely free-100%.<br>
--runs in ur pc.<br>
--fastest and 100% error Free.<br>
+**The best loot is the persons you get along the way.**
+<br>
+Features:
+          -free GST return downloader" or "JSON to Excel extension          
+          -GST Returns downlaoder free.<br>
+          -completely safe-100% and completely free-100%.<br>
+          -runs in ur pc.<br>
+          -fastest and 100% error Free.<br>
 
 
 **in case it shows error - generaete fiels again maybe it error in gst portal and not in app.
