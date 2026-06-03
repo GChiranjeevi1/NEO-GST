@@ -1460,6 +1460,20 @@ function readSelectedClientFromEmbeddedParent() {
 }
 
 function getDownloadValidationState() {
+  // GSTR-2B host: portal is always reachable; GSTIN is not extracted from session on this host.
+  // Skip GSTIN-based validation so buttons are not disabled when the user is on gstr2b.gst.gov.in.
+  if (session.is2bHost) {
+    return {
+      portalGstin: session.portalGstin || session.gstin || "GSTR2B",
+      selectedClientGstin: normalizeGstin(session.selectedClientGstin),
+      selectedClientName: String(session.selectedClientName || "").trim(),
+      hasSelectedClient: !!normalizeGstin(session.selectedClientGstin),
+      hasRequiredContext: true,
+      requiresClientMatch: false,
+      matches: true,
+      message: "",
+    };
+  }
   const portalGstin = normalizeGstin(session.portalGstin || session.gstin);
   const selectedClientGstin = normalizeGstin(session.selectedClientGstin);
   const selectedClientName = String(session.selectedClientName || "").trim();
@@ -10985,10 +10999,10 @@ async function updatePeriods() {
       if (isGstr2aReturn(session.return)) {
         const fromMoment = session.useCustomPeriods
           ? moment(session.periodFrom || "", "MMYYYY")
-          : moment(`01${selectorFinYear.value}`, "MMYYYY");
+          : moment(`01${session.finYear}`, "MMYYYY");
         const toMoment = session.useCustomPeriods
           ? moment(session.periodTo || "", "MMYYYY")
-          : moment(`12${selectorFinYear.value}`, "MMYYYY");
+          : moment(`12${session.finYear}`, "MMYYYY");
         session.dropdown = buildSyntheticMonthlyDropdown(fromMoment, toMoment);
         showStatus(null);
       } else {
@@ -11001,10 +11015,10 @@ async function updatePeriods() {
         if (isGstr2aReturn(session.return)) {
           const fromMoment = session.useCustomPeriods
             ? moment(session.periodFrom || "", "MMYYYY")
-            : moment(`01${selectorFinYear.value}`, "MMYYYY");
+            : moment(`01${session.finYear}`, "MMYYYY");
           const toMoment = session.useCustomPeriods
             ? moment(session.periodTo || "", "MMYYYY")
-            : moment(`12${selectorFinYear.value}`, "MMYYYY");
+            : moment(`12${session.finYear}`, "MMYYYY");
           session.dropdown = buildSyntheticMonthlyDropdown(fromMoment, toMoment);
           showStatus(null);
         } else {
@@ -11198,6 +11212,14 @@ async function updatePeriods() {
   const btnRefresh = getElement("refresh");
   btnRefresh.onclick = async function (evt) {
     reportButtonClicked(evt);
+    await refreshWorkspace();
+  };
+
+  selectorFinYear.onchange = async function () {
+    session.finYear = selectorFinYear.value;
+    const p = loadPrefs();
+    p.finYear = session.finYear;
+    savePrefs(p);
     await refreshWorkspace();
   };
 
@@ -12971,11 +12993,9 @@ async function downloadLedger(cfg, from, to, mode) {
         downloadAs(blobUrl, fname);
       } else {
         const workbookXml = buildItcLedgerWorkbookXml(parsedRows);
-        const blobUrl = URL.createObjectURL(
-          new Blob([workbookXml], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }),
-        );
-        const fname = makeNamedRangeExportFileName(cfg, fromStr, toStr, "xls");
-        downloadAs(blobUrl, fname);
+        const xlsxBlob = await buildXlsxBlobFromWorkbookXml(workbookXml);
+        const fname = makeNamedRangeExportFileName(cfg, fromStr, toStr, "xlsx");
+        await downloadBlobAs(xlsxBlob, fname);
       }
       statusCell.innerHTML = pill("Done", "success");
       if (activeBtn) activeBtn.textContent = "Done";
@@ -13009,11 +13029,9 @@ async function downloadLedger(cfg, from, to, mode) {
       downloadAs(blobUrl, fname);
     } else {
       const workbookXml = buildGenericLedgerWorkbookXml(cfg, chunkPayloads);
-      const blobUrl = URL.createObjectURL(
-        new Blob([workbookXml], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }),
-      );
-      const fname = makeNamedRangeExportFileName(cfg, fromStr, toStr, "xls");
-      downloadAs(blobUrl, fname);
+      const xlsxBlob = await buildXlsxBlobFromWorkbookXml(workbookXml);
+      const fname = makeNamedRangeExportFileName(cfg, fromStr, toStr, "xlsx");
+      await downloadBlobAs(xlsxBlob, fname);
     }
     statusCell.innerHTML = pill("Done", "success");
     if (activeBtn) activeBtn.textContent = "Done";
@@ -13740,11 +13758,9 @@ async function downloadOther(cfg, period, mode) {
       const exportTo = consolidated.to || formatLedgerDate(endDate, "DD/MM/YYYY");
       if (activeMode === "excel") {
         const workbookXml = buildChallanWorkbookXml(consolidated);
-        const blobUrl = URL.createObjectURL(
-          new Blob([workbookXml], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }),
-        );
-        const fname = makeNamedRangeExportFileName(cfg, exportFrom, exportTo, "xls");
-        downloadAs(blobUrl, fname);
+        const xlsxBlob = await buildXlsxBlobFromWorkbookXml(workbookXml);
+        const fname = makeNamedRangeExportFileName(cfg, exportFrom, exportTo, "xlsx");
+        await downloadBlobAs(xlsxBlob, fname);
       } else {
         const fname = makeNamedRangeExportFileName(cfg, exportFrom, exportTo, "json");
         const blobUrl = URL.createObjectURL(

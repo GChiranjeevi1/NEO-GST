@@ -41,7 +41,11 @@ const openAssistantTab = (tab) => {
   runtimeApi.tabs.create({ url });
 };
 
-actionApi.onClicked.addListener(openAssistantTab);
+
+// Icon click is handled by default_popup in manifest.json (opens popup.html).
+// The openAssistantTab function is kept so the React UI tab can still be opened
+// via the "open-download-popup" message if needed.
+
 
 const pendingLoginByTab = new Map();
 const pendingSearchByTab = new Map();

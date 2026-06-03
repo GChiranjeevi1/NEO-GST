@@ -3,9 +3,6 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="bootstrap.min.css">
     <style type="text/css">
       :root {
@@ -18,346 +15,117 @@
         --card: #ffffff;
         --text: #1c2436;
         --muted: #6f7b8e;
-        --radius: 12px;
-        --shadow: 0 16px 40px rgba(20, 34, 74, 0.08);
+        --radius: 10px;
+        --shadow: 0 4px 16px rgba(20,34,74,0.10);
       }
       html, body {
-        font-family: 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif;
-        font-size: 14px;
+        font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+        font-size: 13px;
         background: var(--bg);
         color: var(--text);
-        height: 100%;
+        width: 420px;
+        min-width: 420px;
+        max-width: 420px;
+        margin: 0;
+        padding: 0;
       }
       body {
         margin: 0;
         padding: 0;
-        min-height: 100vh;
-        background: radial-gradient(circle at top left, #eef2ff, transparent 55%),
-          radial-gradient(circle at top right, var(--bg-accent), transparent 50%),
-          var(--bg);
       }
       .shell {
-        min-height: 100vh;
-        padding: 28px 18px 48px;
+        padding: 0 0 8px 0;
+        width: 420px;
       }
-      .page {
-        max-width: 1120px;
-        margin: 0 auto;
-        display: grid;
-        gap: 18px;
-      }
-      .card-soft {
-        background: var(--card);
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        border: 1px solid #e6ebf5;
-      }
+
+      /* ── Header ── */
       .header-bar {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 16px 18px;
-        border-radius: var(--radius);
+        padding: 10px 12px 8px;
         background: linear-gradient(120deg, #e6edff, #ffffff);
-        border: 1px solid #dfe7ff;
+        border-bottom: 1px solid #dfe7ff;
       }
       .header-title {
         font-weight: 700;
         margin: 0;
-        font-size: 16px;
+        font-size: 13px;
       }
       .header-sub {
         color: var(--muted);
-        font-size: 12px;
-        margin: 2px 0 0;
+        font-size: 11px;
+        margin: 1px 0 0;
       }
       .header-actions {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 6px;
       }
-      .hero {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 14px;
-        padding: 16px 18px;
-      }
-      .hero-card {
-        border-radius: var(--radius);
-        padding: 14px;
-        background: #f7f9ff;
-        border: 1px solid #e1e8ff;
-      }
-      .hero-title {
-        font-weight: 700;
-        margin-bottom: 6px;
-        font-size: 14px;
-      }
-      .pill {
-        display: inline-flex;
+
+      /* ── Business info card ── */
+      #businessInfo { display: block; }
+      #businessInfo > .p-3 { padding: 10px 12px 0 !important; }
+
+      .biz-header {
+        display: flex;
         align-items: center;
-        padding: 2px 8px;
-        border-radius: 999px;
-        font-size: 11px;
-        font-weight: 600;
-        letter-spacing: 0.01em;
+        justify-content: space-between;
+        margin-bottom: 8px;
       }
-      .pill.success { background: #e7f4ed; color: var(--success); }
-      .pill.warning { background: #fff6d6; color: #946200; }
-      .pill.danger { background: #ffe3e3; color: var(--danger); }
-      .pill.muted { background: #eef2f7; color: var(--muted); }
+      .biz-header .header-title { font-size: 12px; }
+
+      /* ── Workspace / selectors ── */
+      #workspace { display: block; }
       .info-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 10px 16px;
-        padding: 16px 18px 8px;
+        display: block;
+        padding: 0 0 6px;
       }
-      .info-grid select {
-        width: 100%;
-      }
+      .info-grid > div { margin-bottom: 8px; }
+
       .info-label {
         color: var(--muted);
-        font-size: 11px;
+        font-size: 10px;
         letter-spacing: 0.02em;
         text-transform: uppercase;
         margin-bottom: 2px;
       }
-      .info-value {
-        font-weight: 600;
-        color: var(--text);
-        font-size: 13px;
-      }
+      .info-value { font-weight: 600; font-size: 12px; }
+
       .select-row {
         display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
-        gap: 16px;
-        padding: 0 18px 14px;
-        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        padding: 4px 0 8px;
       }
       .select-row button {
-        height: 36px;
-        font-size: 13px;
-        padding: 6px 12px;
+        height: 30px;
+        font-size: 12px;
+        padding: 4px 10px;
         white-space: nowrap;
       }
-      .multi-select {
-        width: 100%;
-        min-height: 110px;
-        font-size: 12px;
-      }
+
       .period-range .form-control {
-        height: 32px;
-        font-size: 12px;
-      }
-      .returns-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 12px;
-        padding: 16px 18px;
-      }
-      .return-card {
-        border: 1px solid #e6ebf5;
-        border-radius: var(--radius);
-        padding: 10px;
-        background: var(--card);
-        box-shadow: 0 8px 20px rgba(15, 20, 35, 0.05);
-        transition: transform 0.08s ease, box-shadow 0.12s ease;
-      }
-      .return-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 26px rgba(15, 20, 35, 0.1);
-      }
-      .return-title {
-        font-weight: 700;
-        margin: 0 0 2px 0;
-        font-size: 13px;
-      }
-      .return-sub {
-        color: var(--muted);
-        font-size: 12px;
-        margin-bottom: 6px;
-      }
-      .return-actions button {
-        width: 100%;
-      }
-      .activity {
-        padding: 14px 18px 18px;
-      }
-      .activity h6 {
-        font-size: 12px;
-        font-weight: 700;
-        margin: 0 0 6px 0;
-        letter-spacing: 0.02em;
-      }
-      .activity-list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: grid;
-        gap: 6px;
-      }
-      .activity-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 6px 8px;
-        border-radius: 6px;
-        background: #eef2f7;
-        font-size: 12px;
-      }
-      .footer-bar { display: none; }
-      table.table-status {
-        width: 100%;
-        margin-bottom: 0;
-        border-collapse: collapse;
-        font-size: 12px;
-      }
-      #returnStatus table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 12px;
-      }
-      #returnStatus th, #returnStatus td {
-        border: 1px solid #e6ebf5;
-        padding: 8px;
-        vertical-align: middle;
-      }
-      #returnStatus th {
-        background: #f1f4fb;
-        font-weight: 700;
-        color: #3b4862;
-      }
-      table.table-status th, table.table-status td {
-        border: 1px solid #e6ebf5;
-        padding: 8px;
-        vertical-align: middle;
-      }
-      table.table-status th {
-        background: #f1f4fb;
-        font-weight: 700;
-        color: #3b4862;
-      }
-      .alert-inline {
-        margin: 12px 18px;
-        border-radius: var(--radius);
-        padding: 8px 10px;
-      }
-      .small-note {
-        color: var(--muted);
+        height: 28px;
         font-size: 11px;
-        margin: 0 18px 10px;
       }
-      .footer-note {
-        margin-top: 10px;
-        color: var(--muted);
-        font-size: 12px;
-        text-align: center;
-      }
-      body.tool-mode #msgOtherWebsite,
-      body.tool-mode #msgNotOnReturnDashboard,
-      body.tool-mode #businessInfo,
-      body.tool-mode .activity,
-      body.tool-mode #status,
-      body.tool-mode .footer-note {
-        display: none !important;
-      }
-      body.tool-mode .page {
-        max-width: 980px;
-      }
-      body.tool-mode .header-bar {
-        margin-bottom: 0;
-      }
-      html.embedded,
-      body.embedded {
-        height: 100%;
-        min-height: 100%;
-        overflow: auto;
-        background: #fff;
-      }
-      body.embedded .shell {
-        min-height: 100%;
-        padding: 0;
-      }
-      body.embedded .page {
-        min-height: 100%;
-        max-width: none;
-        gap: 0;
-        display: flex;
-        flex-direction: column;
-      }
-      body.embedded .header-bar,
-      body.embedded .hero,
-      body.embedded .activity,
-      body.embedded .footer-note,
-      body.embedded #msgOtherWebsite,
-      body.embedded #msgNotOnReturnDashboard,
-      body.embedded #status {
-        display: none !important;
-      }
-      body.embedded #businessInfo {
-        border: 0;
-        box-shadow: none;
-        border-radius: 0;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        flex: 1 1 auto;
-        min-height: 100%;
-      }
-      body.embedded #businessInfo > .p-3 {
-        padding: 10px 12px 0 !important;
-      }
-      body.embedded #workspace {
-        padding-top: 4px;
-        display: flex;
-        flex-direction: column;
-        min-height: 0;
-      }
-      body.embedded .info-grid {
-        display: block;
-        padding: 0 0 8px;
-        flex: 0 0 auto;
-      }
-      body.embedded .info-grid > div {
-        display: block;
-        margin-bottom: 12px;
-      }
-      body.embedded .info-grid > div:last-child {
-        grid-column: auto !important;
-        margin-bottom: 0;
-      }
-      body.embedded .select-row {
-        padding: 0 0 10px;
-        flex: 0 0 auto;
-      }
-      body.embedded #returnStatus {
-        padding: 0 0 10px !important;
-        flex: 1 1 auto;
-        min-height: 320px;
-        overflow: auto;
-      }
-      body.embedded #returnStatus .row {
-        margin-left: 0;
-        margin-right: 0;
-      }
-      body.embedded #returnStatus [class*="col"] {
-        padding-left: 0;
-        padding-right: 0;
-      }
+
+      /* ── Category pills ── */
       .choice-pills {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 5px;
+        margin-bottom: 6px;
       }
       .choice-pill {
         border: 1px solid #d9e3f7;
         background: #f7f9ff;
         color: var(--text);
         border-radius: 999px;
-        padding: 7px 12px;
-        font-size: 12px;
-        font-weight: 700;
+        padding: 4px 10px;
+        font-size: 11px;
+        font-weight: 600;
         cursor: pointer;
       }
       .choice-pill.active {
@@ -365,21 +133,24 @@
         border-color: var(--primary);
         color: #fff;
       }
+
+      /* ── Type list: 3-column ── */
       .type-list {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 10px;
+        gap: 6px;
       }
       .type-card {
         width: 100%;
-        min-height: 54px;
+        min-height: 44px;
         text-align: center;
         border: 1px solid #dfe7f5;
         background: #fbfcff;
-        border-radius: 12px;
-        padding: 12px 10px;
+        border-radius: 8px;
+        padding: 8px 6px;
         cursor: pointer;
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
       }
@@ -388,187 +159,190 @@
         border-color: #9ebcff;
       }
       .type-title {
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 700;
         color: var(--text);
+        line-height: 1.2;
       }
       .type-sub {
         color: var(--muted);
+        font-size: 10px;
+        margin-top: 2px;
+      }
+
+      /* ── Status / return table ── */
+      #returnStatus { padding: 0 12px 8px; }
+      #returnStatus .row { margin-left: 0; margin-right: 0; }
+      #returnStatus [class*="col"] { padding-left: 0; padding-right: 0; }
+
+      table.table-status {
+        width: 100%;
+        margin-bottom: 0;
+        border-collapse: collapse;
         font-size: 11px;
-        margin-top: 3px;
       }
-      .type-actions {
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 8px;
-      }
-      .converter-panel {
-        padding: 16px 18px 18px;
-      }
-      .converter-toolbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 12px;
-        flex-wrap: wrap;
-      }
-      .converter-dropzone {
-        border: 2px dashed #b9c9ef;
-        background: linear-gradient(180deg, #f9fbff, #f3f7ff);
-        border-radius: 16px;
-        padding: 24px 18px;
-        text-align: center;
-        transition: border-color 0.15s ease, transform 0.12s ease, box-shadow 0.15s ease;
-      }
-      .converter-dropzone.dragover {
-        border-color: var(--primary);
-        box-shadow: 0 12px 30px rgba(20, 86, 255, 0.12);
-        transform: translateY(-1px);
-      }
-      .converter-dropzone h6 {
-        margin: 0 0 6px;
-        font-weight: 700;
-        font-size: 15px;
-      }
-      .converter-dropzone p {
-        margin: 0;
-        color: var(--muted);
-        font-size: 12px;
-      }
-      .converter-grid {
-        display: grid;
-        grid-template-columns: minmax(220px, 260px) 1fr;
-        gap: 14px;
-        margin-top: 14px;
-      }
-      .converter-side,
-      .converter-main {
+      table.table-status th, table.table-status td {
         border: 1px solid #e6ebf5;
-        border-radius: 14px;
-        background: #fff;
-        padding: 14px;
+        padding: 5px 6px;
+        vertical-align: middle;
       }
-      .converter-files {
+      table.table-status th {
+        background: #f1f4fb;
+        font-weight: 700;
+        color: #3b4862;
+      }
+      #returnStatus table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11px;
+      }
+      #returnStatus th, #returnStatus td {
+        border: 1px solid #e6ebf5;
+        padding: 5px 6px;
+        vertical-align: middle;
+      }
+      #returnStatus th {
+        background: #f1f4fb;
+        font-weight: 700;
+        color: #3b4862;
+      }
+
+      /* ── Pills ── */
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 7px;
+        border-radius: 999px;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+      .pill.success { background: #e7f4ed; color: var(--success); }
+      .pill.warning { background: #fff6d6; color: #946200; }
+      .pill.danger  { background: #ffe3e3; color: var(--danger); }
+      .pill.muted   { background: #eef2f7; color: var(--muted); }
+
+      /* ── Alert ── */
+      .alert-inline {
+        margin: 6px 12px;
+        border-radius: 8px;
+        padding: 6px 10px;
+        font-size: 11px;
+      }
+
+      /* ── Activity log ── */
+      .activity {
+        padding: 8px 12px 10px;
+        border-top: 1px solid #e6ebf5;
+        margin-top: 4px;
+      }
+      .activity h6 {
+        font-size: 10px;
+        font-weight: 700;
+        margin: 0 0 4px;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      .activity-list {
         list-style: none;
         margin: 0;
         padding: 0;
         display: grid;
-        gap: 8px;
+        gap: 3px;
+        max-height: 80px;
+        overflow-y: auto;
       }
-      .converter-file {
-        padding: 9px 10px;
-        border-radius: 10px;
-        background: #f5f8ff;
-        border: 1px solid #dfe8fb;
-        font-size: 12px;
-      }
-      .converter-file strong {
-        display: block;
-        font-size: 12px;
-        margin-bottom: 2px;
-      }
-      .converter-actions {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-top: 14px;
-      }
-      .converter-note {
-        margin-top: 10px;
-        color: var(--muted);
-        font-size: 11px;
-      }
-      .schema-panel {
-        padding: 16px 18px 18px;
-      }
-      .schema-toolbar {
+      .activity-item {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 12px;
-        margin-bottom: 12px;
-        flex-wrap: wrap;
-      }
-      .schema-grid {
-        display: grid;
-        grid-template-columns: minmax(220px, 280px) 1fr;
-        gap: 14px;
-      }
-      .schema-side,
-      .schema-main {
-        border: 1px solid #e6ebf5;
-        border-radius: 14px;
-        background: #fff;
-        padding: 14px;
-      }
-      .schema-actions {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-top: 12px;
-      }
-      .schema-paste {
-        min-height: 150px;
-        font-size: 12px;
-        font-family: 'JetBrains Mono', monospace;
-      }
-      .schema-table-wrap {
-        max-height: 420px;
-        overflow: auto;
-        border: 1px solid #e6ebf5;
-        border-radius: 12px;
-      }
-      .schema-table {
-        width: 100%;
-        margin-bottom: 0;
-        border-collapse: collapse;
-        font-size: 12px;
-      }
-      .schema-table th,
-      .schema-table td {
-        border: 1px solid #e6ebf5;
-        padding: 8px;
-        vertical-align: middle;
-      }
-      .schema-table th {
-        background: #f1f4fb;
-        position: sticky;
-        top: 0;
-        z-index: 1;
-      }
-      .schema-table input {
-        width: 100%;
-        border: 1px solid #d9e3f7;
-        border-radius: 8px;
-        padding: 6px 8px;
-        font-size: 12px;
-      }
-      .schema-note {
-        margin-top: 10px;
-        color: var(--muted);
-        font-size: 11px;
-      }
-      @media (max-width: 900px) {
-        .converter-grid {
-          grid-template-columns: 1fr;
-        }
-        .schema-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-      @media (max-width: 900px) {
-        .type-list {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-      }
-      @media (max-width: 640px) {
-        .type-list {
-          grid-template-columns: 1fr;
-        }
+        padding: 4px 6px;
+        border-radius: 5px;
+        background: #eef2f7;
+        font-size: 10px;
+        word-break: break-all;
       }
 
-      /* ── Dark Mode ─────────────────────────────────────────── */
+      /* ── Status row ── */
+      #status { padding: 4px 12px 0; }
+      #statusText { font-size: 11px; color: var(--muted); margin: 0; }
+
+      /* ── Footer ── */
+      .footer-note {
+        color: var(--muted);
+        font-size: 10px;
+        text-align: center;
+        padding: 4px 12px 6px;
+      }
+
+      /* ── Misc ── */
+      .small-note { color: var(--muted); font-size: 10px; margin: 0 12px 6px; }
+
+      /* ── Messages (not on portal / not on dashboard) ── */
+      #msgOtherWebsite .p-3,
+      #msgNotOnReturnDashboard .p-3 {
+        padding: 10px 12px !important;
+      }
+      #msgOtherWebsite h5,
+      #msgNotOnReturnDashboard h5 {
+        font-size: 13px;
+      }
+
+      /* ── Dark Mode Toggle Button ── */
+      #darkModeBtn {
+        background: none;
+        border: 1px solid #dfe7ff;
+        border-radius: 20px;
+        padding: 2px 8px;
+        font-size: 12px;
+        cursor: pointer;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 3px;
+      }
+      #darkModeBtn:hover { background: var(--card); }
+
+      /* ── Client Folder Toggle ── */
+      #folderToggleWrap {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11px;
+        color: var(--muted);
+        user-select: none;
+        cursor: pointer;
+      }
+      .neo-toggle {
+        position: relative;
+        width: 28px;
+        height: 16px;
+        flex-shrink: 0;
+      }
+      .neo-toggle input { opacity: 0; width: 0; height: 0; }
+      .neo-toggle-track {
+        position: absolute;
+        inset: 0;
+        background: #cdd5e0;
+        border-radius: 18px;
+        transition: background 0.2s;
+      }
+      .neo-toggle input:checked ~ .neo-toggle-track { background: var(--primary); }
+      .neo-toggle-thumb {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 12px;
+        height: 12px;
+        background: #fff;
+        border-radius: 50%;
+        transition: left 0.2s;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      }
+      .neo-toggle input:checked ~ .neo-toggle-thumb { left: 14px; }
+
+      /* ── Dark Mode ── */
       body.dark {
         --bg: #0f1117;
         --bg-accent: #1a1a2e;
@@ -579,60 +353,39 @@
         --card: #1e2130;
         --text: #e2e8f8;
         --muted: #8892a4;
-        --shadow: 0 16px 40px rgba(0,0,0,0.45);
-        background: radial-gradient(circle at top left, #1a1f3a, transparent 55%),
-          radial-gradient(circle at top right, #1a1a2e, transparent 50%),
-          #0f1117;
+        --shadow: 0 4px 16px rgba(0,0,0,0.45);
+        background: #0f1117;
       }
-      body.dark .card-soft { border-color: #2a3050; }
       body.dark .header-bar {
         background: linear-gradient(120deg, #1a1f3a, #1e2130);
         border-color: #2a3050;
       }
-      body.dark .hero-card { background: #1a1f3a; border-color: #2a3050; }
-      body.dark .btn-outline-primary { color: var(--primary); border-color: var(--primary); }
-      body.dark .btn-outline-secondary { color: var(--muted); border-color: #2a3050; }
-      body.dark .btn-outline-primary:hover { background: var(--primary); color: #fff; }
       body.dark select, body.dark input, body.dark textarea {
-        background: #1a1f3a; color: var(--text); border-color: #2a3050;
+        background: #1a1f3a;
+        color: var(--text);
+        border-color: #2a3050;
       }
-      body.dark .schema-input { background: #1a1f3a; color: var(--text); border-color: #2a3050; }
       body.dark table th { background: #1a1f3a; }
       body.dark table td { border-color: #2a3050; }
       body.dark .pill { background: #2a3050; }
-      body.dark .type-list .type-item { border-color: #2a3050; }
-      body.dark .type-item.active { background: #1e3060; border-color: var(--primary); }
+      body.dark .choice-pill { background: #1a1f3a; border-color: #2a3050; color: var(--text); }
+      body.dark .choice-pill.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+      body.dark .type-card { background: #1a1f3a; border-color: #2a3050; }
+      body.dark .type-card.active { background: #1e3060; border-color: var(--primary); }
+      body.dark .activity-item { background: #1a1f3a; }
+      body.dark #darkModeBtn { border-color: #2a3050; }
+      body.dark .activity { border-color: #2a3050; }
 
-      /* ── Dark Mode Toggle Button ───────────────────────────── */
-      #darkModeBtn {
-        background: none; border: 1px solid #dfe7ff; border-radius: 20px;
-        padding: 3px 10px; font-size: 14px; cursor: pointer;
-        color: var(--muted); transition: all 0.2s;
-        display: flex; align-items: center; gap: 4px;
-      }
-      #darkModeBtn:hover { background: var(--card); }
-      body.dark #darkModeBtn { border-color: #2a3050; color: var(--muted); }
+      /* ── Converter/Schema panels — hidden in popup mode ── */
+      #converterPanel, #schemaPanel { display: none !important; }
 
-      /* ── Client Folder Toggle ──────────────────────────────── */
-      #folderToggleWrap {
-        display: flex; align-items: center; gap: 6px;
-        font-size: 12px; color: var(--muted); user-select: none; cursor: pointer;
-      }
-      .neo-toggle {
-        position: relative; width: 32px; height: 18px; flex-shrink: 0;
-      }
-      .neo-toggle input { opacity: 0; width: 0; height: 0; }
-      .neo-toggle-track {
-        position: absolute; inset: 0; background: #cdd5e0;
-        border-radius: 18px; transition: background 0.2s;
-      }
-      .neo-toggle input:checked ~ .neo-toggle-track { background: var(--primary); }
-      .neo-toggle-thumb {
-        position: absolute; top: 2px; left: 2px;
-        width: 14px; height: 14px; background: #fff;
-        border-radius: 50%; transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-      }
-      .neo-toggle input:checked ~ .neo-toggle-thumb { left: 16px; }
+      /* ── tool-mode hides portal-only sections ── */
+      body.tool-mode #msgOtherWebsite,
+      body.tool-mode #msgNotOnReturnDashboard,
+      body.tool-mode #businessInfo,
+      body.tool-mode .activity,
+      body.tool-mode #status,
+      body.tool-mode .footer-note { display: none !important; }
     </style>
     <title>GC Returns Pro</title>
   </head>
@@ -642,13 +395,15 @@
     <script src="xlsx.full.min.js"></script>
     <script src="moment.min.js"></script>
     <script src="popup.js"></script>
-    <div class="page">
+
+    <div>
+      <!-- ── Header ── -->
       <div class="header-bar">
         <div class="d-flex align-items-center">
-          <img src="images/neo-gst-logo.svg" alt="GC Returns Pro" height="24" width="24" class="mr-2"/>
+          <img src="images/neo-gst-logo.svg" alt="GC Returns Pro" height="20" width="20" class="mr-2"/>
           <div>
             <p class="header-title mb-0" id="appHeaderTitle">GC Returns Pro</p>
-            <p class="header-sub mb-0" id="appHeaderSub">Download returns faster with a focused workspace.</p>
+            <p class="header-sub mb-0" id="appHeaderSub">GST Returns Downloader</p>
           </div>
         </div>
         <div class="header-actions">
@@ -658,22 +413,18 @@
               <span class="neo-toggle-track"></span>
               <span class="neo-toggle-thumb"></span>
             </span>
-            <span>📁 Client Folder</span>
+            <span>📁</span>
           </label>
-          <button id="darkModeBtn" title="Toggle dark / light mode">🌙 <span id="darkModeBtnLabel">Dark</span></button>
-          <button class="btn btn-outline-primary btn-sm" type="button" id="openConverterBtn">Converters</button>
-          <button class="btn btn-outline-secondary btn-sm" type="button" id="openSchemaBtn">Schema</button>
-          <button class="btn btn-link p-0 text-muted" title="Settings">
-            <span aria-hidden="true">&#9881;</span>
-          </button>
+          <button id="darkModeBtn" title="Toggle dark / light mode">🌙</button>
         </div>
       </div>
-      <div class="card-soft mb-2" id="converterPanel" hidden="true">
+
+      <!-- ── Hidden panels (converter/schema kept for JS compatibility, hidden via CSS) ── -->
+      <div id="converterPanel" hidden="true">
         <div class="converter-panel">
           <div class="converter-toolbar">
             <div>
               <p class="header-title mb-0">Standalone Converters</p>
-              <p class="header-sub mb-0">Drop GST JSON files here and generate report-style Excel without opening the portal workspace.</p>
             </div>
             <button class="btn btn-link btn-sm p-0" type="button" id="closeConverterBtn">Close</button>
           </div>
@@ -715,18 +466,17 @@
                 <button class="btn btn-success btn-sm" type="button" id="converterDownloadSingleBtn">Download Excel</button>
                 <button class="btn btn-primary btn-sm" type="button" id="converterDownloadCombinedBtn">Download Combined Excel</button>
               </div>
-              <div class="converter-note" id="converterStatusNote">Single-file mode exports one workbook. Multi-file mode can generate a consolidated workbook too.</div>
+              <div class="converter-note" id="converterStatusNote">Single-file mode exports one workbook.</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="card-soft mb-2" id="schemaPanel" hidden="true">
+      <div id="schemaPanel" hidden="true">
         <div class="schema-panel">
           <div class="schema-toolbar">
             <div>
               <p class="header-title mb-0">Schema Manager</p>
-              <p class="header-sub mb-0">Maintain friendly labels for JSON keys and reuse them automatically during Excel conversion.</p>
             </div>
             <button class="btn btn-link btn-sm p-0" type="button" id="closeSchemaBtn">Close</button>
           </div>
@@ -735,7 +485,7 @@
               <label class="info-label mb-2 d-block" for="schemaReturnType">Return type</label>
               <select class="custom-select custom-select-sm mb-3" id="schemaReturnType"></select>
               <label class="info-label mb-2 d-block" for="schemaPasteArea">Paste schema rows</label>
-              <textarea class="form-control schema-paste" id="schemaPasteArea" placeholder="Paste from Excel like: return|key|abbrevation or key<TAB>abbreviation"></textarea>
+              <textarea class="form-control schema-paste" id="schemaPasteArea" placeholder="Paste from Excel like: return|key|abbrevation or key&lt;TAB&gt;abbreviation"></textarea>
               <input type="file" id="schemaImportFile" accept=".txt,.tsv,.csv,.json" hidden>
               <div class="schema-actions">
                 <button class="btn btn-primary btn-sm" type="button" id="schemaImportPasteBtn">Import Pasted Rows</button>
@@ -743,13 +493,12 @@
                 <button class="btn btn-outline-secondary btn-sm" type="button" id="schemaExportBtn">Export Excel</button>
                 <button class="btn btn-outline-secondary btn-sm" type="button" id="schemaCopyBtn">Copy Table</button>
               </div>
-              <div class="schema-note" id="schemaStatusNote">New keys are added automatically whenever you convert JSON to Excel.</div>
+              <div class="schema-note" id="schemaStatusNote">Keys added automatically on conversion.</div>
             </div>
             <div class="schema-main">
               <div class="d-flex justify-content-between align-items-center mb-2">
                 <div>
                   <p class="header-title mb-0" style="font-size:14px;">Schema Table</p>
-                  <p class="header-sub mb-0">Edit labels directly. Changes are saved for the selected return type.</p>
                 </div>
                 <button class="btn btn-success btn-sm" type="button" id="schemaSaveBtn">Save Changes</button>
               </div>
@@ -757,8 +506,8 @@
                 <table class="schema-table">
                   <thead>
                     <tr>
-                      <th style="width:72px;">#</th>
-                      <th style="width:220px;">Key</th>
+                      <th style="width:50px;">#</th>
+                      <th style="width:160px;">Key</th>
                       <th>Abbreviation</th>
                     </tr>
                   </thead>
@@ -772,48 +521,53 @@
         </div>
       </div>
 
-      <div class="card-soft mb-2" id="msgOtherWebsite" hidden="true">
+      <!-- ── Not on portal ── -->
+      <div id="msgOtherWebsite" hidden="true">
         <div class="p-3">
           <h5 class="mb-2">This extension works on GST Portal!</h5>
-          <p class="mb-2 text-muted">Open GST Portal and sign in to download GST returns.</p>
+          <p class="mb-2 text-muted" style="font-size:12px;">Open GST Portal and sign in to download GST returns.</p>
           <a class="btn btn-primary btn-sm" href="https://www.gst.gov.in" target="_blank">Open GST Portal</a>
         </div>
       </div>
 
-      <div class="card-soft mb-2" id="msgNotOnReturnDashboard" hidden="true">
+      <!-- ── Not on return dashboard ── -->
+      <div id="msgNotOnReturnDashboard" hidden="true">
         <div class="p-3">
           <h5 class="mb-2">Open Return Dashboard</h5>
-          <p class="mb-0 text-muted">Log in to GST Portal and open the return dashboard to continue.</p>
+          <p class="mb-0 text-muted" style="font-size:12px;">Log in to GST Portal and open the return dashboard to continue.</p>
         </div>
       </div>
 
-      <div class="card-soft mb-2" id="businessInfo" hidden="true">
+      <!-- ── Business info + workspace ── -->
+      <div id="businessInfo" hidden="true">
         <div class="p-3 pb-0">
-          <div class="d-flex justify-content-between align-items-center mb-2">
+          <div class="biz-header">
             <div>
               <p class="header-title mb-0" id="businessName">Business Name</p>
-              <small class="text-muted" id="businessSub">GSTIN & Reg Type</small>
+              <small class="text-muted" id="businessSub" style="font-size:11px;">GSTIN &amp; Reg Type</small>
             </div>
             <span class="pill muted" id="gstStatusPill">Not Filed</span>
           </div>
+
           <div id="workspace" hidden="true">
             <div class="info-grid">
+              <!-- FY + custom period selectors -->
               <div>
                 <div class="info-value" id="finYearWrap">
                   <div id="returnPeriodWrap">
                     <div class="d-flex align-items-center justify-content-between mb-1">
                       <span class="info-label mb-0">Financial Year</span>
-                      <button class="btn btn-link btn-sm p-0 text-uppercase font-weight-bold" type="button" id="toggleCustomBtn">Custom Periods</button>
+                      <button class="btn btn-link btn-sm p-0 text-uppercase font-weight-bold" style="font-size:10px;" type="button" id="toggleCustomBtn">Custom Periods</button>
                     </div>
                     <select class="custom-select custom-select-sm w-100" id="finYear"></select>
                     <div id="customPeriodsWrap" hidden class="mt-2">
                       <div class="d-flex period-range">
                         <div class="mr-2" style="flex:1">
-                          <label class="info-label mb-1 d-block">From period</label>
+                          <label class="info-label mb-1 d-block">From</label>
                           <select class="custom-select custom-select-sm w-100" id="periodFrom"></select>
                         </div>
                         <div style="flex:1">
-                          <label class="info-label mb-1 d-block">To period</label>
+                          <label class="info-label mb-1 d-block">To</label>
                           <select class="custom-select custom-select-sm w-100" id="periodTo"></select>
                         </div>
                       </div>
@@ -833,44 +587,55 @@
                   </div>
                 </div>
               </div>
-              <div style="grid-column: span 2;">
-                <label class="info-label mb-2 d-block">Category</label>
-                <div class="choice-pills mb-3" id="categoryPills"></div>
-                <label class="info-label mb-2 d-block">Subcategory</label>
+
+              <!-- Category + subcategory -->
+              <div>
+                <label class="info-label mb-1 d-block">Category</label>
+                <div class="choice-pills" id="categoryPills"></div>
+                <label class="info-label mb-1 d-block">Subcategory</label>
                 <div class="type-list" id="typeList"></div>
+                <!-- Hidden selects kept for JS compatibility -->
                 <div hidden>
                   <select class="custom-select custom-select-sm mb-2" id="gstCategory"></select>
                   <select class="custom-select custom-select-sm" id="gstReturnType"></select>
                 </div>
-                <small class="text-muted d-block mt-2">Select a subcategory to refresh and load the relevant data below.</small>
+                <small class="text-muted d-block mt-1" style="font-size:10px;">Select a subcategory to refresh and load data below.</small>
               </div>
             </div>
+
+            <!-- Refresh row -->
             <div class="select-row">
               <div>
-                <small class="text-muted d-block" id="hint-return" hidden></small>
+                <small class="text-muted d-block" id="hint-return" hidden style="font-size:10px;"></small>
               </div>
-              <button class="btn btn-primary btn-sm" type="button" id="refresh">Refresh</button>
+              <button class="btn btn-primary btn-sm" type="button" id="refresh">⟳ Refresh</button>
             </div>
-          </div>
+          </div><!-- /workspace -->
         </div>
-        <div id="banner-generating" class="alert alert-warning alert-inline" role="alert" hidden>
-          GST Portal is generating your files. Please check again after sometime. Your files will be generated even if you close this window.
-        </div>
-        <div id="returnStatus" class="px-3 pb-3">
-        </div>
-      </div>
 
-      <div class="card-soft mb-2 activity">
-        <h6 class="text-uppercase">Activity Log</h6>
+        <!-- Generating banner -->
+        <div id="banner-generating" class="alert alert-warning alert-inline" role="alert" hidden>
+          GST Portal is generating your files. Please check again after sometime.
+        </div>
+
+        <!-- Period/status table -->
+        <div id="returnStatus" class="px-3 pb-3"></div>
+      </div><!-- /businessInfo -->
+
+      <!-- ── Activity Log ── -->
+      <div class="activity">
+        <h6>Activity Log</h6>
         <ul class="activity-list" id="activityLog">
           <li class="activity-item text-muted">No activity yet</li>
         </ul>
       </div>
 
-      <div class="row" id="status">
-        <h6 id="statusText" class="mx-3 my-2">Loading...</h6>
+      <!-- ── Status text ── -->
+      <div id="status">
+        <h6 id="statusText" style="font-size:11px; color:var(--muted); margin:0; padding:2px 12px;">Loading...</h6>
       </div>
-      <div class="footer-note">Need help? Keep the GST Portal tab open while using this dashboard.</div>
+
+      <div class="footer-note">Keep the GST Portal tab open while using this.</div>
     </div>
   </body>
 </html>
